@@ -1,0 +1,16 @@
+v0.5: 
+
+Columns (sortable, reorganize)
+	Servername, type (CTF, FFA, RH), Favorites, Playercount, Ping
+
+Rigthclick-menu:
+	Launch BZFlag (default when dblclick)
+	View details
+	Ping Server (game query request)
+
+ping: Only ping once for every unique ip
+http://my.bzflag.org/db?action=LIST
+
+v1.0: (first full release)
+	thumbnails of map (radarview) on server ?
+	integration with bzstats?
