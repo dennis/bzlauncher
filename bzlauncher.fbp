@@ -7,19 +7,19 @@
         <property name="code_generation">C++</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file"></property>
+        <property name="file">gui</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="icons"></property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">BZLauncher</property>
         <property name="namespace"></property>
-        <property name="path">.</property>
+        <property name="path">src</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
-        <property name="use_enum">0</property>
+        <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="1">
+        <object class="Frame" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -31,7 +31,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">BZLauncherApp</property>
+            <property name="name">MainFrame</property>
             <property name="pos"></property>
             <property name="size">597,649</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
@@ -332,7 +332,7 @@
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
             </object>
-            <object class="wxFlexGridSizer" expanded="1">
+            <object class="wxFlexGridSizer" expanded="0">
                 <property name="cols">1</property>
                 <property name="flexible_direction">wxVERTICAL</property>
                 <property name="growablecols"></property>
@@ -396,7 +396,7 @@
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/gtk-refresh.png; Load From File</property>
+                            <property name="bitmap">icons/gtk-refresh.png; Load From File</property>
                             <property name="id">ID_REFRESH_LIST</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Refresh</property>
@@ -411,7 +411,7 @@
                         </object>
                         <object class="toolSeparator" expanded="1" />
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/search.png; Load From File</property>
+                            <property name="bitmap">icons/search.png; Load From File</property>
                             <property name="id">ID_SEARCH</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Search</property>
@@ -425,7 +425,7 @@
                             <event name="OnUpdateUI"></event>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/bzflag.png; Load From File</property>
+                            <property name="bitmap">icons/bzflag.png; Load From File</property>
                             <property name="id">ID_LAUNCH</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Play</property>
@@ -439,7 +439,7 @@
                             <event name="OnUpdateUI"></event>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/emblem-favorite.png; Load From File</property>
+                            <property name="bitmap">icons/emblem-favorite.png; Load From File</property>
                             <property name="id">ID_FAVORITE</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Favorite</property>
@@ -453,7 +453,7 @@
                             <event name="OnUpdateUI"></event>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/network-wireless-encrypted.png; Load From File</property>
+                            <property name="bitmap">icons/network-wireless-encrypted.png; Load From File</property>
                             <property name="id">ID_PING</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Ping</property>
@@ -468,7 +468,7 @@
                         </object>
                         <object class="toolSeparator" expanded="1" />
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/stock_help.png; Load From File</property>
+                            <property name="bitmap">icons/stock_help.png; Load From File</property>
                             <property name="id">ID_ABOUT</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">About</property>
@@ -730,7 +730,7 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBitmap" expanded="1">
                                 <property name="bg"></property>
-                                <property name="bitmap">icons/32x32/bzflag.png; Load From File</property>
+                                <property name="bitmap">icons/bzflag.png; Load From File</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
