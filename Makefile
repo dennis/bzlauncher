@@ -21,6 +21,7 @@ aboutdlg_impl.o: src/aboutdlg_impl.cpp src/aboutdlg_impl.h
 
 src/gui.cpp:
 	-wxformbuilder -g bzlauncher.fbp 
+	-vim -c "%s/\.\.\/icons\//\icons\//g" -c "wq" src/gui.cpp
 
 	
 clean:

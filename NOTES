@@ -10,6 +10,9 @@ Rigthclick-menu:
 
 ping: Only ping once for every unique ip
 
+embedding png images?
+	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
+
 v1.0: (first full release)
 	thumbnails of map (radarview) on server ?
 	integration with bzstats?

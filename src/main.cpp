@@ -6,6 +6,8 @@
 IMPLEMENT_APP(BZLauncherApp)
 
 bool BZLauncherApp::OnInit() {
+	wxImage::AddHandler(new wxPNGHandler);
+
 	this->mainFrame = new  MainFrameImpl(NULL);
 
 	this->mainFrame->Show(TRUE);
