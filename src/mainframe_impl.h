@@ -1,12 +1,16 @@
-#ifndef __MainFrameImpl__
-#define __MainFrameImpl__
+#ifndef __mainframe_impl__
+#define __mainframe_impl__
 
 #include "gui.h"
 
-class MainFrameImpl : public MainFrame
-{
+class MainFrameImpl : public MainFrame {
+protected:
+	void EventRefresh(wxCommandEvent&);
+	void EventShowAbout(wxCommandEvent&);
+
+
 public:
-	MainFrameImpl( wxWindow* parent );
+	MainFrameImpl(wxWindow*);
 
 	void SetStatusText(const wxString&);
 };

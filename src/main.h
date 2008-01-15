@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 
-#include "mainframe_impl.h"
+class MainFrameImpl;
 
 class BZLauncherApp : public wxApp {
 private:
@@ -10,6 +10,7 @@ public:
 	virtual bool OnInit();
 
 	void SetStatusText(const wxString&);
+	void RefreshServerList();
 };
 
 
