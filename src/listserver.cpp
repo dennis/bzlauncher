@@ -3,6 +3,7 @@
 #include <wx/intl.h>
 #include <wx/tokenzr.h>
 #include <wx/listimpl.cpp>
+#include <wx/utils.h>
 
 #include "main.h"
 #include "listserver.h"
@@ -10,6 +11,7 @@
 WX_DEFINE_LIST(ListServerList);
 
 void ListServer::GetServerList() {
+	wxBusyCursor wait;
 	
 	BZLauncherApp& app = wxGetApp();
 

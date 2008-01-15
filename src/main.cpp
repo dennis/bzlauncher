@@ -18,5 +18,5 @@ bool BZLauncherApp::OnInit() {
 }
 
 void BZLauncherApp::SetStatusText(const wxString& text) {
-	this->mainFrame->statusBar->SetStatusText(text);
+	this->mainFrame->SetStatusText(text);
 }
