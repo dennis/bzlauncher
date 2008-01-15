@@ -9,8 +9,9 @@ Rigthclick-menu:
 	Ping Server (game query request)
 
 ping: Only ping once for every unique ip
-http://my.bzflag.org/db?action=LIST
 
 v1.0: (first full release)
 	thumbnails of map (radarview) on server ?
 	integration with bzstats?
+	fancy-pancy view. ligesom juploadr med thumbs af serverne + servernavn
+	under

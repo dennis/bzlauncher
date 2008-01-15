@@ -3,15 +3,21 @@
 
 #include "listserver.h"
 
-bool BZLauncherApp::OnInit() {
-	MainFrame*	frame = new  MainFrame(NULL, 0, _T("BZLauncher v.0.0"), wxPoint(-1,-1), wxSize(-1,-1), wxDEFAULT_FRAME_STYLE);
+IMPLEMENT_APP(BZLauncherApp)
 
-	frame->Show(TRUE);
-	SetTopWindow(frame);
+bool BZLauncherApp::OnInit() {
+	this->mainFrame = new  MainFrame(NULL);
+
+	this->mainFrame->Show(TRUE);
+	SetTopWindow(this->mainFrame);
 
 	ListServer	ls;
 
 	ls.GetServerList();
 
 	return TRUE;
+}
+
+void BZLauncherApp::SetStatusText(const wxString& text) {
+	this->mainFrame->statusBar->SetStatusText(text);
 }
