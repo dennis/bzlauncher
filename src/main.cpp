@@ -1,12 +1,11 @@
 #include "main.h"
-#include "gui.h"
 
 #include "listserver.h"
 
 IMPLEMENT_APP(BZLauncherApp)
 
 bool BZLauncherApp::OnInit() {
-	this->mainFrame = new  MainFrame(NULL);
+	this->mainFrame = new  MainFrameImpl(NULL);
 
 	this->mainFrame->Show(TRUE);
 	SetTopWindow(this->mainFrame);

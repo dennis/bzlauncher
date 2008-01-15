@@ -1,10 +1,10 @@
 #include <wx/wx.h>
 
-#include "gui.h"
+#include "mainframe_impl.h"
 
 class BZLauncherApp : public wxApp {
 private:
-	MainFrame*	mainFrame;
+	MainFrameImpl*	mainFrame;
 
 public:
 	virtual bool OnInit();
