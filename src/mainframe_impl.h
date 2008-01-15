@@ -5,6 +5,7 @@
 
 class MainFrameImpl : public MainFrame {
 protected:
+	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
 	void EventShowAbout(wxCommandEvent&);
 

@@ -19,3 +19,7 @@ void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
 	AboutDlgImpl dlg(this);
 	dlg.ShowModal();
 }
+
+void MainFrameImpl::EventQuit(wxCommandEvent&) {
+	this->Close();
+}

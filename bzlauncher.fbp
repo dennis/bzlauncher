@@ -216,7 +216,7 @@
                         <property name="name">quit</property>
                         <property name="shortcut">CTRL-Q</property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
+                        <event name="OnMenuSelection">EventQuit</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
