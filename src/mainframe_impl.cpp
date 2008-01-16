@@ -42,6 +42,9 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 		// Name
 		col++;
 		wxString s = current->serverHost + wxString::Format(_T(":%d"), current->serverPort);
+		if( current->isCTF() ) s += _T(" CTF");
+		else if( current->isFFA() ) s += _T(" FFA");
+		else if( current->isRH() ) s += _T(" RH");
 		list->SetCellValue(row, col, s);
 		list->SetReadOnly(row, col);
 		list->SetCellTextColour(row, col, *wxBLACK);

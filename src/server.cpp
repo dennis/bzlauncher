@@ -1,8 +1,14 @@
+#include <wx/log.h>
+
 #include "server.h"
 
-void Server::parseServerInfo(const wxString& info) {
-	const char* buf = info.To8BitData();
-	char* p = const_cast<char*>(buf);
+void Server::ParseServerInfo(const wxString& info) {
+	char theBuf[55];
+
+	strncpy(theBuf,info.ToAscii(),54);
+	theBuf[54] = (char)NULL;
+
+	char* p = theBuf;
 	p = this->unpackHex16(p, this->gameStyle);
 	p = this->unpackHex16(p, this->maxShots);
 	p = this->unpackHex16(p, this->shakeWins);
@@ -10,6 +16,7 @@ void Server::parseServerInfo(const wxString& info) {
 	p = this->unpackHex16(p, this->maxPlayerScore);
 	p = this->unpackHex16(p, this->maxTeamScore);
 	p = this->unpackHex16(p, this->maxTime);
+	p = this->unpackHex8(p, this->maxPlayers);
 	p = this->unpackHex8(p, this->rogueCount);
 	p = this->unpackHex8(p, this->rogueMax);
 	p = this->unpackHex8(p, this->redCount);

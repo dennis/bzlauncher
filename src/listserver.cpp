@@ -57,9 +57,12 @@ bool ListServer::ParseLine(const wxString& line) {
 			break;
 		case 1:
 			s->protocolVersion = token;
+			// We only parse BZFS0026 for now
+			if( token.Cmp(_T("BZFS0026")) != 0 )
+				return false;
 			break;
 		case 2:
-			s->flags = token;
+			s->ParseServerInfo(token);
 			break;
 		case 3:
 			s->ip.Hostname(token);

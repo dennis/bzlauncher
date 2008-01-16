@@ -13,11 +13,19 @@ ping: Only ping once for every unique ip
 wxConfig:
 	- store window size, column info (sizes, sort), Favorites, bzflag executable?
 
+- fjern "Fav" og brug bold til at vise hvad der er favorit
+- marker hele linjen
+
+- /var/www/bzstats.strayer.de/update/bzstats_bzfsquery.php
+	bzstats_decryptGame etc
+- use strayers listserver as fallback
+
 embedding png images?
 	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
 
-v1.0: (first full release)
+future release:
 	thumbnails of map (radarview) on server ?
 	integration with bzstats?
 	fancy-pancy view. ligesom juploadr med thumbs af serverne + servernavn
 	under
+	rabbit/ctf/ffa ikoner ved serverne

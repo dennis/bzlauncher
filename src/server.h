@@ -56,11 +56,27 @@ public:
 			this->redCount+
 			this->greenCount+
 			this->blueCount+
-			this->purpleCount+
-			this->observerCount;
+			this->purpleCount;
 	}
 
-	void parseServerInfo(const wxString&);
+	bool isCTF() {
+		return this->gameStyle & TeamFlagGameStyle;
+	}
+
+	bool isRH() {
+		return this->gameStyle & RabbitChaseGameStyle;
+	}
+
+	bool isFFA() {
+		return !this->isCTF() && !this->isRH();
+	}
+
+	void ParseServerInfo(const wxString&);
+
+	Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
+		maxTime(0), maxPlayers(0), rogueCount(0), rogueMax(0), redCount(0), redMax(0), greenCount(0), greenMax(0),
+		blueCount(0), blueMax(0), purpleCount(0), purpleMax(0), observerCount(0), observerMax(0) {
+	}
 private:
 	int hex2bin(char);
 	char* unpackHex16(char*, uint16_t&);
