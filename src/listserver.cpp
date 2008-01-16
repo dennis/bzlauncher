@@ -12,10 +12,11 @@ WX_DEFINE_LIST(ListServerList);
 
 void ListServer::GetServerList() {
 	wxBusyCursor wait;
-	
 	BZLauncherApp& app = wxGetApp();
 
 	app.SetStatusText(_("Fetching data from list-server..."));
+
+	this->ClearList();
 
 	if( this->GetListServerResponse() ) {
 		app.SetStatusText(_("Parsing data from list-server..."));
@@ -25,18 +26,17 @@ void ListServer::GetServerList() {
 			wxString token = tok.GetNextToken();
 			
 			this->ParseLine(token);
-			break;
 		}
 	}
 	else {
 		wxLogError(_("Can't connect to listserver!"));
 	}
-	app.SetStatusText(_("Done.."));
+	app.SetStatusText(wxString::Format(_("Found %d server(s)"), this->list.GetCount()));
 }
 
 bool ListServer::ParseLine(const wxString& line) {
-	Server s;
-	s.serverPort = 5154;
+	Server* s = new Server;
+	s->serverPort = 5154;
 
 	wxStringTokenizer tok(line, _T(" "));
 
@@ -47,31 +47,31 @@ bool ListServer::ParseLine(const wxString& line) {
 		case 0:	{ // hostname:port 
 				int pos = token.Find(_T(":"));
 				if( pos == wxNOT_FOUND ) {
-					s.serverHost = token;
+					s->serverHost = token;
 				}
 				else {
-					s.serverHost = token.Mid(0,pos-1);
-					token.Mid(pos+1).ToLong(reinterpret_cast<long int*>(&s.serverPort));
+					s->serverHost = token.Mid(0,pos);
+					token.Mid(pos+1).ToLong(reinterpret_cast<long int*>(&s->serverPort));
 				}
 			}
 			break;
 		case 1:
-			s.protocolVersion = token;
+			s->protocolVersion = token;
 			break;
 		case 2:
-			s.flags = token;
+			s->flags = token;
 			break;
 		case 3:
-			s.ip.Hostname(token);
+			s->ip.Hostname(token);
 
 			// Get remaining stuff
-			s.name += tok.GetString();
+			s->name += tok.GetString();
 			break;
 		}
 		i++;
 	}
 
-	list.Append(&s);
+	this->list.Append(s);
 
 	return true;
 }
@@ -86,7 +86,6 @@ bool ListServer::GetListServerResponse() {
 
 		this->rawResponse.Clear();
 
-		// Read listserver response
 		while(!in_stream->Read(buffer,1024).Eof()) 
 			this->rawResponse << wxString::From8BitData(buffer,in_stream->LastRead());
 
@@ -94,4 +93,15 @@ bool ListServer::GetListServerResponse() {
 	}
 
 	return false;
+}
+
+void ListServer::ClearList() {
+	ListServerList::iterator i;
+	for(i = this->list.begin(); i != this->list.end(); ++i) {
+		Server*	current = *i;
+
+		delete current;
+	}
+
+	this->list.Clear();
 }

@@ -10,6 +10,9 @@ Rigthclick-menu:
 
 ping: Only ping once for every unique ip
 
+wxConfig:
+	- store window size, column info (sizes, sort), Favorites, bzflag executable?
+
 embedding png images?
 	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
 

@@ -13,6 +13,8 @@ private:
 	bool GetListServerResponse();
 	bool ParseLine(const wxString&);
 
+	void ClearList();
+
 	wxString	rawResponse; 
 
 public:

@@ -21,6 +21,5 @@ void BZLauncherApp::SetStatusText(const wxString& text) {
 }
 
 void BZLauncherApp::RefreshServerList() {
-	ListServer	ls;
-	ls.GetServerList();
+	this->list.GetServerList();
 }

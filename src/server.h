@@ -50,6 +50,16 @@ public:
 	uint8_t		observerCount;
 	uint8_t		observerMax;
 
+	int getPlayerCount() {
+		return 
+			this->rogueCount+
+			this->redCount+
+			this->greenCount+
+			this->blueCount+
+			this->purpleCount+
+			this->observerCount;
+	}
+
 	void parseServerInfo(const wxString&);
 private:
 	int hex2bin(char);
