@@ -6,8 +6,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 : ServerDlg( parent ) {
 
 	// ServerName
-	wxString s = server->serverHost + wxString::Format(_T(":%d"), server->serverPort);
-	serverName->SetLabel(s);
+	serverName->SetLabel(server->serverHostPort);
 
 	// LEFT COLUMN
 

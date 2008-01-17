@@ -23,8 +23,7 @@ enum GameStyle {
 struct Server {
 public:
 
-	wxString	serverHost;
-	int			serverPort;
+	wxString	serverHostPort;
 	wxString	protocolVersion;
 	wxString	flags;
 	wxIPV4address	ip;

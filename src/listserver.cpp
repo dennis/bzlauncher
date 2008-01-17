@@ -36,7 +36,6 @@ void ListServer::GetServerList() {
 
 bool ListServer::ParseLine(const wxString& line) {
 	Server* s = new Server;
-	s->serverPort = 5154;
 
 	wxStringTokenizer tok(line, _T(" "));
 
@@ -44,16 +43,8 @@ bool ListServer::ParseLine(const wxString& line) {
 	while(tok.HasMoreTokens()) {
 		wxString token = tok.GetNextToken();
 		switch(i) {
-		case 0:	{ // hostname:port 
-				int pos = token.Find(_T(":"));
-				if( pos == wxNOT_FOUND ) {
-					s->serverHost = token;
-				}
-				else {
-					s->serverHost = token.Mid(0,pos);
-					token.Mid(pos+1).ToLong(reinterpret_cast<long int*>(&s->serverPort));
-				}
-			}
+		case 0:	
+			s->serverHostPort = token;
 			break;
 		case 1:
 			s->protocolVersion = token;
