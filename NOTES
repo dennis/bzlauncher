@@ -10,15 +10,19 @@ Rigthclick-menu:
 
 ping: Only ping once for every unique ip
 
-wxConfig:
-	- store window size, column info (sizes, sort), Favorites, bzflag executable?
+---
 
-- fjern "Fav" og brug bold til at vise hvad der er favorit
-- marker hele linjen
+TODO:
+	- fjern "Fav" og brug bold til at vise hvad der er favorit
+	- keyboard control af gridlist
+	- use strayers listserver as fallback
 
-- /var/www/bzstats.strayer.de/update/bzstats_bzfsquery.php
-	bzstats_decryptGame etc
-- use strayers listserver as fallback
+	- serverName + port skal bare være serverName
+	- CTF i en kolonne for sig selv
+	wxConfig:
+		- store window size, column info (sizes, sort), Favorites, bzflag executable?
+
+----
 
 embedding png images?
 	http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images

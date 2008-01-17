@@ -71,6 +71,26 @@ public:
 		return !this->isCTF() && !this->isRH();
 	}
 
+	bool gotSuperFlags() {
+		return this->gameStyle & SuperFlagGameStyle;
+	}
+
+	bool gotJumping() {
+		return this->gameStyle & JumpingGameStyle;
+	}
+
+	bool gotAntidote() {
+		return this->gameStyle & AntidoteGameStyle;
+	}
+
+	bool gotRicochet() {
+		return this->gameStyle & RicochetGameStyle;
+	}
+
+	bool gotHandicap() {
+		return this->gameStyle & HandicapGameStyle;
+	}
+
 	void ParseServerInfo(const wxString&);
 
 	Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),

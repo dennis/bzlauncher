@@ -1,6 +1,7 @@
 #include "main.h"
 
 #include "listserver.h"
+#include "server.h"
 #include "mainframe_impl.h"
 
 IMPLEMENT_APP(BZLauncherApp)
@@ -22,4 +23,12 @@ void BZLauncherApp::SetStatusText(const wxString& text) {
 
 void BZLauncherApp::RefreshServerList() {
 	this->list.GetServerList();
+}
+
+Server* BZLauncherApp::GetSelectedServer() {
+	return this->selectedServer;
+}
+
+void BZLauncherApp::SetSelectedServer(Server* s) {
+	this->selectedServer = s;
 }

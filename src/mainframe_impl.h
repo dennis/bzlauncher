@@ -7,8 +7,9 @@ class MainFrameImpl : public MainFrame {
 protected:
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
+	void EventSelectServer(wxGridEvent&);
 	void EventShowAbout(wxCommandEvent&);
-
+	void EventViewServer(wxCommandEvent&);
 
 public:
 	MainFrameImpl(wxWindow*);

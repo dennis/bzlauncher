@@ -1,12 +1,13 @@
 #include "main.h"
 #include "mainframe_impl.h"
 #include "aboutdlg_impl.h"
+#include "serverdlg_impl.h"
 
 #include "listserver.h"
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ) {
-
+	this->serverList->SetSelectionMode(wxGrid::wxGridSelectRows);
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -81,3 +82,15 @@ void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
 void MainFrameImpl::EventQuit(wxCommandEvent&) {
 	this->Close();
 }
+
+void MainFrameImpl::EventViewServer(wxCommandEvent&) {
+	BZLauncherApp& app = wxGetApp();
+	ServerDlgImpl dlg(this, app.GetSelectedServer());
+	dlg.ShowModal();
+}
+
+void MainFrameImpl::EventSelectServer(wxGridEvent& event) {
+	BZLauncherApp& app = wxGetApp();
+	app.SetSelectedServer((app.list.list.Item(event.GetRow()))->GetData());
+}
+
