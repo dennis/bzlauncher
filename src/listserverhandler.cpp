@@ -6,11 +6,11 @@
 #include <wx/utils.h>
 
 #include "main.h"
-#include "listserver.h"
+#include "listserverhandler.h"
 
-WX_DEFINE_LIST(ListServerList);
+WX_DEFINE_LIST(ServerList);
 
-void ListServer::GetServerList() {
+void ListServerHandler::GetServerList() {
 	wxBusyCursor wait;
 	BZLauncherApp& app = wxGetApp();
 
@@ -31,10 +31,10 @@ void ListServer::GetServerList() {
 	else {
 		wxLogError(_("Can't connect to listserver!"));
 	}
-	app.SetStatusText(wxString::Format(_("Found %d server(s)"), this->list.GetCount()));
+	app.SetStatusText(wxString::Format(_("Found %d server(s)"), this->serverList.GetCount()));
 }
 
-bool ListServer::ParseLine(const wxString& line) {
+bool ListServerHandler::ParseLine(const wxString& line) {
 	Server* s = new Server;
 
 	wxStringTokenizer tok(line, _T(" "));
@@ -65,12 +65,12 @@ bool ListServer::ParseLine(const wxString& line) {
 		i++;
 	}
 
-	this->list.Append(s);
+	this->serverList.Append(s);
 
 	return true;
 }
 
-bool ListServer::GetListServerResponse() {
+bool ListServerHandler::GetListServerResponse() {
 	wxURL listserv(wxT("http://my.bzflag.org/db?action=LIST"));
 
 	if(listserv.IsOk()) {
@@ -89,13 +89,13 @@ bool ListServer::GetListServerResponse() {
 	return false;
 }
 
-void ListServer::ClearList() {
-	ListServerList::iterator i;
-	for(i = this->list.begin(); i != this->list.end(); ++i) {
+void ListServerHandler::ClearList() {
+	ServerList::iterator i;
+	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
 
 		delete current;
 	}
 
-	this->list.Clear();
+	this->serverList.Clear();
 }

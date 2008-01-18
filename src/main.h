@@ -1,16 +1,16 @@
 #include <wx/wx.h>
 
-#include "listserver.h"
+#include "listserverhandler.h"
 
 class MainFrameImpl;
 
 class BZLauncherApp : public wxApp {
 private:
-	MainFrameImpl*	mainFrame;
-	Server* selectedServer;
+	MainFrameImpl*		mainFrame;
+	Server* 			selectedServer;
 
 public:
-	ListServer	list;
+	ListServerHandler	listServerHandler;
 
 	virtual bool OnInit();
 

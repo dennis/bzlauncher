@@ -1,14 +1,14 @@
-#ifndef __listserver__
-#define __listserver__
+#ifndef __listserver_handler__
+#define __listserver_handler__
 
 #include <wx/string.h>
 #include <wx/list.h>
 
 #include "server.h"
 
-WX_DECLARE_LIST(Server, ListServerList);
+WX_DECLARE_LIST(Server, ServerList);
 
-class ListServer {
+class ListServerHandler {
 private:
 	bool GetListServerResponse();
 	bool ParseLine(const wxString&);
@@ -18,9 +18,9 @@ private:
 	wxString	rawResponse; 
 
 public:
-	ListServerList	list;
+	ServerList	serverList;
 
-	ListServer() {};
+	ListServerHandler() {};
 
 	void GetServerList();
 };

@@ -3,11 +3,11 @@ all: bzlauncher
 CXX=ccache g++
 CXXFLAGS=`wx-config --cxxflags` -Wall -ggdb 
 
-bzlauncher: gui.o listserver.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o
+bzlauncher: gui.o listserverhandler.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o
 	$(CXX) *.o `wx-config --libs` -o bzlauncher
 
-listserver.o: src/listserver.cpp src/listserver.h
-	$(CXX) src/listserver.cpp -c $(CXXFLAGS)
+listserverhandler.o: src/listserverhandler.cpp src/listserverhandler.h
+	$(CXX) src/listserverhandler.cpp -c $(CXXFLAGS)
 gui.o: src/gui.cpp src/gui.h
 	$(CXX) src/gui.cpp -c $(CXXFLAGS)
 main.o: src/main.cpp src/main.h

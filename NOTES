@@ -17,7 +17,6 @@ TODO:
 	- keyboard control af gridlist
 	- use strayers listserver as fallback
 
-	- serverName + port skal bare være serverName
 	- CTF i en kolonne for sig selv
 	wxConfig:
 		- store window size, column info (sizes, sort), Favorites, bzflag executable?

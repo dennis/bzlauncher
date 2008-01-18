@@ -3,11 +3,11 @@
 #include "aboutdlg_impl.h"
 #include "serverdlg_impl.h"
 
-#include "listserver.h"
+#include "listserverhandler.h"
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ) {
-	this->serverList->SetSelectionMode(wxGrid::wxGridSelectRows);
+	this->serverGrid->SetSelectionMode(wxGrid::wxGridSelectRows);
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -19,26 +19,26 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 
 	app.RefreshServerList();
 
-	wxGrid* list;
-	list = this->serverList;
+	wxGrid* grid;
+	grid = this->serverGrid;
 
 	// Clear list
-	list->BeginBatch();
-	list->DeleteRows(0,list->GetNumberRows());
-	list->InsertRows(0,app.list.list.GetCount());
+	grid->BeginBatch();
+	grid->DeleteRows(0,grid->GetNumberRows());
+	grid->InsertRows(0,app.listServerHandler.serverList.GetCount());
 
 	// Content
-	ListServerList::iterator i;
+	ServerList::iterator i;
 	int row = 0;
 	int col = 0;
-	for(i = app.list.list.begin(); i != app.list.list.end(); ++i) {
+	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
 		Server*	current = *i;
 		col = 0;
 
 		// Favorites
-		list->SetCellValue(row, col, _T("n/a"));
-		list->SetReadOnly(row, col);
-		list->SetCellTextColour(row, col, *wxLIGHT_GREY);
+		grid->SetCellValue(row, col, _T("n/a"));
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxLIGHT_GREY);
 
 		// Name
 		col++;
@@ -46,32 +46,32 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 		if( current->isCTF() ) s += _T(" CTF");
 		else if( current->isFFA() ) s += _T(" FFA");
 		else if( current->isRH() ) s += _T(" RH");
-		list->SetCellValue(row, col, s);
-		list->SetReadOnly(row, col);
-		list->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellValue(row, col, s);
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxBLACK);
 
 		// Type
 		col++;
-		list->SetCellValue(row, col, current->name);
-		list->SetReadOnly(row, col);
-		list->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellValue(row, col, current->name);
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxBLACK);
 
 		// Players
 		col++;
-		list->SetCellValue(row, col, wxString::Format(_T("%d"), current->getPlayerCount()));
-		list->SetReadOnly(row, col);
-		list->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->getPlayerCount()));
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxBLACK);
 
 		// Ping
 		col++;
-		list->SetCellValue(row, col, _T("n/a"));
-		list->SetReadOnly(row, col);
-		list->SetCellTextColour(row, col, *wxLIGHT_GREY);
+		grid->SetCellValue(row, col, _T("n/a"));
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxLIGHT_GREY);
 
 		row++;
 	}
 	
-	list->EndBatch();
+	grid->EndBatch();
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -91,6 +91,6 @@ void MainFrameImpl::EventViewServer(wxCommandEvent&) {
 
 void MainFrameImpl::EventSelectServer(wxGridEvent& event) {
 	BZLauncherApp& app = wxGetApp();
-	app.SetSelectedServer((app.list.list.Item(event.GetRow()))->GetData());
+	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
 }
 

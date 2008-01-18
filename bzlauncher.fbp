@@ -522,7 +522,7 @@
                         <property name="margin_width">0</property>
                         <property name="maximum_size"></property>
                         <property name="minimum_size"></property>
-                        <property name="name">serverList</property>
+                        <property name="name">serverGrid</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
                         <property name="row_label_horiz_alignment">wxALIGN_CENTRE</property>

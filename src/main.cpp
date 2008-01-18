@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include "listserver.h"
+#include "listserverhandler.h"
 #include "server.h"
 #include "mainframe_impl.h"
 
@@ -22,7 +22,7 @@ void BZLauncherApp::SetStatusText(const wxString& text) {
 }
 
 void BZLauncherApp::RefreshServerList() {
-	this->list.GetServerList();
+	this->listServerHandler.GetServerList();
 }
 
 Server* BZLauncherApp::GetSelectedServer() {
