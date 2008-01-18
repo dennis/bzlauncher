@@ -15,6 +15,10 @@ void MainFrameImpl::SetStatusText(const wxString& t) {
 }
 
 void MainFrameImpl::EventRefresh(wxCommandEvent&) {
+	this->RefreshServerGrid();
+}
+
+void MainFrameImpl::RefreshServerGrid() {
 	BZLauncherApp& app = wxGetApp();
 
 	app.RefreshServerList();

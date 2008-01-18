@@ -10,8 +10,9 @@ bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
 
 	this->mainFrame = new  MainFrameImpl(NULL);
+	this->mainFrame->RefreshServerGrid();
+	this->mainFrame->Show(true);
 
-	this->mainFrame->Show(TRUE);
 	SetTopWindow(this->mainFrame);
 
 	return TRUE;

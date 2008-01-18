@@ -11,10 +11,12 @@ protected:
 	void EventShowAbout(wxCommandEvent&);
 	void EventViewServer(wxCommandEvent&);
 
+
 public:
 	MainFrameImpl(wxWindow*);
 
 	void SetStatusText(const wxString&);
+	void RefreshServerGrid();
 };
 
 #endif 
