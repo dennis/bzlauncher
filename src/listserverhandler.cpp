@@ -90,10 +90,12 @@ bool ListServerHandler::GetListServerResponse() {
 }
 
 void ListServerHandler::ClearList() {
+	BZLauncherApp& app = wxGetApp();
+	app.SetSelectedServer(NULL);
+
 	ServerList::iterator i;
 	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
-
 		delete current;
 	}
 
