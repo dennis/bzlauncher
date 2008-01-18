@@ -35,38 +35,42 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 		Server*	current = *i;
 		col = 0;
 
-		// Favorites
-		grid->SetCellValue(row, col, _T("n/a"));
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxLIGHT_GREY);
-
-		// Name
-		col++;
-		wxString s = current->serverHostPort;
-		if( current->isCTF() ) s += _T(" CTF");
-		else if( current->isFFA() ) s += _T(" FFA");
-		else if( current->isRH() ) s += _T(" RH");
-		grid->SetCellValue(row, col, s);
+		// Server
+		grid->SetCellValue(row, col, current->serverHostPort);
 		grid->SetReadOnly(row, col);
 		grid->SetCellTextColour(row, col, *wxBLACK);
-
-		// Type
 		col++;
+
+		// Name
 		grid->SetCellValue(row, col, current->name);
 		grid->SetReadOnly(row, col);
 		grid->SetCellTextColour(row, col, *wxBLACK);
+		col++;
+
+		// Type
+		if( current->isCTF() )
+			grid->SetCellValue(row, col, _("CTF"));
+		else if( current->isFFA() )
+			grid->SetCellValue(row, col, _T("FFA"));
+		else if( current->isRH() )
+			grid->SetCellValue(row, col, _T("RH"));
+		else
+			grid->SetCellValue(row, col, _T("n/a"));
+		grid->SetReadOnly(row, col);
+		grid->SetCellTextColour(row, col, *wxBLACK);
+		col++;
 
 		// Players
-		col++;
 		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->getPlayerCount()));
 		grid->SetReadOnly(row, col);
 		grid->SetCellTextColour(row, col, *wxBLACK);
+		col++;
 
 		// Ping
-		col++;
 		grid->SetCellValue(row, col, _T("n/a"));
 		grid->SetReadOnly(row, col);
 		grid->SetCellTextColour(row, col, *wxLIGHT_GREY);
+		col++;
 
 		row++;
 	}
