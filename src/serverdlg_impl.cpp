@@ -5,77 +5,70 @@
 ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 : ServerDlg( parent ) {
 
-	// ServerName
-	serverName->SetLabel(server->serverHostPort);
+	// ServerHostPort + Name
+	this->serverHostPort->SetLabel(server->serverHostPort);
+	this->serverName->SetLabel(server->name);
 
 	// LEFT COLUMN
 
 	// Players
-	playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
+	this->playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
 
-	// Rogue
-	rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueCount, server->rogueMax));
-
-	// red
-	redVal->SetValue(wxString::Format(_T("%d/%d"), server->redCount, server->redMax));
-
-	// green
-	greenVal->SetValue(wxString::Format(_T("%d/%d"), server->greenCount, server->greenMax));
-	// blue
-	blueVal->SetValue(wxString::Format(_T("%d/%d"), server->blueCount, server->blueMax));
-	// purple
-	purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->purpleCount, server->purpleMax));
-	// observers
-	observersVal->SetValue(wxString::Format(_T("%d/%d"), server->observerCount, server->observerMax));
+	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueCount, server->rogueMax));
+	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->redCount, server->redMax));
+	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->greenCount, server->greenMax));
+	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->blueCount, server->blueMax));
+	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->purpleCount, server->purpleMax));
+	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->observerCount, server->observerMax));
 
 	// RIGHT COLUMN
 
 	// Shots
-	shotsVal->SetValue(wxString::Format(_T("%d"), server->maxShots));
+	this->shotsVal->SetValue(wxString::Format(_T("%d"), server->maxShots));
 
 	// Game type
 	if(server->IsCTF())
-		gameTypeVal->SetValue(_("CTF"));
+		this->gameTypeVal->SetValue(_("CTF"));
 	else if(server->IsFFA()) 
-		gameTypeVal->SetValue(_("FFA"));
+		this->gameTypeVal->SetValue(_("FFA"));
 	else if(server->IsRH()) 
-		gameTypeVal->SetValue(_("RH"));
+		this->gameTypeVal->SetValue(_("RH"));
 	else
-		gameTypeVal->SetValue(_("???"));
+		this->gameTypeVal->SetValue(_("???"));
 	
 	// Super flags
 	if(server->GotSuperFlags())
-		superFlagsVal->SetValue(_("Yes"));
+		this->superFlagsVal->SetValue(_("Yes"));
 	else
-		superFlagsVal->SetValue(_("No"));
+		this->superFlagsVal->SetValue(_("No"));
 	
 	// Antidote flags
 	if(server->GotAntidote())
-		antidoteVal->SetValue(_("Yes"));
+		this->antidoteVal->SetValue(_("Yes"));
 	else
-		antidoteVal->SetValue(_("No"));
+		this->antidoteVal->SetValue(_("No"));
 
 	// Ricochet
 	if(server->GotRicochet())
-		ricochetVal->SetValue(_("Yes"));
+		this->ricochetVal->SetValue(_("Yes"));
 	else
-		ricochetVal->SetValue(_("No"));
+		this->ricochetVal->SetValue(_("No"));
 
 	// Handicap
 	if(server->GotHandicap())
-		handicapVal->SetValue(_("Yes"));
+		this->handicapVal->SetValue(_("Yes"));
 	else
-		handicapVal->SetValue(_("No"));
+		this->handicapVal->SetValue(_("No"));
 
 	// Jumping
 	if(server->GotJumping())
-		jumpVal->SetValue(_("Yes"));
+		this->jumpVal->SetValue(_("Yes"));
 	else
-		jumpVal->SetValue(_("No"));
+		this->jumpVal->SetValue(_("No"));
 	
-	closeBtn->SetFocus();
+	this->closeBtn->SetFocus();
 }
 
 void ServerDlgImpl::EventClose(wxCommandEvent& event) {
-	EndModal(0);
+	this->EndModal(0);
 }
