@@ -5,12 +5,13 @@
 
 class MainFrameImpl : public MainFrame {
 protected:
+	void EventChar(wxKeyEvent&);
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
+	void EventRightClick(wxGridEvent&);
 	void EventSelectServer(wxGridEvent&);
 	void EventShowAbout(wxCommandEvent&);
 	void EventViewServer(wxCommandEvent&);
-	void EventChar(wxKeyEvent&);
 
 public:
 	MainFrameImpl(wxWindow*);

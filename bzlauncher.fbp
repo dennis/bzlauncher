@@ -543,7 +543,7 @@
                         <event name="OnGridCellChange"></event>
                         <event name="OnGridCellLeftClick"></event>
                         <event name="OnGridCellLeftDClick"></event>
-                        <event name="OnGridCellRightClick"></event>
+                        <event name="OnGridCellRightClick">EventRightClick</event>
                         <event name="OnGridCellRightDClick"></event>
                         <event name="OnGridCmdCellChange"></event>
                         <event name="OnGridCmdCellLeftClick"></event>

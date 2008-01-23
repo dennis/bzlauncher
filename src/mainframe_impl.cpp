@@ -133,3 +133,12 @@ void MainFrameImpl::EventChar(wxKeyEvent& event) {
 	}
 */
 }
+void MainFrameImpl::EventRightClick(wxGridEvent& event) {
+	// Select server
+	BZLauncherApp& app = wxGetApp();
+	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
+	this->serverGrid->SelectRow(event.GetRow());
+	
+	// Show menu
+	this->PopupMenu(this->serverMenu);
+}
