@@ -21,7 +21,7 @@ aboutdlg_impl.o: src/aboutdlg_impl.cpp src/aboutdlg_impl.h
 serverdlg_impl.o: src/serverdlg_impl.cpp src/serverdlg_impl.h
 	$(CXX) src/serverdlg_impl.cpp -c $(CXXFLAGS)
 
-src/gui.cpp:
+src/gui.cpp: bzlauncher.fbp
 	-wxformbuilder -g bzlauncher.fbp 
 	-vim -c "%s/\.\.\/icons\//\icons\//g" -c "wq" src/gui.cpp
 
