@@ -24,6 +24,7 @@ void MainFrameImpl::RefreshServerGrid() {
 	app.RefreshServerList();
 
 	wxGrid* grid;
+	const wxColor* serverColor;
 	grid = this->serverGrid;
 
 	// Clear list
@@ -39,16 +40,22 @@ void MainFrameImpl::RefreshServerGrid() {
 		Server*	current = *i;
 		col = 0;
 
+		serverColor = wxBLACK;
+		if(current->IsFull())
+			serverColor = wxRED;
+		else if(current->IsEmpty()) 
+			serverColor = wxLIGHT_GREY;
+
 		// Server
 		grid->SetCellValue(row, col, current->serverHostPort);
 		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellTextColour(row, col, *serverColor);
 		col++;
 
 		// Name
 		grid->SetCellValue(row, col, current->name);
 		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellTextColour(row, col, *serverColor);
 		col++;
 
 		// Type
@@ -61,13 +68,13 @@ void MainFrameImpl::RefreshServerGrid() {
 		else
 			grid->SetCellValue(row, col, _T("n/a"));
 		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellTextColour(row, col, *serverColor);
 		col++;
 
 		// Players
 		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->getPlayerCount()));
 		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxBLACK);
+		grid->SetCellTextColour(row, col, *serverColor);
 		col++;
 
 		// Ping

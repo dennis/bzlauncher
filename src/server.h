@@ -58,6 +58,14 @@ public:
 			this->purpleCount;
 	}
 
+	bool IsFull() {
+		return this->getPlayerCount() == this->maxPlayers;
+	}
+
+	bool IsEmpty() {
+		return this->getPlayerCount() == 0;
+	}
+
 	bool isCTF() {
 		return this->gameStyle & TeamFlagGameStyle;
 	}
