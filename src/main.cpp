@@ -13,7 +13,7 @@ bool BZLauncherApp::OnInit() {
 	this->mainFrame->RefreshServerGrid();
 	this->mainFrame->Show(true);
 
-	SetTopWindow(this->mainFrame);
+	this->SetTopWindow(this->mainFrame);
 
 	return TRUE;
 }
@@ -32,4 +32,15 @@ Server* BZLauncherApp::GetSelectedServer() {
 
 void BZLauncherApp::SetSelectedServer(Server* s) {
 	this->selectedServer = s;
+}
+
+void BZLauncherApp::LaunchSelectedServer() {
+	if(! this->selectedServer) {
+		this->SetStatusText(_("No server selected!"));
+		return;
+	}
+
+	const wxString cmd = _T("bzflag %s");
+
+	::wxShell(wxString::Format(cmd,this->selectedServer->serverHostPort.c_str()));
 }

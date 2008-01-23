@@ -162,3 +162,16 @@ void MainFrameImpl::EventRightClick(wxGridEvent& event) {
 	// Show menu
 	this->PopupMenu(this->serverMenu);
 }
+
+void MainFrameImpl::EventLeftDClick(wxGridEvent& event) {
+	this->LaunchGame();
+}
+
+void MainFrameImpl::EventLaunch(wxCommandEvent& event) {
+	this->LaunchGame();
+}
+
+void MainFrameImpl::LaunchGame() {
+	BZLauncherApp& app = wxGetApp();
+	app.LaunchSelectedServer();
+}

@@ -7,6 +7,8 @@ class MainFrameImpl : public MainFrame {
 protected:
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
+	void EventLaunch(wxCommandEvent&);
+	void EventLeftDClick(wxGridEvent&);
 	void EventRightClick(wxGridEvent&);
 	void EventSelectServer(wxGridEvent&);
 	void EventShowAbout(wxCommandEvent&);
@@ -18,6 +20,8 @@ public:
 
 	void SetStatusText(const wxString&);
 	void RefreshServerGrid();
+
+	void LaunchGame();
 };
 
 #endif 

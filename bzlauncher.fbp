@@ -71,7 +71,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
@@ -147,48 +147,6 @@
                         <event name="OnMenuSelection"></event>
                         <event name="OnUpdateUI"></event>
                     </object>
-                    <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">ID_LAUNCH</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Play</property>
-                        <property name="name">play</property>
-                        <property name="shortcut">RETURN</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">ID_FAVORITE</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Favorite</property>
-                        <property name="name">favorite</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">ID_PING</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Ping</property>
-                        <property name="name">ping</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
                     <object class="separator" expanded="1" />
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
@@ -227,7 +185,7 @@
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap">; Load From File</property>
                         <property name="checked">0</property>
-                        <property name="enabled">0</property>
+                        <property name="enabled">1</property>
                         <property name="help"></property>
                         <property name="id">ID_LAUNCH</property>
                         <property name="kind">wxITEM_NORMAL</property>
@@ -235,7 +193,7 @@
                         <property name="name">joinServer</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
+                        <event name="OnMenuSelection">EventLaunch</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
@@ -542,7 +500,7 @@
                         <event name="OnEraseBackground"></event>
                         <event name="OnGridCellChange"></event>
                         <event name="OnGridCellLeftClick"></event>
-                        <event name="OnGridCellLeftDClick"></event>
+                        <event name="OnGridCellLeftDClick">EventLeftDClick</event>
                         <event name="OnGridCellRightClick">EventRightClick</event>
                         <event name="OnGridCellRightDClick"></event>
                         <event name="OnGridCmdCellChange"></event>
