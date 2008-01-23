@@ -9,30 +9,30 @@ void Server::ParseServerInfo(const wxString& info) {
 	theBuf[54] = (char)NULL;
 
 	char* p = theBuf;
-	p = this->unpackHex16(p, this->gameStyle);
-	p = this->unpackHex16(p, this->maxShots);
-	p = this->unpackHex16(p, this->shakeWins);
-	p = this->unpackHex16(p, this->shakeTimeout);
-	p = this->unpackHex16(p, this->maxPlayerScore);
-	p = this->unpackHex16(p, this->maxTeamScore);
-	p = this->unpackHex16(p, this->maxTime);
-	p = this->unpackHex8(p, this->maxPlayers);
-	p = this->unpackHex8(p, this->rogueCount);
-	p = this->unpackHex8(p, this->rogueMax);
-	p = this->unpackHex8(p, this->redCount);
-	p = this->unpackHex8(p, this->redMax);
-	p = this->unpackHex8(p, this->greenCount);
-	p = this->unpackHex8(p, this->greenMax);
-	p = this->unpackHex8(p, this->blueCount);
-	p = this->unpackHex8(p, this->blueMax);
-	p = this->unpackHex8(p, this->purpleCount);
-	p = this->unpackHex8(p, this->purpleMax);
-	p = this->unpackHex8(p, this->observerCount);
-	p = this->unpackHex8(p, this->observerMax);
+	p = this->UnpackHex16(p, this->gameStyle);
+	p = this->UnpackHex16(p, this->maxShots);
+	p = this->UnpackHex16(p, this->shakeWins);
+	p = this->UnpackHex16(p, this->shakeTimeout);
+	p = this->UnpackHex16(p, this->maxPlayerScore);
+	p = this->UnpackHex16(p, this->maxTeamScore);
+	p = this->UnpackHex16(p, this->maxTime);
+	p = this->UnpackHex8(p, this->maxPlayers);
+	p = this->UnpackHex8(p, this->rogueCount);
+	p = this->UnpackHex8(p, this->rogueMax);
+	p = this->UnpackHex8(p, this->redCount);
+	p = this->UnpackHex8(p, this->redMax);
+	p = this->UnpackHex8(p, this->greenCount);
+	p = this->UnpackHex8(p, this->greenMax);
+	p = this->UnpackHex8(p, this->blueCount);
+	p = this->UnpackHex8(p, this->blueMax);
+	p = this->UnpackHex8(p, this->purpleCount);
+	p = this->UnpackHex8(p, this->purpleMax);
+	p = this->UnpackHex8(p, this->observerCount);
+	p = this->UnpackHex8(p, this->observerMax);
 }
 
 // Pretty much stolen from BZFlag
-int Server::hex2bin(char d) {
+int Server::Hex2bin(char d) {
 	switch(d) {
 		case '0': return 0;
 		case '1': return 1;
@@ -60,18 +60,18 @@ int Server::hex2bin(char d) {
 	return 0;
 }
 
-char* Server::unpackHex16(char* buf, uint16_t& d) {
+char* Server::UnpackHex16(char* buf, uint16_t& d) {
 	d = 0;
-	d = (d << 4) | hex2bin(*buf++);
-	d = (d << 4) | hex2bin(*buf++);
-	d = (d << 4) | hex2bin(*buf++);
-	d = (d << 4) | hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
 	return buf;
 }
 
-char* Server::unpackHex8(char* buf, uint8_t& d) {
+char* Server::UnpackHex8(char* buf, uint8_t& d) {
 	d = 0;
-	d = (d << 4) | hex2bin(*buf++);
-	d = (d << 4) | hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | this->Hex2bin(*buf++);
 	return buf;
 }

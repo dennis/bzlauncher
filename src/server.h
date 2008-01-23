@@ -49,7 +49,7 @@ public:
 	uint8_t		observerCount;
 	uint8_t		observerMax;
 
-	int getPlayerCount() {
+	int GetPlayerCount() {
 		return 
 			this->rogueCount+
 			this->redCount+
@@ -59,42 +59,42 @@ public:
 	}
 
 	bool IsFull() {
-		return this->getPlayerCount() == this->maxPlayers;
+		return this->GetPlayerCount() == this->maxPlayers;
 	}
 
 	bool IsEmpty() {
-		return this->getPlayerCount() == 0;
+		return this->GetPlayerCount() == 0;
 	}
 
-	bool isCTF() {
+	bool IsCTF() {
 		return this->gameStyle & TeamFlagGameStyle;
 	}
 
-	bool isRH() {
+	bool IsRH() {
 		return this->gameStyle & RabbitChaseGameStyle;
 	}
 
-	bool isFFA() {
-		return !this->isCTF() && !this->isRH();
+	bool IsFFA() {
+		return !this->IsCTF() && !this->IsRH();
 	}
 
-	bool gotSuperFlags() {
+	bool GotSuperFlags() {
 		return this->gameStyle & SuperFlagGameStyle;
 	}
 
-	bool gotJumping() {
+	bool GotJumping() {
 		return this->gameStyle & JumpingGameStyle;
 	}
 
-	bool gotAntidote() {
+	bool GotAntidote() {
 		return this->gameStyle & AntidoteGameStyle;
 	}
 
-	bool gotRicochet() {
+	bool GotRicochet() {
 		return this->gameStyle & RicochetGameStyle;
 	}
 
-	bool gotHandicap() {
+	bool GotHandicap() {
 		return this->gameStyle & HandicapGameStyle;
 	}
 
@@ -105,9 +105,9 @@ public:
 		blueCount(0), blueMax(0), purpleCount(0), purpleMax(0), observerCount(0), observerMax(0) {
 	}
 private:
-	int hex2bin(char);
-	char* unpackHex16(char*, uint16_t&);
-	char* unpackHex8(char*, uint8_t&);
+	int Hex2bin(char);
+	char* UnpackHex16(char*, uint16_t&);
+	char* UnpackHex8(char*, uint8_t&);
 };
 
 #endif

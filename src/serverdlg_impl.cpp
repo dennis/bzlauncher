@@ -11,7 +11,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// LEFT COLUMN
 
 	// Players
-	playersVal->SetValue(wxString::Format(_T("%d/%d"), server->getPlayerCount(), server->maxPlayers));
+	playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
 
 	// Rogue
 	rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueCount, server->rogueMax));
@@ -34,41 +34,41 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	shotsVal->SetValue(wxString::Format(_T("%d"), server->maxShots));
 
 	// Game type
-	if(server->isCTF())
+	if(server->IsCTF())
 		gameTypeVal->SetValue(_("CTF"));
-	else if(server->isFFA()) 
+	else if(server->IsFFA()) 
 		gameTypeVal->SetValue(_("FFA"));
-	else if(server->isRH()) 
+	else if(server->IsRH()) 
 		gameTypeVal->SetValue(_("RH"));
 	else
 		gameTypeVal->SetValue(_("???"));
 	
 	// Super flags
-	if(server->gotSuperFlags())
+	if(server->GotSuperFlags())
 		superFlagsVal->SetValue(_("Yes"));
 	else
 		superFlagsVal->SetValue(_("No"));
 	
 	// Antidote flags
-	if(server->gotAntidote())
+	if(server->GotAntidote())
 		antidoteVal->SetValue(_("Yes"));
 	else
 		antidoteVal->SetValue(_("No"));
 
 	// Ricochet
-	if(server->gotRicochet())
+	if(server->GotRicochet())
 		ricochetVal->SetValue(_("Yes"));
 	else
 		ricochetVal->SetValue(_("No"));
 
 	// Handicap
-	if(server->gotHandicap())
+	if(server->GotHandicap())
 		handicapVal->SetValue(_("Yes"));
 	else
 		handicapVal->SetValue(_("No"));
 
 	// Jumping
-	if(server->gotJumping())
+	if(server->GotJumping())
 		jumpVal->SetValue(_("Yes"));
 	else
 		jumpVal->SetValue(_("No"));

@@ -59,11 +59,11 @@ void MainFrameImpl::RefreshServerGrid() {
 		col++;
 
 		// Type
-		if( current->isCTF() )
+		if( current->IsCTF() )
 			grid->SetCellValue(row, col, _("CTF"));
-		else if( current->isFFA() )
+		else if( current->IsFFA() )
 			grid->SetCellValue(row, col, _T("FFA"));
-		else if( current->isRH() )
+		else if( current->IsRH() )
 			grid->SetCellValue(row, col, _T("RH"));
 		else
 			grid->SetCellValue(row, col, _T("n/a"));
@@ -72,7 +72,7 @@ void MainFrameImpl::RefreshServerGrid() {
 		col++;
 
 		// Players
-		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->getPlayerCount()));
+		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->GetPlayerCount()));
 		grid->SetReadOnly(row, col);
 		grid->SetCellTextColour(row, col, *serverColor);
 		col++;
