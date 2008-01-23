@@ -40,7 +40,7 @@
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
-            <property name="window_style">wxTAB_TRAVERSAL</property>
+            <property name="window_style">wxTAB_TRAVERSAL|wxWANTS_CHARS</property>
             <property name="xrc_skip_sizer">1</property>
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
@@ -489,7 +489,7 @@
                     <property name="proportion">0</property>
                     <object class="wxGrid" expanded="1">
                         <property name="autosize_cols">0</property>
-                        <property name="autosize_rows">1</property>
+                        <property name="autosize_rows">0</property>
                         <property name="bg"></property>
                         <property name="cell_bg"></property>
                         <property name="cell_font"></property>
@@ -504,15 +504,15 @@
                         <property name="column_sizes">157,300,47,30,46</property>
                         <property name="context_help"></property>
                         <property name="drag_col_move">0</property>
-                        <property name="drag_col_size">1</property>
-                        <property name="drag_grid_size">1</property>
-                        <property name="drag_row_size">1</property>
-                        <property name="editing">1</property>
+                        <property name="drag_col_size">0</property>
+                        <property name="drag_grid_size">0</property>
+                        <property name="drag_row_size">0</property>
+                        <property name="editing">0</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="font"></property>
                         <property name="grid_line_color"></property>
-                        <property name="grid_lines">1</property>
+                        <property name="grid_lines">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
                         <property name="label_bg"></property>
@@ -536,8 +536,8 @@
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style"></property>
-                        <event name="OnChar">EventChar</event>
+                        <property name="window_style">wxWANTS_CHARS</property>
+                        <event name="OnChar"></event>
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
                         <event name="OnGridCellChange"></event>
@@ -573,7 +573,7 @@
                         <event name="OnGridRowSize"></event>
                         <event name="OnGridSelectCell">EventSelectServer</event>
                         <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
+                        <event name="OnKeyUp">EventKeyUp</event>
                         <event name="OnKillFocus"></event>
                         <event name="OnLeaveWindow"></event>
                         <event name="OnLeftDClick"></event>

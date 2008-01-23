@@ -1,3 +1,4 @@
+#include <wx/log.h>
 #include "main.h"
 #include "mainframe_impl.h"
 #include "aboutdlg_impl.h"
@@ -8,6 +9,7 @@
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ) {
 	this->serverGrid->SetSelectionMode(wxGrid::wxGridSelectRows);
+	this->serverGrid->SetFocus();
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -23,13 +25,13 @@ void MainFrameImpl::RefreshServerGrid() {
 
 	app.RefreshServerList();
 
-	wxGrid* grid;
 	const wxColor* serverColor;
-	grid = this->serverGrid;
+	wxGrid* grid = this->serverGrid;
 
 	// Clear list
 	grid->BeginBatch();
 	grid->DeleteRows(0,grid->GetNumberRows());
+	grid->ClearSelection();
 	grid->InsertRows(0,app.listServerHandler.serverList.GetCount());
 
 	// Content
@@ -109,29 +111,47 @@ void MainFrameImpl::EventSelectServer(wxGridEvent& event) {
 	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
 }
 
-void MainFrameImpl::EventChar(wxKeyEvent& event) {
-/*
+void MainFrameImpl::EventKeyUp(wxKeyEvent& event) {
 	switch(event.GetKeyCode()) {
-		case WXK_HOME:
-			serverGrid->SelectRow(0);
+/* - there must be a better way
+		case WXK_UP: {
+			int row = this->serverGrid->GetGridCursorRow();
+			if( row > 0 ) row--;
+			this->serverGrid->SetGridCursor(row,0);
+			this->serverGrid->MakeCellVisible(row,0);
+			}
 			break;
-		case WXK_END:
-			serverGrid->SelectRow(serverGrid->GetNumberRows());
+
+		case WXK_DOWN: {
+			int row = this->serverGrid->GetGridCursorRow();
+			if( row+1 < this->serverGrid->GetNumberRows() ) row++;
+			this->serverGrid->SetGridCursor(row,0);
+			this->serverGrid->MakeCellVisible(row,0);
+			}
 			break;
+			
+		case WXK_LEFT:
 		case WXK_UP:
-			serverGrid->MoveCursorDown(true);
+		case '8':
+			serverGrid->MoveCursorUp(false);
 			break;
+		case WXK_RIGHT:
 		case WXK_DOWN:
-			serverGrid->MoveCursorDown(true);
+		case '2':
+			serverGrid->MoveCursorDown(false);
 			break;
 		case WXK_PAGEUP:
+		case '9':
 			serverGrid->MovePageUp();
 			break;
+		case '3':
 		case WXK_PAGEDOWN:
 			serverGrid->MovePageDown();
 			break;
-	}
 */
+		default:
+			event.Skip();
+	}
 }
 void MainFrameImpl::EventRightClick(wxGridEvent& event) {
 	// Select server
