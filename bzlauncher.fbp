@@ -485,7 +485,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND|wxTOP</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxGrid" expanded="1">
                         <property name="autosize_cols">0</property>
@@ -507,7 +507,7 @@
                         <property name="drag_col_size">1</property>
                         <property name="drag_grid_size">1</property>
                         <property name="drag_row_size">1</property>
-                        <property name="editing">0</property>
+                        <property name="editing">1</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="font"></property>
@@ -537,7 +537,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnChar"></event>
+                        <event name="OnChar">EventChar</event>
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
                         <event name="OnGridCellChange"></event>

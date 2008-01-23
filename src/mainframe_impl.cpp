@@ -102,3 +102,27 @@ void MainFrameImpl::EventSelectServer(wxGridEvent& event) {
 	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
 }
 
+void MainFrameImpl::EventChar(wxKeyEvent& event) {
+/*
+	switch(event.GetKeyCode()) {
+		case WXK_HOME:
+			serverGrid->SelectRow(0);
+			break;
+		case WXK_END:
+			serverGrid->SelectRow(serverGrid->GetNumberRows());
+			break;
+		case WXK_UP:
+			serverGrid->MoveCursorDown(true);
+			break;
+		case WXK_DOWN:
+			serverGrid->MoveCursorDown(true);
+			break;
+		case WXK_PAGEUP:
+			serverGrid->MovePageUp();
+			break;
+		case WXK_PAGEDOWN:
+			serverGrid->MovePageDown();
+			break;
+	}
+*/
+}

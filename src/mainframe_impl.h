@@ -10,7 +10,7 @@ protected:
 	void EventSelectServer(wxGridEvent&);
 	void EventShowAbout(wxCommandEvent&);
 	void EventViewServer(wxCommandEvent&);
-
+	void EventChar(wxKeyEvent&);
 
 public:
 	MainFrameImpl(wxWindow*);
