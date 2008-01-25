@@ -49,7 +49,7 @@ public:
 	uint8_t		observerCount;
 	uint8_t		observerMax;
 
-	int GetPlayerCount() {
+	int GetPlayerCount() const {
 		return 
 			this->rogueCount+
 			this->redCount+
@@ -58,43 +58,54 @@ public:
 			this->purpleCount;
 	}
 
-	bool IsFull() {
+	bool IsFull() const {
 		return this->GetPlayerCount() == this->maxPlayers;
 	}
 
-	bool IsEmpty() {
+	bool IsEmpty() const {
 		return this->GetPlayerCount() == 0;
 	}
 
-	bool IsCTF() {
+	bool IsCTF() const {
 		return this->gameStyle & TeamFlagGameStyle;
 	}
 
-	bool IsRH() {
+	bool IsRH() const {
 		return this->gameStyle & RabbitChaseGameStyle;
 	}
 
-	bool IsFFA() {
+	bool IsFFA() const {
 		return !this->IsCTF() && !this->IsRH();
 	}
 
-	bool GotSuperFlags() {
+	const wxString GetType() const {
+		if( this->IsCTF() )
+			return wxT("CTF");
+		else if( this->IsFFA() )
+			return wxT("FFA");
+		else if( this->IsRH() )
+			return wxT("RH");
+		else
+			return wxT("??");
+	}
+
+	bool GotSuperFlags() const {
 		return this->gameStyle & SuperFlagGameStyle;
 	}
 
-	bool GotJumping() {
+	bool GotJumping() const {
 		return this->gameStyle & JumpingGameStyle;
 	}
 
-	bool GotAntidote() {
+	bool GotAntidote() const {
 		return this->gameStyle & AntidoteGameStyle;
 	}
 
-	bool GotRicochet() {
+	bool GotRicochet() const {
 		return this->gameStyle & RicochetGameStyle;
 	}
 
-	bool GotHandicap() {
+	bool GotHandicap() const {
 		return this->gameStyle & HandicapGameStyle;
 	}
 

@@ -7,7 +7,7 @@
 #include "listserverhandler.h"
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ) {
+: MainFrame( parent ), m_currentSortMode(1) {
 	this->serverList->SetFocus();
 	int col = 0;
 	this->serverList->InsertColumn(col,_("Server"));
@@ -54,24 +54,16 @@ void MainFrameImpl::RefreshServerGrid() {
 	int idx = 0;
 	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
 		Server*	current = *i;
-
-		// TODO: Colorization missing
 	
 		// Server
 		list->InsertItem(idx, current->serverHostPort);
+		list->SetItemData(idx,idx);
 
 		// Name
 		list->SetItem(idx, 1, current->name);
 
 		// Type
-		if( current->IsCTF() )
-			list->SetItem(idx, 2, _("CTF"));
-		else if( current->IsFFA() )
-			list->SetItem(idx, 2, _("FFA"));
-		else if( current->IsRH() )
-			list->SetItem(idx, 2, _("RH"));
-		else
-			list->SetItem(idx, 2, _("n/a"));
+		list->SetItem(idx, 2, current->GetType());
 
 		// Player Count
 		list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
@@ -81,6 +73,8 @@ void MainFrameImpl::RefreshServerGrid() {
 
 		idx++;
 	}
+	
+	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -105,10 +99,12 @@ void MainFrameImpl::EventViewServer(wxCommandEvent&) {
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
-	int idx = event.m_itemIndex;
-	BZLauncherApp& app = wxGetApp();
-	const wxString s = app.listServerHandler.serverList.Item(idx)->GetData()->serverHostPort;
-	app.SetSelectedServer(s);
+	const wxString s = this->GetServerByIdx(event.GetData())->serverHostPort;
+	wxGetApp().SetSelectedServer(s);
+}
+
+Server* MainFrameImpl::GetServerByIdx(int idx) {
+	return wxGetApp().listServerHandler.serverList.Item(idx)->GetData();
 }
 
 void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
@@ -127,3 +123,55 @@ void MainFrameImpl::LaunchGame() {
 	BZLauncherApp& app = wxGetApp();
 	app.LaunchSelectedServer();
 }
+
+static int SortHelper(int res, bool reverse=false) {
+	if(res==0) return res;
+	if(reverse) return res*(-1);
+	return res;
+}
+int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long col) {
+	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
+	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
+
+	bool ascending = (col<0);
+
+	col = abs(col);
+
+	switch(col) {
+		case 1: // ServerHostPort
+			return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),ascending);
+			break;
+		case 2: // Name
+			return SortHelper(s1->name.CmpNoCase(s2->name),ascending);
+			break;
+		case 3:	// Type
+			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
+			break;
+		case 4: // Players
+			{
+			int r=0;
+			if(s1->GetPlayerCount() < s2->GetPlayerCount())
+				r = -1;
+			else if(s1->GetPlayerCount() > s2->GetPlayerCount())
+				r = 1;
+			return SortHelper(r,ascending);
+			}
+			break;
+		case 5: // Ping
+			break;
+		default:
+			return 0;
+			break;
+	}
+	return -1;
+}
+
+void MainFrameImpl::EventColClick(wxListEvent& event) {
+	if(abs(this->m_currentSortMode) == (event.GetColumn()+1))
+		this->m_currentSortMode *= -1;
+	else
+		this->m_currentSortMode = event.GetColumn()+1;
+	wxLogMessage(wxString::Format(_T("SortMode = %d, event = %d"), this->m_currentSortMode, event.GetColumn()));
+	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+}
+
