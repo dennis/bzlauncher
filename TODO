@@ -9,17 +9,17 @@ v+0
 		- protocol_executable (findes ikke) (fx bzfs0026_executable)
 	- improve bzflag-list parser
 	- favorites
+	- windows compile
 
 version 1.0 alpha
 =================
-	- windows compile
 	- bugfixes
-	- strayer test
 	Ping Server (game query request)
 		- ping: Only ping once for every unique ip
 	- embedding png images?
 		http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
 	- use strayers listserver as fallback
+	- search
 
 version 1.0rc
 =============
@@ -31,3 +31,4 @@ version 1.0rc
 
 version 1 release 
 =================
+	- bugfixes
