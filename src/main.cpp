@@ -26,21 +26,21 @@ void BZLauncherApp::RefreshServerList() {
 	this->listServerHandler.GetServerList();
 }
 
-Server* BZLauncherApp::GetSelectedServer() {
-	return this->selectedServer;
+const wxString BZLauncherApp::GetSelectedServer() {
+	return this->selectedServerHostPort;
 }
 
-void BZLauncherApp::SetSelectedServer(Server* s) {
-	this->selectedServer = s;
+void BZLauncherApp::SetSelectedServer(const wxString& s) {
+	this->selectedServerHostPort = s;
 }
 
 void BZLauncherApp::LaunchSelectedServer() {
-	if(! this->selectedServer) {
+	if(this->selectedServerHostPort.IsEmpty()) {
 		this->SetStatusText(_("No server selected!"));
 		return;
 	}
 
 	const wxString cmd = _T("bzflag %s");
 
-	::wxShell(wxString::Format(cmd,this->selectedServer->serverHostPort.c_str()));
+	::wxShell(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
 }

@@ -69,6 +69,6 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->closeBtn->SetFocus();
 }
 
-void ServerDlgImpl::EventClose(wxCommandEvent& event) {
+void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 	this->EndModal(0);
 }

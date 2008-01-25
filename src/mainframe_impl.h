@@ -8,12 +8,11 @@ protected:
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
 	void EventLaunch(wxCommandEvent&);
-	void EventLeftDClick(wxGridEvent&);
-	void EventRightClick(wxGridEvent&);
-	void EventSelectServer(wxGridEvent&);
+	void EventActivated(wxListEvent&);
+	void EventRightClick(wxListEvent&);
+	void EventSelectServer(wxListEvent&);
 	void EventShowAbout(wxCommandEvent&);
 	void EventViewServer(wxCommandEvent&);
-	void EventKeyUp(wxKeyEvent&);
 
 public:
 	MainFrameImpl(wxWindow*);

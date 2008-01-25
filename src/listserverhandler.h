@@ -23,6 +23,7 @@ public:
 	ListServerHandler() {};
 
 	void GetServerList();
+	Server* FindByName(const wxString&);
 };
 
 

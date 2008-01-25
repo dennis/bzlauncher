@@ -49,8 +49,10 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 		case 1:
 			s->protocolVersion = token;
 			// We only parse BZFS0026 for now
-			if( token.Cmp(_T("BZFS0026")) != 0 )
+			if( token.Cmp(_T("BZFS0026")) != 0 ) {
+				delete s;
 				return false;
+			}
 			break;
 		case 2:
 			s->ParseServerInfo(token);
@@ -90,9 +92,6 @@ bool ListServerHandler::GetListServerResponse() {
 }
 
 void ListServerHandler::ClearList() {
-	BZLauncherApp& app = wxGetApp();
-	app.SetSelectedServer(NULL);
-
 	ServerList::iterator i;
 	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
@@ -100,4 +99,16 @@ void ListServerHandler::ClearList() {
 	}
 
 	this->serverList.Clear();
+}
+
+Server* ListServerHandler::FindByName(const wxString& n) {
+	ServerList::iterator i;
+	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
+		Server*	current = *i;
+
+		if(n.Cmp(current->serverHostPort) == 0)
+			return current;
+	}
+
+return NULL;
 }

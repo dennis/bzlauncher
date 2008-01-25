@@ -8,8 +8,27 @@
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ) {
-	this->serverGrid->SetSelectionMode(wxGrid::wxGridSelectRows);
-	this->serverGrid->SetFocus();
+	this->serverList->SetFocus();
+	int col = 0;
+	this->serverList->InsertColumn(col,_("Server"));
+	this->serverList->SetColumnWidth(col,157);
+	col++;
+
+	this->serverList->InsertColumn(col,_("Name"));
+	this->serverList->SetColumnWidth(col,300);
+	col++;
+
+	this->serverList->InsertColumn(col,_("Type"));
+	this->serverList->SetColumnWidth(col,47);
+	col++;
+
+	this->serverList->InsertColumn(col,_("#"));
+	this->serverList->SetColumnWidth(col,30);
+	col++;
+
+	this->serverList->InsertColumn(col,_("Ping"));
+	this->serverList->SetColumnWidth(col,46);
+	col++;
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -25,70 +44,43 @@ void MainFrameImpl::RefreshServerGrid() {
 
 	app.RefreshServerList();
 
-	const wxColor* serverColor;
-	wxGrid* grid = this->serverGrid;
+	wxListCtrl* list = this->serverList;
 
-	// Clear list
-	grid->BeginBatch();
-	grid->DeleteRows(0,grid->GetNumberRows());
-	grid->ClearSelection();
-	grid->InsertRows(0,app.listServerHandler.serverList.GetCount());
+	list->DeleteAllItems();
 
 	// Content
 	ServerList::iterator i;
-	int row = 0;
-	int col = 0;
+
+	int idx = 0;
 	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
 		Server*	current = *i;
-		col = 0;
 
-		serverColor = wxBLACK;
-		if(current->IsFull())
-			serverColor = wxRED;
-		else if(current->IsEmpty()) 
-			serverColor = wxLIGHT_GREY;
-
+		// TODO: Colorization missing
+	
 		// Server
-		grid->SetCellValue(row, col, current->serverHostPort);
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *serverColor);
-		col++;
+		list->InsertItem(idx, current->serverHostPort);
 
 		// Name
-		grid->SetCellValue(row, col, current->name);
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *serverColor);
-		col++;
+		list->SetItem(idx, 1, current->name);
 
 		// Type
 		if( current->IsCTF() )
-			grid->SetCellValue(row, col, _("CTF"));
+			list->SetItem(idx, 2, _("CTF"));
 		else if( current->IsFFA() )
-			grid->SetCellValue(row, col, _T("FFA"));
+			list->SetItem(idx, 2, _("FFA"));
 		else if( current->IsRH() )
-			grid->SetCellValue(row, col, _T("RH"));
+			list->SetItem(idx, 2, _("RH"));
 		else
-			grid->SetCellValue(row, col, _T("n/a"));
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *serverColor);
-		col++;
+			list->SetItem(idx, 2, _("n/a"));
 
-		// Players
-		grid->SetCellValue(row, col, wxString::Format(_T("%d"), current->GetPlayerCount()));
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *serverColor);
-		col++;
-
+		// Player Count
+		list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
+		
 		// Ping
-		grid->SetCellValue(row, col, _T("n/a"));
-		grid->SetReadOnly(row, col);
-		grid->SetCellTextColour(row, col, *wxLIGHT_GREY);
-		col++;
+		list->SetItem(idx, 4, _("n/a"));
 
-		row++;
+		idx++;
 	}
-	
-	grid->EndBatch();
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -102,72 +94,32 @@ void MainFrameImpl::EventQuit(wxCommandEvent&) {
 
 void MainFrameImpl::EventViewServer(wxCommandEvent&) {
 	BZLauncherApp& app = wxGetApp();
-	ServerDlgImpl dlg(this, app.GetSelectedServer());
-	dlg.ShowModal();
-}
-
-void MainFrameImpl::EventSelectServer(wxGridEvent& event) {
-	BZLauncherApp& app = wxGetApp();
-	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
-}
-
-void MainFrameImpl::EventKeyUp(wxKeyEvent& event) {
-	switch(event.GetKeyCode()) {
-/* - there must be a better way
-		case WXK_UP: {
-			int row = this->serverGrid->GetGridCursorRow();
-			if( row > 0 ) row--;
-			this->serverGrid->SetGridCursor(row,0);
-			this->serverGrid->MakeCellVisible(row,0);
-			}
-			break;
-
-		case WXK_DOWN: {
-			int row = this->serverGrid->GetGridCursorRow();
-			if( row+1 < this->serverGrid->GetNumberRows() ) row++;
-			this->serverGrid->SetGridCursor(row,0);
-			this->serverGrid->MakeCellVisible(row,0);
-			}
-			break;
-			
-		case WXK_LEFT:
-		case WXK_UP:
-		case '8':
-			serverGrid->MoveCursorUp(false);
-			break;
-		case WXK_RIGHT:
-		case WXK_DOWN:
-		case '2':
-			serverGrid->MoveCursorDown(false);
-			break;
-		case WXK_PAGEUP:
-		case '9':
-			serverGrid->MovePageUp();
-			break;
-		case '3':
-		case WXK_PAGEDOWN:
-			serverGrid->MovePageDown();
-			break;
-*/
-		default:
-			event.Skip();
+	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
+	if(s) {
+		ServerDlgImpl dlg(this, s);
+		dlg.ShowModal();
+	}
+	else {
+		app.SetStatusText(_("No server selected"));
 	}
 }
-void MainFrameImpl::EventRightClick(wxGridEvent& event) {
-	// Select server
+
+void MainFrameImpl::EventSelectServer(wxListEvent& event) {
+	int idx = event.m_itemIndex;
 	BZLauncherApp& app = wxGetApp();
-	app.SetSelectedServer((app.listServerHandler.serverList.Item(event.GetRow()))->GetData());
-	this->serverGrid->SelectRow(event.GetRow());
-	
-	// Show menu
+	const wxString s = app.listServerHandler.serverList.Item(idx)->GetData()->serverHostPort;
+	app.SetSelectedServer(s);
+}
+
+void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
 	this->PopupMenu(this->serverMenu);
 }
 
-void MainFrameImpl::EventLeftDClick(wxGridEvent& event) {
+void MainFrameImpl::EventActivated(wxListEvent& WXUNUSED(event)) {
 	this->LaunchGame();
 }
 
-void MainFrameImpl::EventLaunch(wxCommandEvent& event) {
+void MainFrameImpl::EventLaunch(wxCommandEvent& WXUNUSED(event)) {
 	this->LaunchGame();
 }
 

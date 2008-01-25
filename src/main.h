@@ -7,7 +7,7 @@ class MainFrameImpl;
 class BZLauncherApp : public wxApp {
 private:
 	MainFrameImpl*		mainFrame;
-	Server* 			selectedServer;
+	wxString 			selectedServerHostPort;
 
 public:
 	ListServerHandler	listServerHandler;
@@ -17,8 +17,8 @@ public:
 	void SetStatusText(const wxString&);
 	void RefreshServerList();
 
-	Server* GetSelectedServer();
-	void SetSelectedServer(Server*);
+	const wxString GetSelectedServer();
+	void SetSelectedServer(const wxString&);
 
 	void LaunchSelectedServer();
 };

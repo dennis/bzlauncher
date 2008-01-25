@@ -1,7 +1,9 @@
 all: bzlauncher
 
 CXX=ccache g++
-CXXFLAGS=`wx-config --cxxflags` -Wall -ggdb 
+# -Wcast-qual removed: wx can't be compiled with it
+# -Wconversion -ggdb -ansi -pedantic -Wshadow 
+CXXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
 
 bzlauncher: gui.o listserverhandler.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o
 	$(CXX) *.o `wx-config --libs` -o bzlauncher
