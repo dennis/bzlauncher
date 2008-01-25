@@ -1,0 +1,33 @@
+v+0
+===
+	wxConfig:
+	- store:
+		- window size + pos, 
+		- column sizes
+		- sortmode 
+		- tjek efter executable (Default: "bzflag %s")
+		- protocol_executable (findes ikke) (fx bzfs0026_executable)
+	- improve bzflag-list parser
+	- favorites
+
+version 1.0 alpha
+=================
+	- windows compile
+	- bugfixes
+	- strayer test
+	Ping Server (game query request)
+		- ping: Only ping once for every unique ip
+	- embedding png images?
+		http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
+	- use strayers listserver as fallback
+
+version 1.0rc
+=============
+	- bugfixes
+	- create homepage
+	- select license
+	- build debian package
+	- build windows installer
+
+version 1 release 
+=================
