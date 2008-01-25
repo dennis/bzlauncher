@@ -7,7 +7,7 @@
 #include "listserverhandler.h"
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ), m_currentSortMode(1) {
+: MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
 	this->serverList->SetFocus();
 	int col = 0;
 	this->serverList->InsertColumn(col,_("Server"));
@@ -70,6 +70,14 @@ void MainFrameImpl::RefreshServerGrid() {
 		
 		// Ping
 		list->SetItem(idx, 4, _("n/a"));
+
+		// Color
+		if(current->IsFull())
+			list->SetItemTextColour(idx, *wxRED);
+		else if(current->IsEmpty())
+			list->SetItemTextColour(idx, *wxLIGHT_GREY);
+		else
+			list->SetItemTextColour(idx, *wxBLACK);
 
 		idx++;
 	}
@@ -171,7 +179,6 @@ void MainFrameImpl::EventColClick(wxListEvent& event) {
 		this->m_currentSortMode *= -1;
 	else
 		this->m_currentSortMode = event.GetColumn()+1;
-	wxLogMessage(wxString::Format(_T("SortMode = %d, event = %d"), this->m_currentSortMode, event.GetColumn()));
 	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
