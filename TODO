@@ -2,8 +2,6 @@ v+0
 ===
 	wxConfig:
 	- store:
-		- window size + pos, 
-		- column sizes
 		- sortmode 
 		- tjek efter executable (Default: "bzflag %s")
 		- protocol_executable (findes ikke) (fx bzfs0026_executable)

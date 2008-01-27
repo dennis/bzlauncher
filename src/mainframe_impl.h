@@ -10,6 +10,12 @@ private:
 	static int ServerSortCallback(long, long, long);
 	long m_currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
 
+	void SetupColumns();
+	wxRect DetermineFrameSize() const;
+
+	void StoreFrameSize(const wxRect&) const;
+	void StoreColumnSizes() const;
+
 protected:
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);

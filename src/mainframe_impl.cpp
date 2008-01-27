@@ -8,27 +8,102 @@
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
+	this->SetSize(this->DetermineFrameSize());
+	this->SetupColumns();
+
 	this->serverList->SetFocus();
+}
+
+void MainFrameImpl::SetupColumns() {
+	const wxString ConfigNames [] = {
+		_T("window/col_server_width"),
+		_T("window/col_name_width"),
+		_T("window/col_type_width"),
+		_T("window/col_players_width"),
+		_T("window/col_ping_width")
+	};
+
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+
+	// Columns
 	int col = 0;
 	this->serverList->InsertColumn(col,_("Server"));
-	this->serverList->SetColumnWidth(col,157);
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],157));
 	col++;
 
 	this->serverList->InsertColumn(col,_("Name"));
-	this->serverList->SetColumnWidth(col,300);
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],300));
 	col++;
 
 	this->serverList->InsertColumn(col,_("Type"));
-	this->serverList->SetColumnWidth(col,47);
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],47));
 	col++;
 
 	this->serverList->InsertColumn(col,_("#"));
-	this->serverList->SetColumnWidth(col,30);
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],30));
 	col++;
 
 	this->serverList->InsertColumn(col,_("Ping"));
-	this->serverList->SetColumnWidth(col,46);
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
 	col++;
+}
+
+wxRect MainFrameImpl::DetermineFrameSize() const {
+	const int minFrameW = 300;
+	const int minFrameH = 300;
+
+	wxSize scr = wxGetDisplaySize();
+	wxRect wanted; 
+
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+	wxString key = _T("window/");
+
+	wanted.x = cfg->Read(key + _T("/x"), 10);
+	wanted.y = cfg->Read(key + _T("/y"), 10);
+	wanted.width = cfg->Read(key + _T("/w"), 600);
+	wanted.height = cfg->Read(key + _T("/h"), 600);
+
+	delete cfg;
+
+	// Check values
+	wanted.x = wxMin(abs(wanted.x), scr.x - minFrameW);
+	wanted.y = wxMin(abs(wanted.y), scr.y - minFrameH);
+	wanted.height = wxMax(wanted.height, minFrameH);
+	wanted.height = wxMin(wanted.height, scr.x - wanted.x);
+	wanted.width = wxMax(wanted.width, minFrameW);
+	wanted.width = wxMin(wanted.width, scr.y - wanted.y);
+	return wanted;
+}
+
+void MainFrameImpl::StoreFrameSize(const wxRect& r) const {
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+	wxString key = _T("window/");
+	
+	cfg->Write(key + _T("/x"), r.x);
+	cfg->Write(key + _T("/y"), r.y);
+	cfg->Write(key + _T("/h"), r.height);
+	cfg->Write(key + _T("/w"), r.width);
+	delete cfg;
+}
+
+void MainFrameImpl::StoreColumnSizes() const {
+	const wxString ConfigNames [] = {
+		_T("window/col_server_width"),
+		_T("window/col_name_width"),
+		_T("window/col_type_width"),
+		_T("window/col_players_width"),
+		_T("window/col_ping_width")
+	};
+
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+
+	long width;
+	for(int col=0; col < 5; col++) {
+		width = this->serverList->GetColumnWidth(col);
+		cfg->Write(ConfigNames[col],width);
+	}
+
+	delete cfg;
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -91,6 +166,8 @@ void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
 }
 
 void MainFrameImpl::EventQuit(wxCommandEvent&) {
+	this->StoreFrameSize(GetRect());
+	this->StoreColumnSizes();
 	this->Close();
 }
 
