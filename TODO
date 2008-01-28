@@ -1,7 +1,5 @@
 v+0
 ===
-	- improve bzflag-list parser
-		- flag entries that wasnt fully parsed (eg unknown protocol)
 	- favorites
 	- windows compile
 
@@ -14,6 +12,7 @@ version 1.0 alpha
 		http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
 	- use strayers listserver as fallback
 	- search
+	- rewrite bzls parser
 
 version 1.0rc
 =============

@@ -9,6 +9,23 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->serverHostPort->SetLabel(server->serverHostPort);
 	this->serverName->SetLabel(server->name);
 
+	// Server-notice. If any
+	if(!server->fullyParsed) {
+		this->notice->SetForegroundColour(*wxRED);
+		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), server->protocolVersion.c_str()));
+		this->notice->Show();
+	}
+	/*
+	else if(server->IsFull()) {
+		this->notice->SetLabel(_("This server is full"));
+		this->notice->Show();
+	}
+	else if(server->IsEmpty()) {
+		this->notice->SetLabel(_("This server is deserted"));
+		this->notice->Show();
+	}
+	*/
+
 	// LEFT COLUMN
 
 	// Players

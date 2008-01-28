@@ -2,7 +2,7 @@
 
 #include "server.h"
 
-void Server::ParseServerInfo(const wxString& info) {
+void Server::ParseServerInfoBZFS0026(const wxString& info) {
 	char theBuf[55];
 
 	strncpy(theBuf,info.ToAscii(),54);

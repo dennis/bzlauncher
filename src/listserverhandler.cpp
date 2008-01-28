@@ -8,6 +8,19 @@
 #include "main.h"
 #include "listserverhandler.h"
 
+/*
+ * Serverlist is a text/plain response from bzflag.org servers. Each line describes a single
+ * bzflag server (bzfs). The format is:
+ * hostname:port version hexcoded-info ip name
+ * where:
+ *   - hostname:port   is the connection info
+ *   - version         is the protcol version. currently BZFS0026 is used
+ *   - hexcoded info   contains some server details (ctf,ffa.., max allowed players) 
+ *                      etc.  version-specific
+ *   - ip              ip-address of the hostname
+ *   - name            The remaining chars of the line, is the servername as
+ *                      shown in "Find server" option in bzfs
+ */
 WX_DEFINE_LIST(ServerList);
 
 void ListServerHandler::GetServerList() {
@@ -48,14 +61,15 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 			break;
 		case 1:
 			s->protocolVersion = token;
-			// We only parse BZFS0026 for now
-			if( token.Cmp(_T("BZFS0026")) != 0 ) {
-				delete s;
-				return false;
-			}
 			break;
 		case 2:
-			s->ParseServerInfo(token);
+			if(s->protocolVersion.Cmp(_T("BZFS0026")) == 0) {
+				s->ParseServerInfoBZFS0026(token);
+				s->fullyParsed = true;
+			}
+			else {
+				s->fullyParsed = false;
+			}
 			break;
 		case 3:
 			s->ip.Hostname(token);

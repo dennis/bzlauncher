@@ -173,8 +173,10 @@ void MainFrameImpl::RefreshServerGrid() {
 		list->SetItem(idx, 4, _("n/a"));
 
 		// Color
-		if(current->IsFull())
+		if(!current->fullyParsed)
 			list->SetItemTextColour(idx, *wxRED);
+		else if(current->IsFull())
+			list->SetItemTextColour(idx, *wxBLUE);
 		else if(current->IsEmpty())
 			list->SetItemTextColour(idx, *wxLIGHT_GREY);
 		else
