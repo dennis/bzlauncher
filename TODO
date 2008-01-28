@@ -1,11 +1,7 @@
 v+0
 ===
-	wxConfig:
-	- store:
-		- sortmode 
-		- tjek efter executable (Default: "bzflag %s")
-		- protocol_executable (findes ikke) (fx bzfs0026_executable)
 	- improve bzflag-list parser
+		- flag entries that wasnt fully parsed (eg unknown protocol)
 	- favorites
 	- windows compile
 

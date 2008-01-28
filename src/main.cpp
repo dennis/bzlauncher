@@ -37,12 +37,24 @@ void BZLauncherApp::SetSelectedServer(const wxString& s) {
 }
 
 void BZLauncherApp::LaunchSelectedServer() {
-	if(this->selectedServerHostPort.IsEmpty()) {
+	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
+
+	if(this->selectedServerHostPort.IsEmpty() || !server ) {
 		this->SetStatusText(_("No server selected!"));
 		return;
 	}
 
-	const wxString cmd = _T("bzflag %s");
+	const wxString defaultCmd = _T("xmessage %s");
+	wxString cmd = defaultCmd;
 
+	// Read configuration
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+	wxString key = wxString::Format(_T("bzflag/%s"), server->protocolVersion.Lower().c_str());
+
+	if(! cfg->Read(key, &cmd))
+		cfg->Read(_T("bzflag/default"), &cmd);
+	delete cfg;
+
+	// Execute!
 	::wxShell(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
 }

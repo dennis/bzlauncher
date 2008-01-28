@@ -16,6 +16,10 @@ private:
 	void StoreFrameSize(const wxRect&) const;
 	void StoreColumnSizes() const;
 
+	void SetSortMode(int);
+	int DetermineSortMode();
+	void StoreSortMode();
+
 protected:
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);

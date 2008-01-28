@@ -10,9 +10,35 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
+	this->SetSortMode(this->DetermineSortMode());
 
 	this->serverList->SetFocus();
 }
+
+void MainFrameImpl::SetSortMode(int s) {
+	this->m_currentSortMode = s;
+}
+
+int MainFrameImpl::DetermineSortMode() {
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+	wxString key = _T("window/");
+
+	int s = cfg->Read(key + _T("sortmode"), -4);
+
+	delete cfg;
+
+	return s;
+}
+
+void MainFrameImpl::StoreSortMode() {
+	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
+	wxString key = _T("window/");
+			
+	cfg->Write(key + _T("sortmode"), this->m_currentSortMode);
+
+	delete cfg;
+}
+
 
 void MainFrameImpl::SetupColumns() {
 	const wxString ConfigNames [] = {
@@ -58,10 +84,10 @@ wxRect MainFrameImpl::DetermineFrameSize() const {
 	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
 	wxString key = _T("window/");
 
-	wanted.x = cfg->Read(key + _T("/x"), 10);
-	wanted.y = cfg->Read(key + _T("/y"), 10);
-	wanted.width = cfg->Read(key + _T("/w"), 600);
-	wanted.height = cfg->Read(key + _T("/h"), 600);
+	wanted.x = cfg->Read(key + _T("x"), 10);
+	wanted.y = cfg->Read(key + _T("y"), 10);
+	wanted.width = cfg->Read(key + _T("w"), 600);
+	wanted.height = cfg->Read(key + _T("h"), 600);
 
 	delete cfg;
 
@@ -79,10 +105,10 @@ void MainFrameImpl::StoreFrameSize(const wxRect& r) const {
 	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
 	wxString key = _T("window/");
 	
-	cfg->Write(key + _T("/x"), r.x);
-	cfg->Write(key + _T("/y"), r.y);
-	cfg->Write(key + _T("/h"), r.height);
-	cfg->Write(key + _T("/w"), r.width);
+	cfg->Write(key + _T("x"), r.x);
+	cfg->Write(key + _T("y"), r.y);
+	cfg->Write(key + _T("h"), r.height);
+	cfg->Write(key + _T("w"), r.width);
 	delete cfg;
 }
 
@@ -168,6 +194,7 @@ void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
 void MainFrameImpl::EventQuit(wxCommandEvent&) {
 	this->StoreFrameSize(GetRect());
 	this->StoreColumnSizes();
+	this->StoreSortMode();
 	this->Close();
 }
 
