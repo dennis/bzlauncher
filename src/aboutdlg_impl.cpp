@@ -7,6 +7,6 @@ AboutDlgImpl::AboutDlgImpl( wxWindow* parent )
 
 }
 
-void AboutDlgImpl::EventClose(wxCommandEvent& event) {
+void AboutDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 	EndModal(0);
 }
