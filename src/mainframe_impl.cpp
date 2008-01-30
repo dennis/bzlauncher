@@ -381,3 +381,7 @@ void MainFrameImpl::StoreFavorites() {
 
 	delete config;
 }
+
+void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
+	wxGetApp().SetStatusText(_("Not implemented yet"));
+}

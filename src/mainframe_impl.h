@@ -42,6 +42,7 @@ protected:
 	void EventShowAbout(wxCommandEvent&);
 	void EventViewServer(wxCommandEvent&);
 	void EventFavoriteToggle(wxCommandEvent&);
+	void EventPingServer(wxCommandEvent&);
 
 public:
 	MainFrameImpl(wxWindow*);

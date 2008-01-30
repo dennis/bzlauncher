@@ -383,20 +383,6 @@
                         </object>
                         <object class="toolSeparator" expanded="1" />
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/32x32/search.png; Load From File</property>
-                            <property name="id">ID_SEARCH</property>
-                            <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Search</property>
-                            <property name="name">searchTool</property>
-                            <property name="statusbar">Search for server</property>
-                            <property name="tooltip">Search for server</property>
-                            <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked"></event>
-                            <event name="OnToolEnter"></event>
-                            <event name="OnToolRClicked"></event>
-                            <event name="OnUpdateUI"></event>
-                        </object>
-                        <object class="tool" expanded="1">
                             <property name="bitmap">icons/32x32/bzflag.png; Load From File</property>
                             <property name="id">ID_LAUNCH</property>
                             <property name="kind">wxITEM_NORMAL</property>
@@ -433,7 +419,7 @@
                             <property name="statusbar"></property>
                             <property name="tooltip"></property>
                             <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked"></event>
+                            <event name="OnToolClicked">EventPingServer</event>
                             <event name="OnToolEnter"></event>
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>
