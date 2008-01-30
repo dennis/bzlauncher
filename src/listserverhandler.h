@@ -20,7 +20,8 @@ private:
 public:
 	ServerList	serverList;
 
-	ListServerHandler() {};
+	ListServerHandler();
+	~ListServerHandler();
 
 	void GetServerList();
 	Server* FindByName(const wxString&);

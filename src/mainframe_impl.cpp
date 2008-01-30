@@ -8,11 +8,25 @@
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
+	this->imageList = new wxImageList(16,16);
+	this->imgFavIdx = this->imageList->Add(wxBitmap(_T("icons/16x16/emblem-favorite.png")));
+	this->serverList->SetImageList(this->imageList,wxIMAGE_LIST_NORMAL);
+
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
 	this->SetSortMode(this->DetermineSortMode());
 
 	this->serverList->SetFocus();
+
+	this->ReadFavorites();
+}
+
+MainFrameImpl::~MainFrameImpl() {
+	this->StoreFavorites();
+	this->StoreFrameSize(GetRect());
+	this->StoreColumnSizes();
+	this->StoreSortMode();
+	delete this->imageList;
 }
 
 void MainFrameImpl::SetSortMode(int s) {
@@ -46,13 +60,15 @@ void MainFrameImpl::SetupColumns() {
 		_T("window/col_name_width"),
 		_T("window/col_type_width"),
 		_T("window/col_players_width"),
-		_T("window/col_ping_width")
+		_T("window/col_ping_width"),
+		_T("window/col_favorite_width")
 	};
 
 	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
 
 	// Columns
 	int col = 0;
+
 	this->serverList->InsertColumn(col,_("Server"));
 	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],157));
 	col++;
@@ -72,6 +88,11 @@ void MainFrameImpl::SetupColumns() {
 	this->serverList->InsertColumn(col,_("Ping"));
 	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
 	col++;
+
+	this->serverList->InsertColumn(col,_("Fav"));
+	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
+	col++;
+
 }
 
 wxRect MainFrameImpl::DetermineFrameSize() const {
@@ -118,13 +139,14 @@ void MainFrameImpl::StoreColumnSizes() const {
 		_T("window/col_name_width"),
 		_T("window/col_type_width"),
 		_T("window/col_players_width"),
-		_T("window/col_ping_width")
+		_T("window/col_ping_width"),
+		_T("window/col_favorite_width")
 	};
 
 	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
 
 	long width;
-	for(int col=0; col < 5; col++) {
+	for(int col=0; col < 6; col++) {
 		width = this->serverList->GetColumnWidth(col);
 		cfg->Write(ConfigNames[col],width);
 	}
@@ -155,6 +177,9 @@ void MainFrameImpl::RefreshServerGrid() {
 	int idx = 0;
 	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
 		Server*	current = *i;
+
+		// Check if its a favorite
+		current->favorite = (this->favoriteServers.Index(current->serverHostPort) != wxNOT_FOUND);
 	
 		// Server
 		list->InsertItem(idx, current->serverHostPort);
@@ -181,6 +206,9 @@ void MainFrameImpl::RefreshServerGrid() {
 			list->SetItemTextColour(idx, *wxLIGHT_GREY);
 		else
 			list->SetItemTextColour(idx, *wxBLACK);
+		
+		// Favorite
+		this->UpdateServer(idx,current);
 
 		idx++;
 	}
@@ -194,9 +222,6 @@ void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
 }
 
 void MainFrameImpl::EventQuit(wxCommandEvent&) {
-	this->StoreFrameSize(GetRect());
-	this->StoreColumnSizes();
-	this->StoreSortMode();
 	this->Close();
 }
 
@@ -246,6 +271,12 @@ static int SortHelper(int res, bool reverse=false) {
 int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long col) {
 	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
 	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
+	
+	// Make sure fav's are placed at the top, no matter what
+	if(s1->favorite && s2->favorite) 
+		return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),false);
+	if(s1->favorite) return -1;
+	if(s2->favorite) return 1;
 
 	bool ascending = (col<0);
 
@@ -288,3 +319,65 @@ void MainFrameImpl::EventColClick(wxListEvent& event) {
 	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
+void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
+	BZLauncherApp& app = wxGetApp();
+	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
+	if(s) {
+		if(s->favorite) {
+			// Remove from favoriteServers
+			s->favorite = false;
+			this->favoriteServers.Remove(s->serverHostPort);
+		}
+		else {
+			// Add to favoriteServers
+			s->favorite = true;
+			this->favoriteServers.Add(s->serverHostPort);
+		}
+		
+		int idx = this->serverList->GetNextItem(-1,wxLIST_NEXT_ALL,wxLIST_STATE_SELECTED);
+		if(idx==-1) {
+			app.SetStatusText(_("Couldnt find row! :("));
+		}
+		else {
+			this->UpdateServer(idx,s);
+			this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+		}
+	}
+	else {
+		app.SetStatusText(_("No server selected"));
+	}
+}
+
+void MainFrameImpl::UpdateServer(int idx, Server* s) {
+	if(s->favorite) {
+		//FIXME list->SetItemImage(idx, 5 , this->imgFavIdx);
+		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
+		this->serverList->SetItem(idx, 5, _T("Yes"));
+	}
+	else {
+		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
+		this->serverList->SetItem(idx, 5, _T("No"));
+	}
+}
+
+void MainFrameImpl::ReadFavorites() {
+	wxString str;
+	wxConfig* config = new wxConfig(_T("bzlauncher"));
+	int count = 0;
+
+	while(config->Read(wxString::Format(_T("favorites/%d"), count), &str)) {
+		this->favoriteServers.Add(str);
+		count++;
+	}
+	delete config;
+}
+
+void MainFrameImpl::StoreFavorites() {
+	wxConfig* config = new wxConfig(_T("bzlauncher"));
+
+	for(unsigned int i = 0; i < this->favoriteServers.GetCount(); i++) {
+		config->Write(wxString::Format(_T("favorites/%d"), i), this->favoriteServers.Item(i));
+	}
+
+	delete config;
+}

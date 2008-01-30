@@ -49,6 +49,7 @@ public:
 	uint8_t		observerCount;
 	uint8_t		observerMax;
 	bool		fullyParsed;
+	bool		favorite;
 
 	int GetPlayerCount() const {
 		return 
@@ -114,7 +115,8 @@ public:
 
 	Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
 		maxTime(0), maxPlayers(0), rogueCount(0), rogueMax(0), redCount(0), redMax(0), greenCount(0), greenMax(0),
-		blueCount(0), blueMax(0), purpleCount(0), purpleMax(0), observerCount(0), observerMax(0) {
+		blueCount(0), blueMax(0), purpleCount(0), purpleMax(0), observerCount(0), observerMax(0), 
+		fullyParsed(false), favorite(false) {
 	}
 private:
 	int Hex2bin(char);

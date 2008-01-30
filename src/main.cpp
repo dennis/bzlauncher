@@ -16,7 +16,7 @@ bool BZLauncherApp::OnInit() {
 	this->SetTopWindow(this->mainFrame);
 
 	this->SetAppName(_T("BZLauncher"));
-
+	
 	return TRUE;
 }
 

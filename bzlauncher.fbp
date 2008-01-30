@@ -71,7 +71,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
@@ -136,7 +136,7 @@
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
-                        <property name="enabled">1</property>
+                        <property name="enabled">0</property>
                         <property name="help"></property>
                         <property name="id">ID_SEARCH</property>
                         <property name="kind">wxITEM_NORMAL</property>
@@ -219,6 +219,20 @@
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Ping server</property>
                         <property name="name">pingServer</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection"></event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">ID_FAVORITE</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Favorite?</property>
+                        <property name="name">favoriteToggle</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection"></event>
@@ -405,7 +419,7 @@
                             <property name="statusbar"></property>
                             <property name="tooltip"></property>
                             <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked"></event>
+                            <event name="OnToolClicked">EventFavoriteToggle</event>
                             <event name="OnToolEnter"></event>
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>

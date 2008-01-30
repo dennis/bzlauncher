@@ -23,6 +23,13 @@
  */
 WX_DEFINE_LIST(ServerList);
 
+ListServerHandler::ListServerHandler() {
+}
+
+ListServerHandler::~ListServerHandler() {
+}
+
+
 void ListServerHandler::GetServerList() {
 	wxBusyCursor wait;
 	BZLauncherApp& app = wxGetApp();
@@ -49,6 +56,9 @@ void ListServerHandler::GetServerList() {
 
 bool ListServerHandler::ParseLine(const wxString& line) {
 	Server* s = new Server;
+
+	s->fullyParsed  = false;
+	s->favorite     = false;
 
 	wxStringTokenizer tok(line, _T(" "));
 
