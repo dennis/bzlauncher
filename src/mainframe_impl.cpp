@@ -3,6 +3,7 @@
 #include "mainframe_impl.h"
 #include "aboutdlg_impl.h"
 #include "serverdlg_impl.h"
+#include "updatingdlg_impl.h"
 
 #include "listserverhandler.h"
 
@@ -165,6 +166,9 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 }
 
 void MainFrameImpl::RefreshServerGrid() {
+	UpdatingDlgImpl dlg(this);
+	dlg.Show();
+
 	BZLauncherApp& app = wxGetApp();
 
 	app.RefreshServerList();
@@ -178,6 +182,7 @@ void MainFrameImpl::RefreshServerGrid() {
 
 	int idx = 0;
 	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
+		dlg.Pulse();
 		Server*	current = *i;
 
 		// Check if its a favorite
@@ -215,7 +220,9 @@ void MainFrameImpl::RefreshServerGrid() {
 		idx++;
 	}
 	
+	dlg.Pulse();
 	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	dlg.Pulse();
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
