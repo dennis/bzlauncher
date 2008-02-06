@@ -3,8 +3,16 @@
 
 #include <wx/string.h>
 #include <wx/socket.h>
-#include <stdint.h>
 
+#ifdef _WIN32
+  // Visual C++ 2008 dosn't ship with stdint.h
+  typedef __int16 int16_t;
+  typedef unsigned __int16 uint16_t;
+  typedef __int8 int8_t;
+  typedef unsigned __int8 uint8_t;
+#else
+# include <stdint.h>
+#endif
 enum GameStyle {
   PlainGameStyle =       0x0000,
   TeamFlagGameStyle =    0x0001, // capture the flag

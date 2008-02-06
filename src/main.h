@@ -9,6 +9,7 @@ class BZLauncherApp : public wxApp {
 private:
 	MainFrameImpl*		mainFrame;
 	wxString 			selectedServerHostPort;
+	wxString			iconsDirectory;
 
 public:
 	ListServerHandler	listServerHandler;
@@ -22,6 +23,10 @@ public:
 	void SetSelectedServer(const wxString&);
 
 	void LaunchSelectedServer();
+
+	const wxString getIconsDirectory() {
+		return this->iconsDirectory;
+	}
 };
 
 

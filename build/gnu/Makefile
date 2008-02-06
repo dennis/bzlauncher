@@ -1,6 +1,6 @@
 all: bzlauncher
 
-CXX=ccache g++
+CXX=ccache g++-3.4
 # -Wcast-qual removed: wx can't be compiled with it
 # -Wconversion -ggdb -ansi -pedantic -Wshadow 
 CXXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 

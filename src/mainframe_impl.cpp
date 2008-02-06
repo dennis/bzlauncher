@@ -8,9 +8,11 @@
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
-	this->imageList = new wxImageList(16,16);
-	this->imgFavIdx = this->imageList->Add(wxBitmap(_T("icons/16x16/emblem-favorite.png")));
-	this->serverList->SetImageList(this->imageList,wxIMAGE_LIST_NORMAL);
+	//Not used: this->imageList = new wxImageList(16,16);
+	//Not used: this->imgFavIdx = this->imageList->Add(wxBitmap(wxGetApp().getIconsDirectory() + _T("16x16/emblem-favorite.png")));
+	//Not used: this->serverList->SetImageList(this->imageList,wxIMAGE_LIST_NORMAL);
+
+	wxMessageBox(wxGetApp().getIconsDirectory());
 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
@@ -26,7 +28,7 @@ MainFrameImpl::~MainFrameImpl() {
 	this->StoreFrameSize(GetRect());
 	this->StoreColumnSizes();
 	this->StoreSortMode();
-	delete this->imageList;
+//	delete this->imageList;
 }
 
 void MainFrameImpl::SetSortMode(int s) {
@@ -213,7 +215,7 @@ void MainFrameImpl::RefreshServerGrid() {
 		idx++;
 	}
 	
-	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -268,6 +270,7 @@ static int SortHelper(int res, bool reverse=false) {
 	if(reverse) return res*(-1);
 	return res;
 }
+/*
 int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long col) {
 	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
 	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
@@ -310,13 +313,13 @@ int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long co
 	}
 	return -1;
 }
-
+*/
 void MainFrameImpl::EventColClick(wxListEvent& event) {
 	if(abs(this->m_currentSortMode) == (event.GetColumn()+1))
 		this->m_currentSortMode *= -1;
 	else
 		this->m_currentSortMode = event.GetColumn()+1;
-	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
@@ -340,7 +343,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		}
 		else {
 			this->UpdateServer(idx,s);
-			this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+			//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 		}
 	}
 	else {

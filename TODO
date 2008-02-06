@@ -1,6 +1,9 @@
 v+0
 ===
 	- windows compile
+		- Fix the FIXME
+		- Move to linux, change gfx into XPM
+		- Move back to windows
 	- would be nice with favorite-icon instead of yes/no
 
 v+1
