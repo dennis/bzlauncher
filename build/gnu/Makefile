@@ -1,31 +1,34 @@
-all: bzlauncher
 
 CXX=ccache g++
 CXXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
+ROOTDIR=../..
+SRCDIR=$(ROOTDIR)/src
 
-bzlauncher: gui.o listserverhandler.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o updatingdlg_impl.o
-	$(CXX) *.o `wx-config --libs` -o bzlauncher
+all: $(ROOTDIR)/bzlauncher
 
-listserverhandler.o: src/listserverhandler.cpp src/listserverhandler.h
-	$(CXX) src/listserverhandler.cpp -c $(CXXFLAGS)
-gui.o: src/gui.cpp src/gui.h
-	$(CXX) src/gui.cpp -c $(CXXFLAGS)
-main.o: src/main.cpp src/main.h
-	$(CXX) src/main.cpp -c $(CXXFLAGS)
-server.o: src/server.cpp src/server.h
-	$(CXX) src/server.cpp -c $(CXXFLAGS)
-mainframe_impl.o: src/mainframe_impl.cpp src/mainframe_impl.h
-	$(CXX) src/mainframe_impl.cpp -c $(CXXFLAGS)
-aboutdlg_impl.o: src/aboutdlg_impl.cpp src/aboutdlg_impl.h
-	$(CXX) src/aboutdlg_impl.cpp -c $(CXXFLAGS)
-serverdlg_impl.o: src/serverdlg_impl.cpp src/serverdlg_impl.h
-	$(CXX) src/serverdlg_impl.cpp -c $(CXXFLAGS)
-updatingdlg_impl.o: src/updatingdlg_impl.cpp src/updatingdlg_impl.h
-	$(CXX) src/updatingdlg_impl.cpp -c $(CXXFLAGS)
+$(ROOTDIR)/bzlauncher: gui.o listserverhandler.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o updatingdlg_impl.o
+	$(CXX) *.o `wx-config --libs` -o $(ROOTDIR)/bzlauncher
 
-src/gui.cpp: bzlauncher.fbp
-	-wxformbuilder -g bzlauncher.fbp 
-	-vim -c "%s/\.\.\/icons\//\icons\//g" -c "wq" src/gui.cpp
+listserverhandler.o: $(SRCDIR)/listserverhandler.cpp $(SRCDIR)/listserverhandler.h
+	$(CXX) $(SRCDIR)/listserverhandler.cpp -c $(CXXFLAGS)
+gui.o: $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
+	$(CXX) $(SRCDIR)/gui.cpp -c $(CXXFLAGS)
+main.o: $(SRCDIR)/main.cpp $(SRCDIR)/main.h
+	$(CXX) $(SRCDIR)/main.cpp -c $(CXXFLAGS)
+server.o: $(SRCDIR)/server.cpp $(SRCDIR)/server.h
+	$(CXX) $(SRCDIR)/server.cpp -c $(CXXFLAGS)
+mainframe_impl.o: $(SRCDIR)/mainframe_impl.cpp $(SRCDIR)/mainframe_impl.h
+	$(CXX) $(SRCDIR)/mainframe_impl.cpp -c $(CXXFLAGS)
+aboutdlg_impl.o: $(SRCDIR)/aboutdlg_impl.cpp $(SRCDIR)/aboutdlg_impl.h
+	$(CXX) $(SRCDIR)/aboutdlg_impl.cpp -c $(CXXFLAGS)
+serverdlg_impl.o: $(SRCDIR)/serverdlg_impl.cpp $(SRCDIR)/serverdlg_impl.h
+	$(CXX) $(SRCDIR)/serverdlg_impl.cpp -c $(CXXFLAGS)
+updatingdlg_impl.o: $(SRCDIR)/updatingdlg_impl.cpp $(SRCDIR)/updatingdlg_impl.h
+	$(CXX) $(SRCDIR)/updatingdlg_impl.cpp -c $(CXXFLAGS)
+
+$(SRCDIR)/gui.cpp: $(ROOTDIR)/bzlauncher.fbp
+	-wxformbuilder -g $(ROOTDIR)/bzlauncher.fbp 
+	-vim -c "%s/\.\.\/icons\//\icons\//g" -c "wq" $(SRCDIR)/gui.cpp
 
 	
 clean:
@@ -33,6 +36,6 @@ clean:
 	-rm bzlauncher
 
 cleanall: clean
-	-rm src/gui.cpp src/gui.h
+	-rm $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
 
 .PHONY: clean cleanall all
