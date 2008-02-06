@@ -7,6 +7,55 @@
 
 #include "listserverhandler.h"
 
+static int SortHelper(int res, bool reverse=false) {
+	if(res==0) return res;
+	if(reverse) return res*(-1);
+	return res;
+}
+
+static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
+	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
+	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
+	
+	// Make sure fav's are placed at the top, no matter what
+	if(s1->favorite && s2->favorite) 
+		return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),false);
+	if(s1->favorite) return -1;
+	if(s2->favorite) return 1;
+
+	bool ascending = (col<0);
+
+	col = abs(col);
+
+	switch(col) {
+		case 1: // ServerHostPort
+			return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),ascending);
+			break;
+		case 2: // Name
+			return SortHelper(s1->name.CmpNoCase(s2->name),ascending);
+			break;
+		case 3:	// Type
+			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
+			break;
+		case 4: // Players
+			{
+			int r=0;
+			if(s1->GetPlayerCount() < s2->GetPlayerCount())
+				r = -1;
+			else if(s1->GetPlayerCount() > s2->GetPlayerCount())
+				r = 1;
+			return SortHelper(r,ascending);
+			}
+			break;
+		case 5: // Ping
+			break;
+		default:
+			return 0;
+			break;
+	}
+	return -1;
+}
+
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
 	//Not used: this->imageList = new wxImageList(16,16);
@@ -221,7 +270,7 @@ void MainFrameImpl::RefreshServerGrid() {
 	}
 	
 	dlg.Pulse();
-	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
 	dlg.Pulse();
 }
 
@@ -272,61 +321,12 @@ void MainFrameImpl::LaunchGame() {
 	app.LaunchSelectedServer();
 }
 
-static int SortHelper(int res, bool reverse=false) {
-	if(res==0) return res;
-	if(reverse) return res*(-1);
-	return res;
-}
-
-int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long col) {
-	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
-	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
-	
-	// Make sure fav's are placed at the top, no matter what
-	if(s1->favorite && s2->favorite) 
-		return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),false);
-	if(s1->favorite) return -1;
-	if(s2->favorite) return 1;
-
-	bool ascending = (col<0);
-
-	col = abs(col);
-
-	switch(col) {
-		case 1: // ServerHostPort
-			return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),ascending);
-			break;
-		case 2: // Name
-			return SortHelper(s1->name.CmpNoCase(s2->name),ascending);
-			break;
-		case 3:	// Type
-			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
-			break;
-		case 4: // Players
-			{
-			int r=0;
-			if(s1->GetPlayerCount() < s2->GetPlayerCount())
-				r = -1;
-			else if(s1->GetPlayerCount() > s2->GetPlayerCount())
-				r = 1;
-			return SortHelper(r,ascending);
-			}
-			break;
-		case 5: // Ping
-			break;
-		default:
-			return 0;
-			break;
-	}
-	return -1;
-}
-
 void MainFrameImpl::EventColClick(wxListEvent& event) {
 	if(abs(this->m_currentSortMode) == (event.GetColumn()+1))
 		this->m_currentSortMode *= -1;
 	else
 		this->m_currentSortMode = event.GetColumn()+1;
-	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
@@ -350,7 +350,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		}
 		else {
 			this->UpdateServer(idx,s);
-			this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+			this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
 		}
 	}
 	else {

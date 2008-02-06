@@ -7,9 +7,7 @@
 
 class MainFrameImpl : public MainFrame {
 private:
-	static Server* GetServerByIdx(int);
 
-	static int ServerSortCallback(long, long, long);
 	long m_currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
 
 	wxArrayString	favoriteServers;
@@ -45,6 +43,8 @@ protected:
 	void EventPingServer(wxCommandEvent&);
 
 public:
+	static Server* GetServerByIdx(int);
+
 	MainFrameImpl(wxWindow*);
 	~MainFrameImpl();
 
