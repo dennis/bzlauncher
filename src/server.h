@@ -77,11 +77,11 @@ public:
 	}
 
 	bool IsCTF() const {
-		return this->gameStyle & TeamFlagGameStyle;
+		return this->gameStyle && TeamFlagGameStyle;
 	}
 
 	bool IsRH() const {
-		return this->gameStyle & RabbitChaseGameStyle;
+		return this->gameStyle && RabbitChaseGameStyle;
 	}
 
 	bool IsFFA() const {
@@ -100,23 +100,23 @@ public:
 	}
 
 	bool GotSuperFlags() const {
-		return this->gameStyle & SuperFlagGameStyle;
+		return this->gameStyle && SuperFlagGameStyle;
 	}
 
 	bool GotJumping() const {
-		return this->gameStyle & JumpingGameStyle;
+		return this->gameStyle && JumpingGameStyle;
 	}
 
 	bool GotAntidote() const {
-		return this->gameStyle & AntidoteGameStyle;
+		return this->gameStyle && AntidoteGameStyle;
 	}
 
 	bool GotRicochet() const {
-		return this->gameStyle & RicochetGameStyle;
+		return this->gameStyle && RicochetGameStyle;
 	}
 
 	bool GotHandicap() const {
-		return this->gameStyle & HandicapGameStyle;
+		return this->gameStyle && HandicapGameStyle;
 	}
 
 	void ParseServerInfoBZFS0026(const wxString&);
