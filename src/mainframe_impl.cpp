@@ -28,7 +28,7 @@ MainFrameImpl::~MainFrameImpl() {
 	this->StoreFrameSize(GetRect());
 	this->StoreColumnSizes();
 	this->StoreSortMode();
-//	delete this->imageList;
+	//Not used: delete this->imageList;
 }
 
 void MainFrameImpl::SetSortMode(int s) {
@@ -215,7 +215,7 @@ void MainFrameImpl::RefreshServerGrid() {
 		idx++;
 	}
 	
-	//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -270,7 +270,7 @@ static int SortHelper(int res, bool reverse=false) {
 	if(reverse) return res*(-1);
 	return res;
 }
-/*
+
 int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long col) {
 	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
 	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
@@ -313,13 +313,13 @@ int wxCALLBACK MainFrameImpl::ServerSortCallback(long item1, long item2, long co
 	}
 	return -1;
 }
-*/
+
 void MainFrameImpl::EventColClick(wxListEvent& event) {
 	if(abs(this->m_currentSortMode) == (event.GetColumn()+1))
 		this->m_currentSortMode *= -1;
 	else
 		this->m_currentSortMode = event.GetColumn()+1;
-	//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+	this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
@@ -343,7 +343,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		}
 		else {
 			this->UpdateServer(idx,s);
-			//FIXME this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
+			this->serverList->SortItems(MainFrameImpl::ServerSortCallback, this->m_currentSortMode);
 		}
 	}
 	else {
@@ -353,7 +353,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::UpdateServer(int idx, Server* s) {
 	if(s->favorite) {
-		//FIXME list->SetItemImage(idx, 5 , this->imgFavIdx);
+		//Not used: list->SetItemImage(idx, 5 , this->imgFavIdx);
 		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
 		this->serverList->SetItem(idx, 5, _T("Yes"));
 	}

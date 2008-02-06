@@ -1,8 +1,6 @@
 all: bzlauncher
 
-CXX=ccache g++-3.4
-# -Wcast-qual removed: wx can't be compiled with it
-# -Wconversion -ggdb -ansi -pedantic -Wshadow 
+CXX=ccache g++
 CXXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
 
 bzlauncher: gui.o listserverhandler.o main.o server.o mainframe_impl.o aboutdlg_impl.o serverdlg_impl.o
@@ -34,3 +32,5 @@ clean:
 
 cleanall: clean
 	-rm src/gui.cpp src/gui.h
+
+.PHONY: clean cleanall all
