@@ -6,6 +6,10 @@
 
 IMPLEMENT_APP(BZLauncherApp)
 
+BZLauncherApp::~BZLauncherApp() {
+	delete this->mainFrame;
+}
+
 bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
 

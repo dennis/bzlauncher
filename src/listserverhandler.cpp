@@ -27,6 +27,7 @@ ListServerHandler::ListServerHandler() {
 }
 
 ListServerHandler::~ListServerHandler() {
+	this->ClearList();
 }
 
 

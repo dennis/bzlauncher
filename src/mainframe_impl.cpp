@@ -145,6 +145,7 @@ void MainFrameImpl::SetupColumns() {
 	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
 	col++;
 
+	delete cfg;
 }
 
 wxRect MainFrameImpl::DetermineFrameSize() const {

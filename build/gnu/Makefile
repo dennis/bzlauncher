@@ -32,6 +32,9 @@ bzlauncher: $(ROOTDIR)/bzlauncher
 
 xpm: $(XPMS)
 
+valgrind: bzlauncher
+	cd $(ROOTDIR) && valgrind --leak-check=full --suppressions=build/gnu/valgrind.suppression ./bzlauncher
+
 $(ROOTDIR)/bzlauncher: $(OBJS)
 	$(CXX) *.o `wx-config --libs` -o $(ROOTDIR)/bzlauncher
 
@@ -61,4 +64,4 @@ cleanall: clean
 	-rm $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
 	-rm $(SRCDIR)/*.xpm
 
-.PHONY: clean cleanall all xpm dist bzlauncher
+.PHONY: clean cleanall all xpm dist bzlauncher valgrind

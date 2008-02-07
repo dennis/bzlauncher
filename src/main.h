@@ -16,6 +16,8 @@ public:
 
 	virtual bool OnInit();
 
+	~BZLauncherApp();
+
 	void SetStatusText(const wxString&);
 	void RefreshServerList();
 
