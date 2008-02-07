@@ -12,7 +12,7 @@ bool BZLauncherApp::OnInit() {
 	this->iconsDirectory = wxString::Format(_T("%s/icons/"), wxGetCwd().c_str());
 
 	this->mainFrame = new  MainFrameImpl(NULL);
-	this->mainFrame->RefreshServerGrid();
+	//this->mainFrame->RefreshServerGrid();
 	this->mainFrame->Show(true);
 
 	this->SetTopWindow(this->mainFrame);
