@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <wx/config.h>
+#include <wx/fs_inet.h>
 
 #include "listserverhandler.h"
 

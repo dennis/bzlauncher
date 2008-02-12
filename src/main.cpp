@@ -11,6 +11,7 @@ BZLauncherApp::~BZLauncherApp() {
 
 bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
+	wxFileSystem::AddHandler(new wxInternetFSHandler);
 
 	this->iconsDirectory = wxString::Format(_T("%s/icons/"), wxGetCwd().c_str());
 

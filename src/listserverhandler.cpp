@@ -98,22 +98,32 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 }
 
 bool ListServerHandler::GetListServerResponse() {
-	wxURL listserv(wxT("http://my.bzflag.org/db?action=LIST"));
+	wxFileSystem	fs;
+	wxFSFile*		listserv = fs.OpenFile(_T("http://my.bzflag.org/db?action=LIST"));
+	bool			r = false;
 
-	if(listserv.IsOk()) {
+	if(listserv) {
 		wxInputStream *in_stream;
-		in_stream = listserv.GetInputStream();
-		char		buffer[1024];
+		in_stream = listserv->GetStream();
 
-		this->rawResponse.Clear();
+		if(in_stream) {
+			char		buffer[1024];
 
-		while(!in_stream->Read(buffer,1024).Eof()) 
-			this->rawResponse << wxString::From8BitData(buffer,in_stream->LastRead());
+			this->rawResponse.Clear();
 
-		return true;
+			while(!in_stream->Read(buffer,1024).Eof()) {
+				this->rawResponse << wxString::From8BitData(buffer,in_stream->LastRead());
+			}
+
+			r = true;
+		}
+		else
+			wxLogMessage(_("in_stream == null"));
+
+		delete listserv;
 	}
 
-	return false;
+	return r;
 }
 
 void ListServerHandler::ClearList() {

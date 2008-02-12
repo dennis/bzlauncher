@@ -3,6 +3,7 @@
 
 #include <wx/string.h>
 #include <wx/list.h>
+#include <wx/filesys.h>
 
 #include "server.h"
 
