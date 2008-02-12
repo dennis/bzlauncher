@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include <wx/fs_inet.h>
+
 #include "listserverhandler.h"
 #include "server.h"
 #include "mainframe_impl.h"
@@ -13,15 +15,17 @@ bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
 	wxFileSystem::AddHandler(new wxInternetFSHandler);
 
-	this->iconsDirectory = wxString::Format(_T("%s/icons/"), wxGetCwd().c_str());
-
 	this->mainFrame = new  MainFrameImpl(NULL);
-	this->mainFrame->RefreshServerGrid();
 	this->mainFrame->Show(true);
 
 	this->SetTopWindow(this->mainFrame);
 
 	this->SetAppName(_T("BZLauncher"));
+
+#ifndef _WIN32
+	this->mainFrame->RefreshServerGrid();
+#endif
+
 	return TRUE;
 }
 

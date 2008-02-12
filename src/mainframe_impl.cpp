@@ -62,8 +62,6 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	//Not used: this->imgFavIdx = this->imageList->Add(wxBitmap(wxGetApp().getIconsDirectory() + _T("16x16/emblem-favorite.png")));
 	//Not used: this->serverList->SetImageList(this->imageList,wxIMAGE_LIST_NORMAL);
 
-	wxMessageBox(wxGetApp().getIconsDirectory());
-
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
 	this->SetSortMode(this->DetermineSortMode());

@@ -135,9 +135,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib wxbase28_net.lib wxmsw28_adv.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib odbc32.lib"
-				LinkIncremental="2"
+				LinkIncremental="0"
 				AdditionalLibraryDirectories="&quot;C:\wx\wxMSW-2.8.7\lib\vc_lib&quot;"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
