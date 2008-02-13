@@ -1,20 +1,20 @@
 v+0
 ===
-	- windows compile
-		- fix icons
-		- fix auto-load
-
+	- fix icons
+		- load embedded png
+			http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
+	- WINBUG: auto-load on startup
+	- http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&displaylang=en
+		- seems only msvcr90.dll is required
+	- store configuration as ini (always)
+		- try to determine where bzflag is located (at least on windows)
+			- just pop up a filebrowser (only windows?)
 v+1
 ===
 	- bugfixes
-	- improve graphics if possible
 	Ping Server (game query request)
 		- ping: Only ping once for every unique ip
-	- embedding png images?
-		http://www.wxwidgets.org/wiki/index.php/Embedding_PNG_Images
-	- use strayers listserver as fallback
-	- search
-	- rewrite bzls parser?
+	- use strayers listserver as fallback (but in config)
 
 version 1.0rc
 =============
@@ -27,3 +27,10 @@ version 1.0rc
 version 1 release 
 =================
 	- bugfixes
+
+not decided
+===========
+	- configuration menu, allow you to remove ini if we keep it
+	- search
+	- rewrite bzls parser?
+	- column order
