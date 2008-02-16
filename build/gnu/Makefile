@@ -7,6 +7,7 @@ SRCDIR=$(ROOTDIR)/src
 ICONDIR=$(ROOTDIR)/icons
 OBJS=\
 	aboutdlg_impl.o \
+	config.o \
 	gui.o \
 	listserverhandler.o \
 	main.o \
@@ -14,23 +15,12 @@ OBJS=\
 	server.o \
 	serverdlg_impl.o \
 	updatingdlg_impl.o
-XPMS=\
-	$(SRCDIR)/about32.xpm \
-	$(SRCDIR)/bzflag32.xpm \
-	$(SRCDIR)/down22.xpm \
-	$(SRCDIR)/favorite32.xpm \
-	$(SRCDIR)/ping32.xpm \
-	$(SRCDIR)/refresh32.xpm \
-	$(SRCDIR)/stop22.xpm \
-	$(SRCDIR)/up22.xpm
 
 all: dist bzlauncher
 
-dist: xpm $(SRCDIR)/gui.cpp
+dist: $(SRCDIR)/gui.cpp
 
 bzlauncher: $(ROOTDIR)/bzlauncher
-
-xpm: $(XPMS)
 
 valgrind: bzlauncher
 	cd $(ROOTDIR) && valgrind --leak-check=full --suppressions=build/gnu/valgrind.suppression ./bzlauncher
@@ -44,12 +34,6 @@ $(ROOTDIR)/bzlauncher: $(OBJS)
 gui.o: $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-%_xpm: $(ICONDIR)/%.png
-	convert $< xpm:$@
-
-$(SRCDIR)/%.xpm: %_xpm
-	mv $< $@
-
 # Create src/gui.(cpp|h)
 $(SRCDIR)/gui.cpp: $(ROOTDIR)/bzlauncher.fbp
 	-wxformbuilder -g $(ROOTDIR)/bzlauncher.fbp 
@@ -62,6 +46,5 @@ clean:
 
 cleanall: clean
 	-rm $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
-	-rm $(SRCDIR)/*.xpm
 
 .PHONY: clean cleanall all xpm dist bzlauncher valgrind

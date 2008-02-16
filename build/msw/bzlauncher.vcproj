@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\config.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\gui.cpp"
 				>
 			</File>
@@ -219,6 +223,10 @@
 			>
 			<File
 				RelativePath="..\..\src\aboutdlg_impl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\config.h"
 				>
 			</File>
 			<File

@@ -14,15 +14,8 @@ private:
 
 	void SetupColumns();
 	wxRect DetermineFrameSize() const;
-	void ReadFavorites();
-	void StoreFavorites();
 
-	void StoreFrameSize(const wxRect&) const;
 	void StoreColumnSizes() const;
-
-	void SetSortMode(int);
-	int DetermineSortMode();
-	void StoreSortMode();
 
 	void UpdateServer(int idx, Server*);
 

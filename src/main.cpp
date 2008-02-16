@@ -2,6 +2,7 @@
 
 #include <wx/fs_inet.h>
 
+#include "config.h"
 #include "listserverhandler.h"
 #include "server.h"
 #include "mainframe_impl.h"
@@ -53,17 +54,6 @@ void BZLauncherApp::LaunchSelectedServer() {
 		return;
 	}
 
-	const wxString defaultCmd = _T("xmessage %s");
-	wxString cmd = defaultCmd;
-
-	// Read configuration
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-	wxString key = wxString::Format(_T("bzflag/%s"), server->protocolVersion.Lower().c_str());
-
-	if(! cfg->Read(key, &cmd))
-		cfg->Read(_T("bzflag/default"), &cmd);
-	delete cfg;
-
-	// Execute!
+	wxString cmd = appConfig.getBZFlagCommand(server->protocolVersion);
 	::wxShell(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
 }

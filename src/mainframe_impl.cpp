@@ -1,5 +1,6 @@
 #include <wx/log.h>
 #include "main.h"
+#include "config.h"
 #include "mainframe_impl.h"
 #include "aboutdlg_impl.h"
 #include "serverdlg_impl.h"
@@ -57,93 +58,32 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ), m_currentSortMode(-4) { // Sort by Players DESC
-	//Not used: this->imageList = new wxImageList(16,16);
-	//Not used: this->imgFavIdx = this->imageList->Add(wxBitmap(wxGetApp().getIconsDirectory() + _T("16x16/emblem-favorite.png")));
-	//Not used: this->serverList->SetImageList(this->imageList,wxIMAGE_LIST_NORMAL);
-
+: MainFrame( parent )  { 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
-	this->SetSortMode(this->DetermineSortMode());
-
+	this->m_currentSortMode = appConfig.getSortMode();
+	this->favoriteServers   = appConfig.getFavorites();
 	this->serverList->SetFocus();
-
-	this->ReadFavorites();
 }
 
 MainFrameImpl::~MainFrameImpl() {
-	this->StoreFavorites();
-	this->StoreFrameSize(GetRect());
-	this->StoreColumnSizes();
-	this->StoreSortMode();
-	//Not used: delete this->imageList;
+#warning "Fix me"
+	//appConfig.setFavorites(this->favoriteServers);
+	//this->StoreColumnSizes();
+	//appConfig.setWindowDimensions(GetRect());
+	//appConfig.setSortMode(this->m_currentSortMode);
 }
-
-void MainFrameImpl::SetSortMode(int s) {
-	this->m_currentSortMode = s;
-}
-
-int MainFrameImpl::DetermineSortMode() {
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-	wxString key = _T("window/");
-
-	int s = cfg->Read(key + _T("sortmode"), -4);
-
-	delete cfg;
-
-	return s;
-}
-
-void MainFrameImpl::StoreSortMode() {
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-	wxString key = _T("window/");
-			
-	cfg->Write(key + _T("sortmode"), this->m_currentSortMode);
-
-	delete cfg;
-}
-
 
 void MainFrameImpl::SetupColumns() {
-	const wxString ConfigNames [] = {
-		_T("window/col_server_width"),
-		_T("window/col_name_width"),
-		_T("window/col_type_width"),
-		_T("window/col_players_width"),
-		_T("window/col_ping_width"),
-		_T("window/col_favorite_width")
+	wxString names[] = {
+		_("Server"), _("Name"), _("Type"),
+		_("#"), _("Ping"), _("Fav")
 	};
 
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-
-	// Columns
-	int col = 0;
-
-	this->serverList->InsertColumn(col,_("Server"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],157));
-	col++;
-
-	this->serverList->InsertColumn(col,_("Name"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],300));
-	col++;
-
-	this->serverList->InsertColumn(col,_("Type"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],47));
-	col++;
-
-	this->serverList->InsertColumn(col,_("#"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],30));
-	col++;
-
-	this->serverList->InsertColumn(col,_("Ping"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
-	col++;
-
-	this->serverList->InsertColumn(col,_("Fav"));
-	this->serverList->SetColumnWidth(col,cfg->Read(ConfigNames[col],46));
-	col++;
-
-	delete cfg;
+	for(int col = 0; col < Config::COL_COUNT; col++) {
+		this->serverList->InsertColumn(col,names[col]);
+		this->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
+	}
 }
 
 wxRect MainFrameImpl::DetermineFrameSize() const {
@@ -151,17 +91,7 @@ wxRect MainFrameImpl::DetermineFrameSize() const {
 	const int minFrameH = 300;
 
 	wxSize scr = wxGetDisplaySize();
-	wxRect wanted; 
-
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-	wxString key = _T("window/");
-
-	wanted.x = cfg->Read(key + _T("x"), 10);
-	wanted.y = cfg->Read(key + _T("y"), 10);
-	wanted.width = cfg->Read(key + _T("w"), 600);
-	wanted.height = cfg->Read(key + _T("h"), 600);
-
-	delete cfg;
+	wxRect wanted = appConfig.getWindowDimensions();
 
 	// Check values
 	wanted.x = wxMin(abs(wanted.x), scr.x - minFrameW);
@@ -173,36 +103,9 @@ wxRect MainFrameImpl::DetermineFrameSize() const {
 	return wanted;
 }
 
-void MainFrameImpl::StoreFrameSize(const wxRect& r) const {
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-	wxString key = _T("window/");
-	
-	cfg->Write(key + _T("x"), r.x);
-	cfg->Write(key + _T("y"), r.y);
-	cfg->Write(key + _T("h"), r.height);
-	cfg->Write(key + _T("w"), r.width);
-	delete cfg;
-}
-
 void MainFrameImpl::StoreColumnSizes() const {
-	const wxString ConfigNames [] = {
-		_T("window/col_server_width"),
-		_T("window/col_name_width"),
-		_T("window/col_type_width"),
-		_T("window/col_players_width"),
-		_T("window/col_ping_width"),
-		_T("window/col_favorite_width")
-	};
-
-	wxConfig* cfg = new wxConfig(_T("bzlauncher"));
-
-	long width;
-	for(int col=0; col < 6; col++) {
-		width = this->serverList->GetColumnWidth(col);
-		cfg->Write(ConfigNames[col],width);
-	}
-
-	delete cfg;
+	for(int col = 0; col < Config::COL_COUNT; col++)
+		appConfig.setColumnWidth(Config::ColType(col), this->serverList->GetColumnWidth(col));
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -367,28 +270,6 @@ void MainFrameImpl::UpdateServer(int idx, Server* s) {
 		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
 		this->serverList->SetItem(idx, 5, _T("No"));
 	}
-}
-
-void MainFrameImpl::ReadFavorites() {
-	wxString str;
-	wxConfig* config = new wxConfig(_T("bzlauncher"));
-	int count = 0;
-
-	while(config->Read(wxString::Format(_T("favorites/%d"), count), &str)) {
-		this->favoriteServers.Add(str);
-		count++;
-	}
-	delete config;
-}
-
-void MainFrameImpl::StoreFavorites() {
-	wxConfig* config = new wxConfig(_T("bzlauncher"));
-
-	for(unsigned int i = 0; i < this->favoriteServers.GetCount(); i++) {
-		config->Write(wxString::Format(_T("favorites/%d"), i), this->favoriteServers.Item(i));
-	}
-
-	delete config;
 }
 
 void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
