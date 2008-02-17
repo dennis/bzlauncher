@@ -1,6 +1,7 @@
 #ifndef __mainframe_impl__
 #define __mainframe_impl__
 
+#include <wx/timer.h>
 #include <wx/imaglist.h>
 #include <wx/arrstr.h>
 #include "gui.h"
@@ -17,6 +18,8 @@ private:
 
 	void UpdateServer(int idx, Server*);
 
+	wxTimer			initialLoadTimer;
+
 protected:
 	wxImageList*	imageList;
 	int				imgFavIdx;
@@ -32,6 +35,7 @@ protected:
 	void EventViewServer(wxCommandEvent&);
 	void EventFavoriteToggle(wxCommandEvent&);
 	void EventPingServer(wxCommandEvent&);
+	void EventTimer(wxTimerEvent&);
 
 public:
 	static Server* GetServerByIdx(int);

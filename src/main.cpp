@@ -23,10 +23,6 @@ bool BZLauncherApp::OnInit() {
 
 	this->SetAppName(_T("BZLauncher"));
 
-#ifndef _WIN32
-	this->mainFrame->RefreshServerGrid();
-#endif
-
 	return TRUE;
 }
 

@@ -57,12 +57,15 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent )  { 
+: MainFrame( parent ), initialLoadTimer(this)  { 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
 	this->m_currentSortMode = appConfig.getSortMode();
 	this->favoriteServers   = appConfig.getFavorites();
 	this->serverList->SetFocus();
+
+	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
+	this->initialLoadTimer.Start(300,true);
 }
 
 MainFrameImpl::~MainFrameImpl() {
@@ -268,4 +271,8 @@ void MainFrameImpl::UpdateServer(int idx, Server* s) {
 
 void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 	wxGetApp().SetStatusText(_("Not implemented yet"));
+}
+
+void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
+	this->RefreshServerGrid();
 }
