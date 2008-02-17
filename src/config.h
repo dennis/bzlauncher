@@ -1,7 +1,6 @@
 #ifndef __config__
 #define __config__
 
-#include <wx/config.h>
 #include <wx/gdicmn.h> // wxRect
 #include <wx/arrstr.h>
 
@@ -17,10 +16,7 @@ public:
 		COL_COUNT
 	} ColType;
 
-
 protected:
-	wxConfig*	cfg;
-
 	int getColumnDefaultWidth(ColType) const;
 	wxString getColumnName(ColType) const;
 	wxString getColumnKey(ColType) const;
@@ -30,6 +26,7 @@ public:
 	Config();
 	~Config();
 
+	void setBZFlagCommand(const wxString&, const wxString& = _T("default"));
 	wxString getBZFlagCommand(const wxString&) const;
 
 	int getSortMode() const;

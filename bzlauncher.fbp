@@ -7,7 +7,7 @@
         <property name="code_generation">C++</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">gui</property>
+        <property name="file">gui_raw</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="icons"></property>

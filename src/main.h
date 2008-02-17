@@ -22,7 +22,7 @@ public:
 	const wxString GetSelectedServer();
 	void SetSelectedServer(const wxString&);
 
-	void LaunchSelectedServer();
+	void LaunchSelectedServer(wxWindow*);
 };
 
 

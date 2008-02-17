@@ -1,4 +1,3 @@
-#include <wx/log.h>
 #include "main.h"
 #include "config.h"
 #include "mainframe_impl.h"
@@ -67,11 +66,11 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 }
 
 MainFrameImpl::~MainFrameImpl() {
-#warning "Fix me"
-	//appConfig.setFavorites(this->favoriteServers);
-	//this->StoreColumnSizes();
-	//appConfig.setWindowDimensions(GetRect());
-	//appConfig.setSortMode(this->m_currentSortMode);
+	for(int col = 0; col < Config::COL_COUNT; col++)
+		appConfig.setColumnWidth(Config::ColType(col), this->serverList->GetColumnWidth(col));
+	appConfig.setFavorites(this->favoriteServers);
+	appConfig.setWindowDimensions(GetRect());
+	appConfig.setSortMode(this->m_currentSortMode);
 }
 
 void MainFrameImpl::SetupColumns() {
@@ -101,11 +100,6 @@ wxRect MainFrameImpl::DetermineFrameSize() const {
 	wanted.width = wxMax(wanted.width, minFrameW);
 	wanted.width = wxMin(wanted.width, scr.y - wanted.y);
 	return wanted;
-}
-
-void MainFrameImpl::StoreColumnSizes() const {
-	for(int col = 0; col < Config::COL_COUNT; col++)
-		appConfig.setColumnWidth(Config::ColType(col), this->serverList->GetColumnWidth(col));
 }
 
 void MainFrameImpl::SetStatusText(const wxString& t) {
@@ -220,7 +214,7 @@ void MainFrameImpl::EventLaunch(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::LaunchGame() {
 	BZLauncherApp& app = wxGetApp();
-	app.LaunchSelectedServer();
+	app.LaunchSelectedServer(this);
 }
 
 void MainFrameImpl::EventColClick(wxListEvent& event) {

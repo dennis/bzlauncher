@@ -46,7 +46,11 @@ void BZLauncherApp::SetSelectedServer(const wxString& s) {
 	this->selectedServerHostPort = s;
 }
 
-void BZLauncherApp::LaunchSelectedServer() {
+#ifdef _WINDOWS
+void BZLauncherApp::LaunchSelectedServer(wxWindow* w) {
+#else
+void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
+#endif
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
 	if(this->selectedServerHostPort.IsEmpty() || !server ) {
@@ -55,5 +59,28 @@ void BZLauncherApp::LaunchSelectedServer() {
 	}
 
 	wxString cmd = appConfig.getBZFlagCommand(server->protocolVersion);
+	if(cmd.IsEmpty()) {	// We dont know how to launch it
+#ifdef _WINDOWS
+		// Since BZFlag isnt likely to be in PATH, we need to explicit
+		// ask where it is
+		wxFileDialog dia(w,_("Choose the BZFlag executable"), _T("c:/"),
+			_T("bzflag.exe"), _T("*.exe"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+
+		dia.ShowModal();
+		cmd = dia.GetFilename();
+		if(cmd.IsEmpty()) {
+			this->SetStatusText(_("No BZFlag ?"));
+			return;
+		}
+
+		cmd += _T(" %s");
+#else 
+		// We assume BZFlag is in PATH
+		cmd = _T("bzflag %s");
+#endif
+
+		// Save it before we move on
+		appConfig.setBZFlagCommand(cmd);
+	}
 	::wxShell(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
 }

@@ -15,8 +15,6 @@ private:
 	void SetupColumns();
 	wxRect DetermineFrameSize() const;
 
-	void StoreColumnSizes() const;
-
 	void UpdateServer(int idx, Server*);
 
 protected:
