@@ -77,11 +77,11 @@ public:
 	}
 
 	bool IsCTF() const {
-		return this->gameStyle && TeamFlagGameStyle;
+		return (this->gameStyle & TeamFlagGameStyle);
 	}
 
 	bool IsRH() const {
-		return this->gameStyle && RabbitChaseGameStyle;
+		return (this->gameStyle & RabbitChaseGameStyle);
 	}
 
 	bool IsFFA() const {

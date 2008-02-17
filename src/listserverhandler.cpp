@@ -117,8 +117,9 @@ bool ListServerHandler::GetListServerResponse() {
 
 			r = true;
 		}
-		else
+		else {
 			wxLogMessage(_("in_stream == null"));
+		}
 
 		delete listserv;
 	}

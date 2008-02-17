@@ -2,7 +2,6 @@ v+0
 ===
 	- FIXME: make Config work properly (remove CFG_OP macro)
 	- NEEDS TESTING: WINBUG: auto-load on startup (just delay auto-load)
-	- BUG: Alle servers are CTF?!
 
 v+1
 ===
