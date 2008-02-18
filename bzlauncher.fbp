@@ -19,7 +19,7 @@
         <property name="relative_path">1</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="1">
+        <object class="Frame" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -1090,10 +1090,10 @@
                         <property name="permission">protected</property>
                         <property name="pos"></property>
                         <property name="size">-1,200</property>
-                        <property name="style">wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_WORDWRAP</property>
+                        <property name="style">wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP</property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>
-                        <property name="value">&#x0A;Version 1.0&#x0A;http://...?&#x0A;&#x0A;Author:&#x0A;Dennis Møllegaard Pedersen&#x0A;http://dennis.moellegaard.dk&#x0A;&#x0A;Helpful spirits:&#x0A;Strayer, BZFlag devs and Suavegirl</property>
+                        <property name="value">&#x0A;Version 1.0&#x0A;&#x0A;Author:&#x0A;Dennis Moellegaard Pedersen&#x0A;dennis@moellegaard.dk&#x0A;&#x0A;Helpful spirits:&#x0A;Strayer, BZFlag devs and Suavegirl</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
