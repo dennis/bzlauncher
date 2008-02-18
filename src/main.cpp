@@ -62,14 +62,15 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 		wxFileDialog dia(w,_("Choose the BZFlag executable"), _T("c:/"),
 			_T("bzflag.exe"), _T("*.exe"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
-		dia.ShowModal();
-		cmd = dia.GetFilename();
-		if(cmd.IsEmpty()) {
-			this->SetStatusText(_("No BZFlag ?"));
-			return;
-		}
+		if(dia.ShowModal() == wxID_OK) {
+			cmd = dia.GetFilename();
+			if(cmd.IsEmpty()) {
+				this->SetStatusText(_("No BZFlag ?"));
+				return;
+			}
 
-		cmd += _T(" %s");
+			cmd += _T(" %s");
+		}
 #else 
 		// We assume BZFlag is in PATH
 		cmd = _T("bzflag %s");

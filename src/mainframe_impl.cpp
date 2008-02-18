@@ -58,6 +58,8 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), initialLoadTimer(this)  { 
+	this->toolBar->SetToolBitmapSize(wxSize(32,32));
+	this->toolBar->Realize();
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
 	this->m_currentSortMode = appConfig.getSortMode();

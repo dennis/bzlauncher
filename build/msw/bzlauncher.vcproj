@@ -259,38 +259,38 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="XPM Files"
+			Name="PNG Source"
 			>
 			<File
-				RelativePath="..\..\src\about32.xpm"
+				RelativePath="..\..\src\about32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\bzflag32.xpm"
+				RelativePath="..\..\src\bzflag32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\down22.xpm"
+				RelativePath="..\..\src\down22.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\favorite32.xpm"
+				RelativePath="..\..\src\favorite32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\ping32.xpm"
+				RelativePath="..\..\src\ping32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\refresh32.xpm"
+				RelativePath="..\..\src\refresh32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stop22.xpm"
+				RelativePath="..\..\src\stop22.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\up22.xpm"
+				RelativePath="..\..\src\up22.h"
 				>
 			</File>
 		</Filter>
