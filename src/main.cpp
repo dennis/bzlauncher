@@ -63,7 +63,7 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 			_T("bzflag.exe"), _T("*.exe"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
 		if(dia.ShowModal() == wxID_OK) {
-			cmd = dia.GetFilename();
+			cmd = dia.GetDirectory() + _T("\\") + dia.GetFilename();
 			if(cmd.IsEmpty()) {
 				this->SetStatusText(_("No BZFlag ?"));
 				return;
@@ -79,5 +79,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 		// Save it before we move on
 		appConfig.setBZFlagCommand(cmd);
 	}
-	::wxShell(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
+	wxLogMessage(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
+	::wxExecute(wxString::Format(cmd,this->selectedServerHostPort.c_str()),wxEXEC_SYNC);
 }
