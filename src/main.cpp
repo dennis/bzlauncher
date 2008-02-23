@@ -64,20 +64,17 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 
 		if(dia.ShowModal() == wxID_OK) {
 			cmd = dia.GetDirectory() + _T("\\") + dia.GetFilename();
-			if(cmd.IsEmpty()) {
-				this->SetStatusText(_("No BZFlag ?"));
-				return;
-			}
 
 			cmd += _T(" %s");
+
+			// Save it before we move on
+			appConfig.setBZFlagCommand(cmd);
 		}
 #else 
 		// We assume BZFlag is in PATH
 		cmd = _T("bzflag %s");
-#endif
-
-		// Save it before we move on
 		appConfig.setBZFlagCommand(cmd);
+#endif
 	}
 	wxLogMessage(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
 	::wxExecute(wxString::Format(cmd,this->selectedServerHostPort.c_str()),wxEXEC_SYNC);

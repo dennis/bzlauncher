@@ -18,10 +18,8 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
 	
 	// Make sure fav's are placed at the top, no matter what
-	if(s1->favorite && s2->favorite) 
-		return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),false);
-	if(s1->favorite) return -1;
-	if(s2->favorite) return 1;
+	if(s1->favorite && !s2->favorite) return -1;
+	if(s2->favorite && !s1->favorite) return 1;
 
 	bool ascending = (col<0);
 
