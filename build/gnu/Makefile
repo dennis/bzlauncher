@@ -16,6 +16,7 @@ OBJS=\
 	mainframe_impl.o \
 	server.o \
 	serverdlg_impl.o \
+	serverping.o \
 	updatingdlg_impl.o
 ICONS=\
 	$(SRCDIR)/about32.h \

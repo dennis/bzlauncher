@@ -6,6 +6,7 @@
 #include <wx/filesys.h>
 
 #include "server.h"
+#include "serverping.h"
 
 WX_DECLARE_LIST(Server, ServerList);
 
@@ -16,7 +17,9 @@ private:
 
 	void ClearList();
 
-	wxString	rawResponse; 
+	wxString	rawResponse;
+
+	ServerPingList	pingList;
 
 public:
 	ServerList	serverList;

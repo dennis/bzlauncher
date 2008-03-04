@@ -83,7 +83,9 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 			}
 			break;
 		case 3:
-			s->ip.Hostname(token);
+			wxIPV4address ip;
+			ip.Hostname(token);
+			s->setIP(ip);
 
 			// Get remaining stuff
 			s->name += tok.GetString();

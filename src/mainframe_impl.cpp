@@ -66,6 +66,8 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->initialLoadTimer.Start(300,true);
+
+	this->pingTimer.Start(50);
 }
 
 MainFrameImpl::~MainFrameImpl() {

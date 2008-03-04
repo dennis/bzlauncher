@@ -4,6 +4,8 @@
 #include <wx/string.h>
 #include <wx/socket.h>
 
+#include "serverping.h"
+
 #ifdef _WIN32
   // Visual C++ 2008 dosn't ship with stdint.h
   typedef __int16 int16_t;
@@ -13,6 +15,7 @@
 #else
 # include <stdint.h>
 #endif
+
 enum GameStyle {
   PlainGameStyle =       0x0000,
   TeamFlagGameStyle =    0x0001, // capture the flag
@@ -29,12 +32,15 @@ enum GameStyle {
 };
 
 struct Server {
+protected:
+	wxIPV4address	ip;
+	ServerPing		ping;
+
 public:
 
 	wxString	serverHostPort;
 	wxString	protocolVersion;
 	wxString	flags;
-	wxIPV4address	ip;
 	wxString	name;
 	uint16_t	gameStyle;
 	uint16_t	maxShots;
@@ -58,6 +64,15 @@ public:
 	uint8_t		observerMax;
 	bool		fullyParsed;
 	bool		favorite;
+
+	void setIP(const wxIPV4address& val) {
+		this->ip = val;
+		this->ping = ServerPing(val);
+	}
+
+	const wxIPV4address& getIP() {
+		return this->ip;
+	}
 
 	int GetPlayerCount() const {
 		return 

@@ -6,6 +6,8 @@
 #include <wx/arrstr.h>
 #include "gui.h"
 
+#include "serverping.h"
+
 class MainFrameImpl : public MainFrame {
 private:
 
@@ -19,6 +21,7 @@ private:
 	void UpdateServer(int idx, Server*);
 
 	wxTimer			initialLoadTimer;
+	ServerPingTrackerTimer	pingTimer;
 
 protected:
 	wxImageList*	imageList;
