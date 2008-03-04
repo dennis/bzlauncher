@@ -1,11 +1,5 @@
-> I don't like the dark grey frame around the server list
-> sorting is strange..one server with 19, one with 18 players...when I add both to my favourites, the sorting by player number isn't working correctly
-> I aborted the bzflag client choosing window...now it doesn't popup any more and tries to execute something..?
-
-
 v+1
 ===
-	- bugfixes
 	Ping Server (game query request)
 		- ping: Only ping once for every unique ip
 	- use strayers listserver as fallback (but in config)

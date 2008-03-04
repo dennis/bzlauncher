@@ -76,6 +76,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 		appConfig.setBZFlagCommand(cmd);
 #endif
 	}
-	wxLogMessage(wxString::Format(cmd,this->selectedServerHostPort.c_str()));
+	wxSetWorkingDirectory(wxFileName::FileName(cmd).GetPath());
 	::wxExecute(wxString::Format(cmd,this->selectedServerHostPort.c_str()),wxEXEC_SYNC);
 }
