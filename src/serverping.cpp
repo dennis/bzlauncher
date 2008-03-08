@@ -41,9 +41,10 @@ ServerPingImpl* ServerPingTracker::Ping(const wxIPV4address &ip) {
 	ServerPingImpl*	ping = NULL;
 	wxString ipReal = ip.IPAddress();
 
+	// Try to find existing ping object for requested ip
 	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
 		ping = *i;
-		if(ipReal.compare(ping->ip) == 0) {
+		if(ipReal.compare(ping->ip.IPAddress()) == 0) {
 			return ping;
 
 		}
@@ -61,32 +62,61 @@ void ServerPingTracker::Unping(ServerPing* ping) {
 }
 
 void ServerPingTracker::Work() {
-	int queued = 0;
-	ServerPingImpl*	ping = NULL;
+	int queued = ServerPingTracker::CountQueued();
 
 	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
-		ping = *i;
-
-		if(ping->isQueued()) 
+		// Start pinging more IPs, if queued is below maxpings
+		if((*i)->isPending() && queued < ServerPingTracker::maxpings ) {
+			(*i)->measurePingStart();
 			queued++;
-	}
-
-	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); queued < maxpings && i != ServerPingTracker::list.end(); ++i) {
-		ping = *i;
-
-		if(ping->isPending()) {
-			wxLogMessage(_T("TODO: I want to ping %s. %lx count %d"), ping->ip.c_str(),
-				(long int)ping, ping->refcount);
-			queued++;
-			ping->queued();
+		}
+		else if((*i)->isQueued()) {
+			(*i)->measurePingContinue();
 		}
 	}
 }
 
+int ServerPingTracker::CountQueued() {
+	int queued = 0;
+	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
+		if((*i)->isQueued())
+			queued++;
+	}
+
+	return queued;
+}
+
 ServerPingImpl::ServerPingImpl() : refcount(0), status(PING_FAILED)  {
 }
-ServerPingImpl::ServerPingImpl(const wxIPV4address& _ip) : ip(_ip.IPAddress()), refcount(0), status(PING_PENDING)  {
+ServerPingImpl::ServerPingImpl(const wxIPV4address& _ip) : ip(_ip), refcount(0), status(PING_PENDING)  {
 }
 
 ServerPingImpl::~ServerPingImpl() {
+}
+
+void ServerPingImpl::measurePingStart() {
+	this->timer.Start();
+	this->sock.Connect(ip,false);
+	this->sock.SetFlags(wxSOCKET_NOWAIT);
+	this->sock.SetTimeout(2);
+	this->status = PING_QUEUED;
+}
+
+void ServerPingImpl::measurePingContinue() {
+	if( this->sock.WaitOnConnect(0,0) ) {
+		// Connected
+		if(this->sock.IsConnected()) {
+			this->status = PING_SUCCESS;
+			this->timer.Pause();
+			this->duration = this->timer.Time();
+		}
+		else {
+			this->status = PING_FAILED;
+			this->duration = 9999;
+		}
+	}
+}
+
+void ServerPingTrackerTimer::Notify() {
+	ServerPingTracker::Work();
 }

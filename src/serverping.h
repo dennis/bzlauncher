@@ -21,6 +21,7 @@ public:
 	static ServerPingImpl* Ping(const wxIPV4address &ip);
 	static void Unping(ServerPing*);
 	static void Work();
+	static int CountQueued();
 };
 
 
@@ -39,17 +40,22 @@ public:
 
 class ServerPingImpl {
 public:
-	wxString	ip;
-	//wxStopWatch		timer;
+	wxIPV4address	ip;
+	wxStopWatch		timer;
+	wxSocketClient	sock;
 
 private:
 	int refcount;
 	friend class ServerPing;
 	friend class ServerPingTracker; // FIXME This is temp!
 
+	void measurePingStart();
+	void measurePingContinue();
+
 protected:
 	typedef enum { PING_QUEUED, PING_PENDING, PING_FAILED, PING_SUCCESS } Status;
 	Status			status;
+	long			duration;
 
 public:
 	ServerPingImpl();
@@ -59,17 +65,11 @@ public:
 	bool isQueued() { return this->status == PING_QUEUED; }
 	bool isPending() { return this->status == PING_PENDING; }
 	bool isReady()  { return (this->status == PING_SUCCESS || this->status == PING_FAILED); }
-	
-	void queued() {
-		this->status = PING_QUEUED; 
-	}
 };
 
 class ServerPingTrackerTimer : public wxTimer {
 public:
-	void Notify() {
-		ServerPingTracker::Work();
-	}
+	void Notify();
 };
 
 #endif
