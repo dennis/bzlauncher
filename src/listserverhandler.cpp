@@ -113,7 +113,7 @@ bool ListServerHandler::GetListServerResponse() {
 
 			this->rawResponse.Clear();
 
-			while(!in_stream->Read(buffer,1024).Eof()) {
+			while(in_stream->Read(buffer,1024).LastRead()) {
 				this->rawResponse << wxString::From8BitData(buffer,in_stream->LastRead());
 			}
 
