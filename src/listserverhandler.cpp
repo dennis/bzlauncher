@@ -82,13 +82,23 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 				s->fullyParsed = false;
 			}
 			break;
-		case 3:
+		case 3: {
+			long port = 5154;
+			// Get Port from serverHostPort
+			int pos;
+			if((pos = s->serverHostPort.Find(':',true)) != wxNOT_FOUND) {
+				if(!s->serverHostPort.Mid(pos+1).ToLong(&port))
+					port = 5154;
+			}
+
 			wxIPV4address ip;
 			ip.Hostname(token);
+			ip.Service(port);
 			s->setIP(ip);
 
 			// Get remaining stuff
 			s->name += tok.GetString();
+			}
 			break;
 		}
 		i++;
