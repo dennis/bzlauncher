@@ -33,6 +33,8 @@ public:
 	ServerPing(const wxIPV4address&);
 	ServerPing(const ServerPing&);
 	~ServerPing();
+
+	ServerPing& operator=(const ServerPing&);
 };
 
 class ServerPingImpl {
@@ -43,13 +45,16 @@ public:
 private:
 	int refcount;
 	friend class ServerPing;
+	friend class ServerPingTracker; // FIXME This is temp!
 
 protected:
 	typedef enum { PING_QUEUED, PING_PENDING, PING_FAILED, PING_SUCCESS } Status;
 	Status			status;
 
 public:
-	ServerPingImpl(const wxIPV4address& _ip) : ip(_ip.IPAddress()), status(PING_PENDING)  {}
+	ServerPingImpl();
+	ServerPingImpl(const wxIPV4address&);
+	~ServerPingImpl();
 
 	bool isQueued() { return this->status == PING_QUEUED; }
 	bool isPending() { return this->status == PING_PENDING; }

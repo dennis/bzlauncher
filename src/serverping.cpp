@@ -4,22 +4,34 @@
 
 WX_DEFINE_LIST(ServerPingList);
 
-ServerPing::ServerPing() : impl(NULL) {
+ServerPing::ServerPing() : impl(NULL)  {
 }
 
 ServerPing::ServerPing(const wxIPV4address& ip) : impl(ServerPingTracker::Ping(ip)) {
+	this->impl->refcount++;
+	assert(this->impl->refcount);
 }
 
 ServerPing::ServerPing(const ServerPing& s) : impl(s.impl) { 
-	if( this->impl ) this->impl->refcount++; 
+	this->impl->refcount++;
+	assert(this->impl->refcount);
 }
 
 ServerPing::~ServerPing() { 
-	if( this->impl && --this->impl->refcount == 0) {
-		wxLogMessage(_T("Unpining %lx count %d"), (long int)this, this->impl->refcount);
+	assert(this->impl->refcount);
+	this->impl->refcount--;
+	if( this->impl && this->impl->refcount == 0) {
 		ServerPingTracker::Unping(this);
 		delete impl; 
 	}
+}
+
+ServerPing& ServerPing::operator=(const ServerPing& s) {
+	this->impl = s.impl;
+	this->impl->refcount++;
+	assert(this->impl->refcount);
+	
+	return *this;
 }
 
 ServerPingList ServerPingTracker::list;
@@ -63,9 +75,18 @@ void ServerPingTracker::Work() {
 		ping = *i;
 
 		if(ping->isPending()) {
-			wxLogMessage(_T("I want to ping %s"), ping->ip.c_str());
+			wxLogMessage(_T("TODO: I want to ping %s. %lx count %d"), ping->ip.c_str(),
+				(long int)ping, ping->refcount);
 			queued++;
 			ping->queued();
 		}
 	}
+}
+
+ServerPingImpl::ServerPingImpl() : refcount(0), status(PING_FAILED)  {
+}
+ServerPingImpl::ServerPingImpl(const wxIPV4address& _ip) : ip(_ip.IPAddress()), refcount(0), status(PING_PENDING)  {
+}
+
+ServerPingImpl::~ServerPingImpl() {
 }
