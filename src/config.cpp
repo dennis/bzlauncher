@@ -142,3 +142,16 @@ void Config::setFavorites(const wxArrayString& list) {
 			cfg->Write(wxString::Format(_T("favorites/%d"), i), list.Item(i));
 	);
 }
+
+wxString Config::getListServerURL(int n) const {
+	int count = 0;
+	wxString str;
+	CFG_OP(cfg,
+		while(cfg->Read(wxString::Format(_T("listserver/%d"), count), &str)) {
+			if(count == n) return str;
+			count++;
+		}
+	);
+
+	return _T("http://my.bzflag.org/db?action=LIST");
+}

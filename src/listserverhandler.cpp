@@ -6,6 +6,7 @@
 #include <wx/utils.h>
 
 #include "main.h"
+#include "config.h"
 #include "listserverhandler.h"
 
 /*
@@ -115,8 +116,13 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 
 bool ListServerHandler::GetListServerResponse() {
 	wxFileSystem	fs;
-	wxFSFile*		listserv = fs.OpenFile(_T("http://my.bzflag.org/db?action=LIST"));
+	wxFSFile*		listserv = NULL;
+	wxString		url;
+	int				c = 0;
 	bool			r = false;
+
+	while( listserv == NULL && (url = appConfig.getListServerURL(c++)) && !url.IsEmpty())
+		listserv = fs.OpenFile(url);
 
 	if(listserv) {
 		wxInputStream *in_stream;

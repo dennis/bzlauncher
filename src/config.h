@@ -22,7 +22,6 @@ protected:
 	wxString getColumnKey(ColType) const;
 
 public:
-	
 	Config();
 	~Config();
 
@@ -40,6 +39,8 @@ public:
 
 	wxArrayString getFavorites() const;
 	void setFavorites(const wxArrayString&);
+
+	wxString getListServerURL(int=0) const;
 };
 
 extern Config appConfig;
