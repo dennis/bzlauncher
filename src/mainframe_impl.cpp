@@ -278,7 +278,14 @@ void MainFrameImpl::UpdateServer(int idx, Server* s) {
 }
 
 void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
-	wxGetApp().SetStatusText(_("Not implemented yet"));
+	BZLauncherApp& app = wxGetApp();
+	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
+	if(s) {
+		s->ping.ping();
+	}
+	else {
+		app.SetStatusText(_("No server selected"));
+	}
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {

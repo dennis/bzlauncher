@@ -43,6 +43,11 @@ long ServerPing::getDuration() {
 	return this->impl->getDuration();
 }
 
+void ServerPing::ping() {
+	assert(this->impl);
+	this->impl->ping();
+}
+
 ServerPingList ServerPingTracker::list;
 const int ServerPingTracker::maxpings = 5;
 wxWindow* ServerPingTracker::receiver = NULL;
@@ -105,11 +110,7 @@ ServerPingImpl::~ServerPingImpl() {
 }
 
 void ServerPingImpl::measurePingStart() {
-	this->timer.Start();
-	this->sock.Connect(ip,false);
-	this->sock.SetFlags(wxSOCKET_NOWAIT);
-	this->sock.SetTimeout(2);
-	this->status = PING_QUEUED;
+	this->ping();
 }
 
 void ServerPingImpl::measurePingContinue() {
@@ -126,6 +127,14 @@ void ServerPingImpl::measurePingContinue() {
 		}
 		ServerPingTracker::SendEvent(this->ip);
 	}
+}
+
+void ServerPingImpl::ping() {
+	this->timer.Start();
+	this->sock.Connect(ip,false);
+	this->sock.SetFlags(wxSOCKET_NOWAIT);
+	this->sock.SetTimeout(2);
+	this->status = PING_QUEUED;
 }
 
 void ServerPingTrackerTimer::Notify() {

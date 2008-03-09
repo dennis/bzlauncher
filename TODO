@@ -1,9 +1,5 @@
 version 1.0rc
 ===
-	Ping Server (game query request)
-		- ping: Only ping once for every unique ip
-	- use strayers listserver as fallback (but in config)
-
 	- bugfixes
 	- create homepage
 	- select license

@@ -43,6 +43,7 @@ public:
 	
 	bool isOK();
 	long getDuration();
+	void ping();
 };
 
 class ServerPingImpl {
@@ -78,6 +79,8 @@ public:
 	long getDuration() {
 		return this->duration;
 	}
+
+	void ping();
 };
 
 class ServerPingTrackerTimer : public wxTimer {
