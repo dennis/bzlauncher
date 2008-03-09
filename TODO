@@ -1,7 +1,6 @@
 version 1.0rc
 ===
 	- bugfixes
-	- create homepage
 	- build debian package
 	- build windows installer
 		- http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&displaylang=en
