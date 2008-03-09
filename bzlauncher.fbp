@@ -213,9 +213,9 @@
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
-                        <property name="enabled">0</property>
+                        <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_PING</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Ping server</property>
                         <property name="name">pingServer</property>
@@ -892,7 +892,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="0">
+        <object class="Dialog" expanded="1">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -989,7 +989,7 @@
                                 <property name="style">wxHL_ALIGN_CENTRE|wxHL_DEFAULT_STYLE</property>
                                 <property name="subclass"></property>
                                 <property name="tooltip"></property>
-                                <property name="url">http://www.bzflag.org</property>
+                                <property name="url">http://dennis.moellegaard.dk/projects/bzlauncher/</property>
                                 <property name="visited_color"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
@@ -1093,7 +1093,7 @@
                         <property name="style">wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP</property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>
-                        <property name="value">&#x0A;Version 1.0&#x0A;&#x0A;Author:&#x0A;Dennis Moellegaard Pedersen&#x0A;dennis@moellegaard.dk&#x0A;&#x0A;Helpful spirits:&#x0A;Strayer, BZFlag devs and Suavegirl</property>
+                        <property name="value">&#x0A;Version 1.0&#x0A;&#x0A;Author:&#x0A;Dennis Moellegaard Pedersen&#x0A;dennis@moellegaard.dk&#x0A;&#x0A;Thanks to:&#x0A;Suavegirl, Strayer and&#x0A;the BZFlag developers</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
