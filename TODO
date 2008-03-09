@@ -1,10 +1,9 @@
-version 1.0rc
-===
 	- bugfixes
 	- build debian package
 	- build windows installer
 		- http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&displaylang=en
 			- seems only msvcr90.dll is required
+	- code refactoring / cleanup
 
 version 1 release 
 =================
