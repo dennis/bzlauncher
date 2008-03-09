@@ -75,7 +75,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	fgSizer1->Add( toolBar, 0, wxEXPAND, 5 );
 	
 	serverList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	fgSizer1->Add( serverList, 0, wxALL|wxEXPAND, 5 );
+	fgSizer1->Add( serverList, 0, wxALL|wxEXPAND, 0 );
 	
 	findPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	findPanel->Hide();
