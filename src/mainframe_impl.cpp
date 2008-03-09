@@ -53,7 +53,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 			if(s1->ping.getDuration() < s2->ping.getDuration())
 				r = -1;
 			else if(s1->ping.getDuration() > s2->ping.getDuration())
-				r = -1;
+				r = 1;
 			return SortHelper(r,ascending);
 			}
 			break;
