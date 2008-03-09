@@ -206,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\serverping.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\updatingdlg_impl.cpp"
 				>
 			</File>
@@ -251,6 +255,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\serverdlg_impl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\serverping.h"
 				>
 			</File>
 			<File
