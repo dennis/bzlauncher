@@ -28,7 +28,7 @@ ICONS=\
 	$(SRCDIR)/stop22.h \
 	$(SRCDIR)/up22.h 
 
-all: pre $(ROOTDIR)/bzlauncher
+all: $(ROOTDIR)/bzlauncher
 
 $(ROOTDIR)/bzlauncher: $(OBJS)
 	$(CXX) *.o `wx-config --libs` -o $(ROOTDIR)/bzlauncher
@@ -40,7 +40,7 @@ gui.o: $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # Pre compilation steps
-pre: $(SRCDIR)/gui.cpp $(ICONS)
+pre: gui_files $(ICONS)
 	cp -a $(SRCDIR)/gui_raw.cpp $(SRCDIR)/gui.cpp
 	cp -a $(SRCDIR)/gui_raw.h $(SRCDIR)/gui.h
 
@@ -49,7 +49,7 @@ $(SRCDIR)/gui_raw.cpp: $(ROOTDIR)/bzlauncher.fbp
 	-wxformbuilder -g $(ROOTDIR)/bzlauncher.fbp 
 
 # wxformbuilder postprocessing: Add some code to top of gui_raw.cpp
-$(SRCDIR)/gui.cpp: $(SRCDIR)/gui_raw.cpp
+gui_files: $(SRCDIR)/gui_raw.cpp
 	sed '/#include "gui_raw.h"/ a #include <wx/mstream.h>\n\ninline wxBitmap _wxGetBitmapFromMemory(const unsigned char *data, int length) { wxMemoryInputStream is(data, length); return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1); }\n #define wxGetBitmapFromMemory(name) _wxGetBitmapFromMemory(name ## _png, sizeof(name ## _png))' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp && mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
 	sed 's/#include "gui_raw.h"/#include "gui.h"/' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp && mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
 	sed 's/__gui_raw__/__gui__/' <$(SRCDIR)/gui_raw.h >$(SRCDIR)/gui_raw.h.tmp && mv $(SRCDIR)/gui_raw.h.tmp $(SRCDIR)/gui_raw.h
@@ -71,9 +71,11 @@ $(ROOTDIR)/bin2c: $(CONTRIBDIR)/bin2c.c
 clean:
 	-rm *.o
 	-rm $(ROOTDIR)/bzlauncher
+
+cleanall: clean
 	-rm $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
 	-rm $(SRCDIR)/gui_raw.cpp $(SRCDIR)/gui_raw.h
 	-rm $(ROOTDIR)/bin2c
 	-rm $(SRCDIR)/*32.h $(SRCDIR)/*22.h
 
-.PHONY: clean pre all
+.PHONY: cleanall clean pre all
