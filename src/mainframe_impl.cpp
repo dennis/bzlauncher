@@ -164,7 +164,7 @@ void MainFrameImpl::RefreshServerGrid() {
 		list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
 		
 		// Ping
-		list->SetItem(idx, 4, _("n/a"));
+		list->SetItem(idx, 4, _("..."));
 
 		// Favorite
 		this->UpdateServer(idx,current);
