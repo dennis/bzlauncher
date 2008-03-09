@@ -156,5 +156,5 @@ wxString Config::getListServerURL(int n) const {
 	if(count == 0 && n == 1) 
 		return _T("http://my.bzflag.org/db?action=LIST");
 	else
-		return _T("http://bzstats.strayer.de/stuff/listserver.php?protocol=NEW");
+		return _T("http://bzstats.strayer.de/stuff/listserver.php");
 }
