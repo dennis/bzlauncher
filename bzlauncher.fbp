@@ -36,7 +36,7 @@
             <property name="size">597,601</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
-            <property name="title">BZLauncher v1.0</property>
+            <property name="title">BZLauncher #VERSION#</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -1093,7 +1093,7 @@
                         <property name="style">wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP</property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>
-                        <property name="value">&#x0A;Version 1.0&#x0A;&#x0A;Author:&#x0A;Dennis Moellegaard Pedersen&#x0A;dennis@moellegaard.dk&#x0A;&#x0A;Thanks to:&#x0A;Suavegirl, Strayer and&#x0A;the BZFlag developers</property>
+                        <property name="value">&#x0A;Version #VERSION#&#x0A;&#x0A;Author:&#x0A;Dennis Moellegaard Pedersen&#x0A;dennis@moellegaard.dk&#x0A;&#x0A;Thanks to:&#x0A;Suavegirl, Strayer and&#x0A;the BZFlag developers</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>

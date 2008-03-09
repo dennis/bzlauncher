@@ -7,6 +7,7 @@
 
 #include "gui.h"
 #include <wx/mstream.h>
+#include "version.h"
 
 inline wxBitmap _wxGetBitmapFromMemory(const unsigned char *data, int length) { wxMemoryInputStream is(data, length); return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1); }
  #define wxGetBitmapFromMemory(name) _wxGetBitmapFromMemory(name ## _png, sizeof(name ## _png))
@@ -155,7 +156,7 @@ AboutDlg::AboutDlg( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
 	
-	m_textCtrl2 = new wxTextCtrl( this, wxID_ANY, _("\nVersion 1.0\n\nAuthor:\nDennis Moellegaard Pedersen\ndennis@moellegaard.dk\n\nThanks to:\nSuavegirl, Strayer and\nthe BZFlag developers"), wxDefaultPosition, wxSize( -1,200 ), wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
+	m_textCtrl2 = new wxTextCtrl( this, wxID_ANY, _("\nVersion " VERSION "\n\nAuthor:\nDennis Moellegaard Pedersen\ndennis@moellegaard.dk\n\nThanks to:\nSuavegirl, Strayer and\nthe BZFlag developers"), wxDefaultPosition, wxSize( -1,200 ), wxTE_AUTO_URL|wxTE_CENTRE|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
 	fgSizer2->Add( m_textCtrl2, 0, wxALL|wxEXPAND, 5 );
 	
 	m_button3 = new wxButton( this, wxID_ANY, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );

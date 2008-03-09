@@ -15,6 +15,8 @@
 #include "down22.h"
 #include "bzflag32.h"
 #include "about32.h"
+#include "version.h"
+
 
 #include <wx/string.h>
 #include <wx/bitmap.h>
@@ -92,7 +94,7 @@ class MainFrame : public wxFrame
 		
 	
 	public:
-		MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BZLauncher v1.0"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 597,601 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxWANTS_CHARS );
+		MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BZLauncher " VERSION ""), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 597,601 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL|wxWANTS_CHARS );
 	
 };
 
