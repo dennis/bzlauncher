@@ -6,6 +6,8 @@
 #include <wx/stopwatch.h>
 #include <wx/timer.h>
 
+DECLARE_EVENT_TYPE(wxEVT_PING_CHANGED, -1)
+
 class ServerPing;
 class ServerPingImpl;
 
@@ -18,10 +20,12 @@ protected:
 	static ServerPingList	list;
 	static const int        maxpings;
 public:
+	static wxWindow*		receiver;
 	static ServerPingImpl* Ping(const wxIPV4address &ip);
 	static void Unping(ServerPing*);
 	static void Work();
 	static int CountQueued();
+	static void SendEvent(const wxIPV4address&);
 };
 
 
@@ -36,6 +40,9 @@ public:
 	~ServerPing();
 
 	ServerPing& operator=(const ServerPing&);
+	
+	bool isOK();
+	long getDuration();
 };
 
 class ServerPingImpl {
@@ -65,6 +72,12 @@ public:
 	bool isQueued() { return this->status == PING_QUEUED; }
 	bool isPending() { return this->status == PING_PENDING; }
 	bool isReady()  { return (this->status == PING_SUCCESS || this->status == PING_FAILED); }
+	bool isFailed()  { return this->status == PING_FAILED; }
+	bool isSuccess()  { return this->status == PING_SUCCESS; }
+
+	long getDuration() {
+		return this->duration;
+	}
 };
 
 class ServerPingTrackerTimer : public wxTimer {

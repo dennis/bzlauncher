@@ -7,6 +7,8 @@
 
 #include "listserverhandler.h"
 
+#include "serverping.h"
+
 static int SortHelper(int res, bool reverse=false) {
 	if(res==0) return res;
 	if(reverse) return res*(-1);
@@ -14,8 +16,8 @@ static int SortHelper(int res, bool reverse=false) {
 }
 
 static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
-	Server* s1 = MainFrameImpl::GetServerByIdx(item1);
-	Server* s2 = MainFrameImpl::GetServerByIdx(item2);
+	Server* s1 = reinterpret_cast<Server*>(item1);
+	Server* s2 = reinterpret_cast<Server*>(item2);
 	
 	// Make sure fav's are placed at the top, no matter what
 	if(s1->favorite && !s2->favorite) return -1;
@@ -46,6 +48,14 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 			}
 			break;
 		case 5: // Ping
+			{
+			int r = 0;
+			if(s1->ping.getDuration() < s2->ping.getDuration())
+				r = -1;
+			else if(s1->ping.getDuration() > s2->ping.getDuration())
+				r = -1;
+			return SortHelper(r,ascending);
+			}
 			break;
 		default:
 			return 0;
@@ -56,6 +66,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), initialLoadTimer(this)  { 
+	ServerPingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
 	this->SetSize(this->DetermineFrameSize());
@@ -65,9 +76,10 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->serverList->SetFocus();
 
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
+	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 	this->initialLoadTimer.Start(300,true);
 
-	this->pingTimer.Start(50);
+	this->pingTimer.Start(10);
 }
 
 MainFrameImpl::~MainFrameImpl() {
@@ -140,7 +152,7 @@ void MainFrameImpl::RefreshServerGrid() {
 	
 		// Server
 		list->InsertItem(idx, current->serverHostPort);
-		list->SetItemData(idx,idx);
+		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
 
 		// Name
 		list->SetItem(idx, 1, current->name);
@@ -154,16 +166,6 @@ void MainFrameImpl::RefreshServerGrid() {
 		// Ping
 		list->SetItem(idx, 4, _("n/a"));
 
-		// Color
-		if(!current->fullyParsed)
-			list->SetItemTextColour(idx, *wxRED);
-		else if(current->IsFull())
-			list->SetItemTextColour(idx, *wxBLUE);
-		else if(current->IsEmpty())
-			list->SetItemTextColour(idx, *wxLIGHT_GREY);
-		else
-			list->SetItemTextColour(idx, *wxBLACK);
-		
 		// Favorite
 		this->UpdateServer(idx,current);
 
@@ -197,13 +199,11 @@ void MainFrameImpl::EventViewServer(wxCommandEvent&) {
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
-	const wxString s = this->GetServerByIdx(event.GetData())->serverHostPort;
+	Server* srv = reinterpret_cast<Server*>(event.GetData());
+	const wxString s = srv->serverHostPort;
 	wxGetApp().SetSelectedServer(s);
 }
 
-Server* MainFrameImpl::GetServerByIdx(int idx) {
-	return wxGetApp().listServerHandler.serverList.Item(idx)->GetData();
-}
 
 void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
 	this->PopupMenu(this->serverMenu);
@@ -261,13 +261,19 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::UpdateServer(int idx, Server* s) {
 	if(s->favorite) {
-		//Not used: list->SetItemImage(idx, 5 , this->imgFavIdx);
 		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
-		this->serverList->SetItem(idx, 5, _T("Yes"));
+		this->serverList->SetItem(idx, 5, _("Yes"));
 	}
 	else {
 		this->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
-		this->serverList->SetItem(idx, 5, _T("No"));
+		this->serverList->SetItem(idx, 5, _("No"));
+	}
+
+	if(s->ping.isOK()) {
+		this->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
+	}
+	else {
+		this->serverList->SetItem(idx, 4, _("n/a"));
 	}
 }
 
@@ -277,4 +283,34 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	this->RefreshServerGrid();
+}
+
+void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
+	wxIPV4address	ip;
+
+	long port = 5154;
+	int pos;
+	if((pos = event.GetString().Find(':',true)) != wxNOT_FOUND) {
+		if(!event.GetString().Mid(pos+1).ToLong(&port))
+			port = 5154;
+		ip.Hostname(event.GetString().Mid(0,pos));
+	}
+	else {
+		ip.Hostname(event.GetString());
+	}
+	ip.Service(port);
+
+	long item = -1;
+	for ( ;; ) {
+		item = this->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
+
+		if(item == -1)
+			break;
+
+		Server* current = reinterpret_cast<Server*>(this->serverList->GetItemData(item));
+
+		if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() && ip.Service()) {
+			this->UpdateServer(item, current);
+		}
+	}
 }

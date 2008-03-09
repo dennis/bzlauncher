@@ -38,11 +38,10 @@ protected:
 	void EventViewServer(wxCommandEvent&);
 	void EventFavoriteToggle(wxCommandEvent&);
 	void EventPingServer(wxCommandEvent&);
+	void EventPingChanged(wxCommandEvent&);
 	void EventTimer(wxTimerEvent&);
 
 public:
-	static Server* GetServerByIdx(int);
-
 	MainFrameImpl(wxWindow*);
 	~MainFrameImpl();
 

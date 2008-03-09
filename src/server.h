@@ -32,11 +32,9 @@ enum GameStyle {
 };
 
 struct Server {
-protected:
+public:
 	wxIPV4address	ip;
 	ServerPing		ping;
-
-public:
 
 	wxString	serverHostPort;
 	wxString	protocolVersion;

@@ -3,6 +3,7 @@
 #include <wx/log.h>
 
 WX_DEFINE_LIST(ServerPingList);
+DEFINE_EVENT_TYPE(wxEVT_PING_CHANGED)
 
 ServerPing::ServerPing() : impl(NULL)  {
 }
@@ -34,8 +35,17 @@ ServerPing& ServerPing::operator=(const ServerPing& s) {
 	return *this;
 }
 
+bool ServerPing::isOK() {
+	return this->impl->isSuccess();
+}
+
+long ServerPing::getDuration() {
+	return this->impl->getDuration();
+}
+
 ServerPingList ServerPingTracker::list;
 const int ServerPingTracker::maxpings = 5;
+wxWindow* ServerPingTracker::receiver = NULL;
 
 ServerPingImpl* ServerPingTracker::Ping(const wxIPV4address &ip) {
 	ServerPingImpl*	ping = NULL;
@@ -114,9 +124,16 @@ void ServerPingImpl::measurePingContinue() {
 			this->status = PING_FAILED;
 			this->duration = 9999;
 		}
+		ServerPingTracker::SendEvent(this->ip);
 	}
 }
 
 void ServerPingTrackerTimer::Notify() {
 	ServerPingTracker::Work();
+}
+
+void ServerPingTracker::SendEvent(const wxIPV4address& ip) {
+	wxCommandEvent event(wxEVT_PING_CHANGED);
+	event.SetString(wxString::Format(_T("%s:%ld"), ip.IPAddress().c_str(), ip.Service()));
+	ServerPingTracker::receiver->GetEventHandler()->ProcessEvent(event);
 }
