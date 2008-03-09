@@ -90,11 +90,11 @@ public:
 	}
 
 	bool IsCTF() const {
-		return (this->gameStyle & TeamFlagGameStyle);
+		return (this->gameStyle & TeamFlagGameStyle) == TeamFlagGameStyle;
 	}
 
 	bool IsRH() const {
-		return (this->gameStyle & RabbitChaseGameStyle);
+		return (this->gameStyle & RabbitChaseGameStyle) == RabbitChaseGameStyle;
 	}
 
 	bool IsFFA() const {
