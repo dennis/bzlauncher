@@ -11,7 +11,7 @@
 class MainFrameImpl : public MainFrame {
 private:
 
-	long m_currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
+	long currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
 
 	wxArrayString	favoriteServers;
 

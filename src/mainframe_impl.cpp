@@ -71,7 +71,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->toolBar->Realize();
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
-	this->m_currentSortMode = appConfig.getSortMode();
+	this->currentSortMode = appConfig.getSortMode();
 	this->favoriteServers   = appConfig.getFavorites();
 	this->serverList->SetFocus();
 
@@ -87,7 +87,7 @@ MainFrameImpl::~MainFrameImpl() {
 		appConfig.setColumnWidth(Config::ColType(col), this->serverList->GetColumnWidth(col));
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
-	appConfig.setSortMode(this->m_currentSortMode);
+	appConfig.setSortMode(this->currentSortMode);
 }
 
 void MainFrameImpl::SetupColumns() {
@@ -173,7 +173,7 @@ void MainFrameImpl::RefreshServerGrid() {
 	}
 	
 	dlg.Pulse();
-	this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
+	this->serverList->SortItems(ServerSortCallback, this->currentSortMode);
 	dlg.Pulse();
 }
 
@@ -223,11 +223,11 @@ void MainFrameImpl::LaunchGame() {
 }
 
 void MainFrameImpl::EventColClick(wxListEvent& event) {
-	if(abs(this->m_currentSortMode) == (event.GetColumn()+1))
-		this->m_currentSortMode *= -1;
+	if(abs(this->currentSortMode) == (event.GetColumn()+1))
+		this->currentSortMode *= -1;
 	else
-		this->m_currentSortMode = event.GetColumn()+1;
-	this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
+		this->currentSortMode = event.GetColumn()+1;
+	this->serverList->SortItems(ServerSortCallback, this->currentSortMode);
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
@@ -251,7 +251,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		}
 		else {
 			this->UpdateServer(idx,s);
-			this->serverList->SortItems(ServerSortCallback, this->m_currentSortMode);
+			this->serverList->SortItems(ServerSortCallback, this->currentSortMode);
 		}
 	}
 	else {
