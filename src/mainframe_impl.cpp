@@ -169,6 +169,17 @@ void MainFrameImpl::RefreshServerGrid() {
 		// Favorite
 		this->UpdateServer(idx,current);
 
+		// Use colors to show if servers are supported by bzlauncher(Red), full (Blue), empty (grey)
+		if(!current->fullyParsed)
+			list->SetItemTextColour(idx, *wxRED);
+		else if(current->IsFull())
+			list->SetItemTextColour(idx, *wxBLUE);
+		else if(current->IsEmpty())
+			list->SetItemTextColour(idx, *wxLIGHT_GREY);
+		else
+			list->SetItemTextColour(idx, *wxBLACK);
+											    
+
 		idx++;
 	}
 	
