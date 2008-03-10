@@ -36,6 +36,8 @@ private:
 	  // add here before reusing old ones above
 	};
 
+	wxString	name;
+
 public:
 	class Team {
 	public:
@@ -43,13 +45,13 @@ public:
 		uint8_t count;
 		uint8_t max;
 	};
+	
 	wxIPV4address	ip;
 	ServerPing		ping;
 
-	wxString	serverHostPort;
 	wxString	protocolVersion;
 	wxString	flags;
-	wxString	name;
+	wxString	longName;
 	uint16_t	gameStyle;
 	uint16_t	maxShots;
 	uint16_t	shakeWins;
@@ -70,8 +72,11 @@ public:
 
 	Server();
 
+	wxString getName() const;
+	void     setName(const wxString&);
+
 	void setIP(const wxIPV4address&);
-	const wxIPV4address& getIP();
+	const wxIPV4address& getIP() const;
 
 	bool IsFull() const;
 	bool IsEmpty() const;

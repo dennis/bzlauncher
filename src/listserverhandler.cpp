@@ -70,16 +70,30 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 	wxStringTokenizer tok(line, _T(" "));
 
 	int i = 0;
+	long port;
+	wxString host;
 	while(tok.HasMoreTokens()) {
 		wxString token = tok.GetNextToken();
 		switch(i) {
-		case 0:	
-			s->serverHostPort = token;
+		case 0:	{ // servername:port
+			s->setName(token);
+
+			port = 5154;
+			host = token;
+			int pos;
+
+			if((pos = token.Find(':',true)) != wxNOT_FOUND) {
+				if(!token.Mid(pos+1).ToLong(&port))
+					port = 5154;
+				host = token.Mid(0,pos-1);
+			}
+
+			}
 			break;
-		case 1:
+		case 1:  // version 
 			s->protocolVersion = token;
 			break;
-		case 2: 
+		case 2:  // Hex info
 			{
 				ServerHexParser* p = ServerHexParser::GetParser(s->protocolVersion);
 				if(p) {
@@ -88,23 +102,16 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 				}
 			}
 			break;
-		case 3: {
-			long port = 5154;
-			// Get Port from serverHostPort
-			int pos;
-			if((pos = s->serverHostPort.Find(':',true)) != wxNOT_FOUND) {
-				if(!s->serverHostPort.Mid(pos+1).ToLong(&port))
-					port = 5154;
+		case 3: 
+			{
+				wxIPV4address ip;
+				ip.Hostname(token);
+				ip.Service(port);
+				s->setIP(ip);
 			}
-
-			wxIPV4address ip;
-			ip.Hostname(token);
-			ip.Service(port);
-			s->setIP(ip);
-
-			// Get remaining stuff
-			s->name += tok.GetString();
-			}
+			break;
+		case 4: // Server long describtive name
+			s->longName += tok.GetString();
 			break;
 		}
 		i++;
@@ -165,7 +172,7 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
 
-		if(n.Cmp(current->serverHostPort) == 0)
+		if(n.Cmp(current->getName()) == 0)
 			return current;
 	}
 

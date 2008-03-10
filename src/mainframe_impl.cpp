@@ -29,10 +29,10 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 	switch(col) {
 		case 1: // ServerHostPort
-			return SortHelper(s1->serverHostPort.CmpNoCase(s2->serverHostPort),ascending);
+			return SortHelper(s1->getName().CmpNoCase(s2->getName()),ascending);
 			break;
 		case 2: // Name
-			return SortHelper(s1->name.CmpNoCase(s2->name),ascending);
+			return SortHelper(s1->longName.CmpNoCase(s2->longName),ascending);
 			break;
 		case 3:	// Type
 			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
@@ -148,14 +148,14 @@ void MainFrameImpl::RefreshServerGrid() {
 		Server*	current = *i;
 
 		// Check if its a favorite
-		current->favorite = (this->favoriteServers.Index(current->serverHostPort) != wxNOT_FOUND);
+		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
 	
 		// Server
-		list->InsertItem(idx, current->serverHostPort);
+		list->InsertItem(idx, current->getName());
 		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
 
 		// Name
-		list->SetItem(idx, 1, current->name);
+		list->SetItem(idx, 1, current->longName);
 
 		// Type
 		list->SetItem(idx, 2, current->GetType());
@@ -211,7 +211,7 @@ void MainFrameImpl::EventViewServer(wxCommandEvent&) {
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
-	const wxString s = srv->serverHostPort;
+	const wxString s = srv->getName();
 	wxGetApp().SetSelectedServer(s);
 }
 
@@ -248,12 +248,12 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		if(s->favorite) {
 			// Remove from favoriteServers
 			s->favorite = false;
-			this->favoriteServers.Remove(s->serverHostPort);
+			this->favoriteServers.Remove(s->getName());
 		}
 		else {
 			// Add to favoriteServers
 			s->favorite = true;
-			this->favoriteServers.Add(s->serverHostPort);
+			this->favoriteServers.Add(s->getName());
 		}
 		
 		int idx = this->serverList->GetNextItem(-1,wxLIST_NEXT_ALL,wxLIST_STATE_SELECTED);

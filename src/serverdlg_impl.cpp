@@ -6,8 +6,8 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 : ServerDlg( parent ) {
 
 	// ServerHostPort + Name
-	this->serverHostPort->SetLabel(server->serverHostPort);
-	this->serverName->SetLabel(server->name);
+	this->serverHostPort->SetLabel(server->getName());
+	this->serverName->SetLabel(server->longName);
 
 	// Server-notice. If any
 	if(!server->fullyParsed) {
