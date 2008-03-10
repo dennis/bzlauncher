@@ -67,80 +67,29 @@ public:
 	bool		fullyParsed;
 	bool		favorite;
 
-	void setIP(const wxIPV4address& val) {
-		this->ip = val;
-		this->ping = ServerPing(val);
-	}
+	Server();
 
-	const wxIPV4address& getIP() {
-		return this->ip;
-	}
+	void setIP(const wxIPV4address&);
+	const wxIPV4address& getIP();
 
-	int GetPlayerCount() const {
-		return 
-			this->rogueTeam.count+
-			this->redTeam.count+
-			this->greenTeam.count+
-			this->blueTeam.count+
-			this->purpleTeam.count;
-	}
+	bool IsFull() const;
+	bool IsEmpty() const;
+	bool IsCTF() const;
+	bool IsRH() const;
+	bool IsFFA() const;
 
-	bool IsFull() const {
-		return this->GetPlayerCount() == this->maxPlayers;
-	}
+	const wxString GetType() const;
 
-	bool IsEmpty() const {
-		return this->GetPlayerCount() == 0;
-	}
+	bool GotAntidote() const;
+	bool GotHandicap() const;
+	bool GotJumping() const;
+	bool GotRicochet() const;
+	bool GotSuperFlags() const;
 
-	bool IsCTF() const {
-		return (this->gameStyle & TeamFlagGameStyle) == TeamFlagGameStyle;
-	}
-
-	bool IsRH() const {
-		return (this->gameStyle & RabbitChaseGameStyle) == RabbitChaseGameStyle;
-	}
-
-	bool IsFFA() const {
-		return !this->IsCTF() && !this->IsRH();
-	}
-
-	const wxString GetType() const {
-		if( this->IsCTF() )
-			return wxT("CTF");
-		else if( this->IsFFA() )
-			return wxT("FFA");
-		else if( this->IsRH() )
-			return wxT("RH");
-		else
-			return wxT("??");
-	}
-
-	bool GotSuperFlags() const {
-		return this->gameStyle && SuperFlagGameStyle;
-	}
-
-	bool GotJumping() const {
-		return this->gameStyle && JumpingGameStyle;
-	}
-
-	bool GotAntidote() const {
-		return this->gameStyle && AntidoteGameStyle;
-	}
-
-	bool GotRicochet() const {
-		return this->gameStyle && RicochetGameStyle;
-	}
-
-	bool GotHandicap() const {
-		return this->gameStyle && HandicapGameStyle;
-	}
+	int GetPlayerCount() const;
 
 	void ParseServerInfoBZFS0026(const wxString&);
 
-	Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
-		maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false) {
-	}
 private:
 	int Hex2bin(char);
 	char* UnpackHex16(char*, uint16_t&);
