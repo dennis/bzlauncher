@@ -2,41 +2,7 @@
 
 #include "server.h"
 
-Server::Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
-	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false) {
-}
-
-void Server::ParseServerInfoBZFS0026(const wxString& info) {
-	char theBuf[55];
-
-	strncpy(theBuf,info.ToAscii(),54);
-	theBuf[54] = (char)NULL;
-
-	char* p = theBuf;
-	p = this->UnpackHex16(p, this->gameStyle);
-	p = this->UnpackHex16(p, this->maxShots);
-	p = this->UnpackHex16(p, this->shakeWins);
-	p = this->UnpackHex16(p, this->shakeTimeout);
-	p = this->UnpackHex16(p, this->maxPlayerScore);
-	p = this->UnpackHex16(p, this->maxTeamScore);
-	p = this->UnpackHex16(p, this->maxTime);
-	p = this->UnpackHex8(p, this->maxPlayers);
-	p = this->UnpackHex8(p, this->rogueTeam.count);
-	p = this->UnpackHex8(p, this->rogueTeam.max);
-	p = this->UnpackHex8(p, this->redTeam.count);
-	p = this->UnpackHex8(p, this->redTeam.max);
-	p = this->UnpackHex8(p, this->greenTeam.count);
-	p = this->UnpackHex8(p, this->greenTeam.max);
-	p = this->UnpackHex8(p, this->blueTeam.count);
-	p = this->UnpackHex8(p, this->blueTeam.max);
-	p = this->UnpackHex8(p, this->purpleTeam.count);
-	p = this->UnpackHex8(p, this->purpleTeam.max);
-	p = this->UnpackHex8(p, this->observerTeam.count);
-	p = this->UnpackHex8(p, this->observerTeam.max);
-}
-
-// Pretty much stolen from BZFlag
-int Server::Hex2bin(char d) {
+static int Hex2bin(char d) {
 	switch(d) {
 		case '0': return 0;
 		case '1': return 1;
@@ -64,20 +30,61 @@ int Server::Hex2bin(char d) {
 	return 0;
 }
 
-char* Server::UnpackHex16(char* buf, uint16_t& d) {
+static char* UnpackHex16(char* buf, uint16_t& d) {
 	d = 0;
-	d = (d << 4) | this->Hex2bin(*buf++);
-	d = (d << 4) | this->Hex2bin(*buf++);
-	d = (d << 4) | this->Hex2bin(*buf++);
-	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
 	return buf;
 }
 
-char* Server::UnpackHex8(char* buf, uint8_t& d) {
+static char* UnpackHex8(char* buf, uint8_t& d) {
 	d = 0;
-	d = (d << 4) | this->Hex2bin(*buf++);
-	d = (d << 4) | this->Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
 	return buf;
+}
+
+ServerHexParser* ServerHexParser::GetParser(const wxString& proto) {
+	if(proto.CmpNoCase(_T("BZFS0026")) == 0)
+		return new ServerHexParserBZFS0026();
+	return NULL;
+}
+
+void ServerHexParserBZFS0026::parse(const wxString hex, Server& s) {
+	char theBuf[55];
+
+	strncpy(theBuf,hex.ToAscii(),54);
+	theBuf[54] = (char)NULL;
+
+	char* p = theBuf;
+	p = UnpackHex16(p, s.gameStyle);
+	p = UnpackHex16(p, s.maxShots);
+	p = UnpackHex16(p, s.shakeWins);
+	p = UnpackHex16(p, s.shakeTimeout);
+	p = UnpackHex16(p, s.maxPlayerScore);
+	p = UnpackHex16(p, s.maxTeamScore);
+	p = UnpackHex16(p, s.maxTime);
+	p = UnpackHex8(p, s.maxPlayers);
+	p = UnpackHex8(p, s.rogueTeam.count);
+	p = UnpackHex8(p, s.rogueTeam.max);
+	p = UnpackHex8(p, s.redTeam.count);
+	p = UnpackHex8(p, s.redTeam.max);
+	p = UnpackHex8(p, s.greenTeam.count);
+	p = UnpackHex8(p, s.greenTeam.max);
+	p = UnpackHex8(p, s.blueTeam.count);
+	p = UnpackHex8(p, s.blueTeam.max);
+	p = UnpackHex8(p, s.purpleTeam.count);
+	p = UnpackHex8(p, s.purpleTeam.max);
+	p = UnpackHex8(p, s.observerTeam.count);
+	p = UnpackHex8(p, s.observerTeam.max);
+
+	s.fullyParsed = true;
+}
+
+Server::Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
+	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false) {
 }
 
 void Server::setIP(const wxIPV4address& val) {

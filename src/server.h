@@ -16,8 +16,26 @@
 # include <stdint.h>
 #endif
 
+// Generic parsing functions
+class Server;
+
+class ServerHexParser {
+public:
+	static ServerHexParser* GetParser(const wxString&);
+
+	virtual ~ServerHexParser() {};
+
+	virtual void parse(const wxString, Server&) = 0;
+};
+
+class ServerHexParserBZFS0026 : public ServerHexParser {
+public:
+	void parse(const wxString, Server&);
+};
+
+
 /// BZFlag server description
-struct Server {
+class Server {
 private:	
 	/// GameStyle as defined in BZFlag source
 	enum GameStyle {
@@ -87,13 +105,6 @@ public:
 	bool GotSuperFlags() const;
 
 	int GetPlayerCount() const;
-
-	void ParseServerInfoBZFS0026(const wxString&);
-
-private:
-	int Hex2bin(char);
-	char* UnpackHex16(char*, uint16_t&);
-	char* UnpackHex8(char*, uint8_t&);
 };
 
 #endif

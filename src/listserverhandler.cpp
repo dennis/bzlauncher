@@ -78,13 +78,13 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 		case 1:
 			s->protocolVersion = token;
 			break;
-		case 2:
-			if(s->protocolVersion.Cmp(_T("BZFS0026")) == 0) {
-				s->ParseServerInfoBZFS0026(token);
-				s->fullyParsed = true;
-			}
-			else {
-				s->fullyParsed = false;
+		case 2: 
+			{
+				ServerHexParser* p = ServerHexParser::GetParser(s->protocolVersion);
+				if(p) {
+					p->parse(token,*s);
+					delete p;
+				}
 			}
 			break;
 		case 3: {
