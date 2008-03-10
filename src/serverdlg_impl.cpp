@@ -31,12 +31,12 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// Players
 	this->playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
 
-	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueCount, server->rogueMax));
-	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->redCount, server->redMax));
-	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->greenCount, server->greenMax));
-	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->blueCount, server->blueMax));
-	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->purpleCount, server->purpleMax));
-	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->observerCount, server->observerMax));
+	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueTeam.count, server->rogueTeam.max));
+	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->redTeam.count, server->redTeam.max));
+	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->greenTeam.count, server->greenTeam.max));
+	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->blueTeam.count, server->blueTeam.max));
+	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->purpleTeam.count, server->purpleTeam.max));
+	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->observerTeam.count, server->observerTeam.max));
 
 	// RIGHT COLUMN
 

@@ -17,18 +17,18 @@ void Server::ParseServerInfoBZFS0026(const wxString& info) {
 	p = this->UnpackHex16(p, this->maxTeamScore);
 	p = this->UnpackHex16(p, this->maxTime);
 	p = this->UnpackHex8(p, this->maxPlayers);
-	p = this->UnpackHex8(p, this->rogueCount);
-	p = this->UnpackHex8(p, this->rogueMax);
-	p = this->UnpackHex8(p, this->redCount);
-	p = this->UnpackHex8(p, this->redMax);
-	p = this->UnpackHex8(p, this->greenCount);
-	p = this->UnpackHex8(p, this->greenMax);
-	p = this->UnpackHex8(p, this->blueCount);
-	p = this->UnpackHex8(p, this->blueMax);
-	p = this->UnpackHex8(p, this->purpleCount);
-	p = this->UnpackHex8(p, this->purpleMax);
-	p = this->UnpackHex8(p, this->observerCount);
-	p = this->UnpackHex8(p, this->observerMax);
+	p = this->UnpackHex8(p, this->rogueTeam.count);
+	p = this->UnpackHex8(p, this->rogueTeam.max);
+	p = this->UnpackHex8(p, this->redTeam.count);
+	p = this->UnpackHex8(p, this->redTeam.max);
+	p = this->UnpackHex8(p, this->greenTeam.count);
+	p = this->UnpackHex8(p, this->greenTeam.max);
+	p = this->UnpackHex8(p, this->blueTeam.count);
+	p = this->UnpackHex8(p, this->blueTeam.max);
+	p = this->UnpackHex8(p, this->purpleTeam.count);
+	p = this->UnpackHex8(p, this->purpleTeam.max);
+	p = this->UnpackHex8(p, this->observerTeam.count);
+	p = this->UnpackHex8(p, this->observerTeam.max);
 }
 
 // Pretty much stolen from BZFlag
