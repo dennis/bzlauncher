@@ -16,23 +16,6 @@
 # include <stdint.h>
 #endif
 
-// Generic parsing functions
-class Server;
-
-class ServerHexParser {
-public:
-	static ServerHexParser* GetParser(const wxString&);
-
-	virtual ~ServerHexParser() {};
-
-	virtual void parse(const wxString, Server&) = 0;
-};
-
-class ServerHexParserBZFS0026 : public ServerHexParser {
-public:
-	void parse(const wxString, Server&);
-};
-
 
 /// BZFlag server description
 class Server {

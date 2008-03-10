@@ -8,6 +8,7 @@
 #include "main.h"
 #include "config.h"
 #include "listserverhandler.h"
+#include "serverparser.h"
 
 /*
  * Serverlist is a text/plain response from bzflag.org servers. Each line describes a single
