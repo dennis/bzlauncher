@@ -39,6 +39,7 @@ private:
 	wxString	name;
 
 public:
+	/// Represents a team. How many players and maximum
 	class Team {
 	public:
 		Team() : count(0), max(0) {};

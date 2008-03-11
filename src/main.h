@@ -4,6 +4,7 @@
 
 class MainFrameImpl;
 
+/// Starting point of BZLauncher 
 class BZLauncherApp : public wxApp {
 private:
 	MainFrameImpl*		mainFrame;

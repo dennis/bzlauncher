@@ -4,6 +4,7 @@
 #include <wx/gdicmn.h> // wxRect
 #include <wx/arrstr.h>
 
+/// Manages configuration settings (load/save)
 class Config {
 public:
 	typedef enum {
@@ -43,6 +44,7 @@ public:
 	wxString getListServerURL(int=0) const;
 };
 
+/// I prefer a global variable over static class and singleton
 extern Config appConfig;
 
 #endif

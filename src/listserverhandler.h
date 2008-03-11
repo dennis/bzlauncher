@@ -9,7 +9,8 @@
 #include "serverping.h"
 
 WX_DECLARE_LIST(Server, ServerList);
-
+/// Performs the listserver interaction - mainly parsing the data
+/// received from i mainly parsing the data
 class ListServerHandler {
 private:
 	bool GetListServerResponse();

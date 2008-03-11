@@ -8,6 +8,10 @@
 
 #include "serverping.h"
 
+/// Main Window - presenting the servers online.
+/// This is the implementation of MainFrame (which is generated)
+/// this allows us to change how MainFrame is implemented without
+/// needing to reimplement everything the MainFrame class is updated.
 class MainFrameImpl : public MainFrame {
 private:
 

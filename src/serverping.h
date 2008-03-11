@@ -13,22 +13,36 @@ class ServerPingImpl;
 
 WX_DECLARE_LIST(ServerPingImpl, ServerPingList);
 
+/// Static class that manage the pings. It controls the birth and deaths of ServerPingImpls
 class ServerPingTracker {
 private:
 	ServerPingTracker() {};
 protected:
 	static ServerPingList	list;
 	static const int        maxpings;
-public:
-	static wxWindow*		receiver;
-	static ServerPingImpl* Ping(const wxIPV4address &ip);
-	static void Unping(ServerPing*);
-	static void Work();
 	static int CountQueued();
+public:
+	/// Where should SendEvent() send its events to?
+	static wxWindow*		receiver;
+
+	/// Ping a IP. This will return a ServerPingImpl that 
+	/// represents the ping to that particular ip.
+	static ServerPingImpl* Ping(const wxIPV4address &ip);
+
+	/// Destroy a ping again
+	static void Unping(ServerPing*);
+
+	/// Process pings (send out more, wait for answer..)
+	static void Work();
+
+	/// Send event to a receiver once a ping is changed
 	static void SendEvent(const wxIPV4address&);
 };
 
-
+/// The server ping object. Represents a ping to a server/ip. The
+/// ping itself is implemented in ServerPingImpl and multiple ServerPing
+/// may use the same ServerPingImpl assuming they're pinging the same ip
+/// ServerPing uses refcounting to control if and when to destroy ServerPingImpl's
 class ServerPing {	
 protected:
 	ServerPingImpl*		impl;
@@ -46,6 +60,9 @@ public:
 	void ping();
 };
 
+/// The implementation of a ping. Only one ServerPingImpl exists pr IP to avoid
+/// pinging the same IP more than once (no need) - this is the reponsibility of
+/// ServerPingTracker
 class ServerPingImpl {
 public:
 	wxIPV4address	ip;
@@ -83,6 +100,8 @@ public:
 	void ping();
 };
 
+/// Timer - used to make sure that ServerPingTracker can track its progress of measuring
+/// the pings
 class ServerPingTrackerTimer : public wxTimer {
 public:
 	void Notify();
