@@ -1,6 +1,7 @@
-BZLauncher by Dennis Moellegaard Pedersen <dennis@moellegaard.dk>
-
-Released under MIT LICENSE (see MIT-LICENSE), except for the BZFlag Icon (Red
-Tank) which is released under LGPL.
-
+BZLauncher (c) 2008 by Dennis Moellegaard Pedersen <dennis@moellegaard.dk>
 http://dennis.moellegaard.dk/projects/bzlauncher/
+
+ * The BZLauncher code itself is released under MIT LICENSE (see MIT-LICENSE)
+ * BZFlag Icon (the Red Tank) which is released under LGPL (http://www.bzflag.org)
+ * All other icons is released under Creative Commons Attribution
+   Share-Alike (http://tango.freedesktop.org/)
