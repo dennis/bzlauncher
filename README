@@ -5,3 +5,18 @@ http://dennis.moellegaard.dk/projects/bzlauncher/
  * BZFlag Icon (the Red Tank) which is released under LGPL (http://www.bzflag.org)
  * All other icons is released under Creative Commons Attribution
    Share-Alike (http://tango.freedesktop.org/)
+
+Compiling - linux
+-----------------
+ * To compile BZLauncher you need wxwidgets 2.8.4 or better and GNU c/c++.
+ * cd build/gnu/ 
+ * make
+ * the executable is found in the main directory
+
+Compiling - Windows
+-------------------
+ * To compile BZLauncher you need wxwidgets 2.8.4 and Microsoft Visual C++ 9
+   (will probably work with others, but I havn't tested it)
+ * Open the project: build/msw/bzlauncher.sln
+ * Compile!
+ * the executable is found in the main directory
