@@ -108,10 +108,8 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 				ip.Hostname(token);
 				ip.Service(port);
 				s->setIP(ip);
+				s->longName += tok.GetString();
 			}
-			break;
-		case 4: // Server long describtive name
-			s->longName += tok.GetString();
 			break;
 		}
 		i++;
