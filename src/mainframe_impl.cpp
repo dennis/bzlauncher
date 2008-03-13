@@ -78,8 +78,6 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 	this->initialLoadTimer.Start(300,true);
-
-	this->pingTimer.Start(10);
 }
 
 MainFrameImpl::~MainFrameImpl() {
@@ -301,6 +299,7 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	this->RefreshServerGrid();
+	this->pingTimer.Start(10);
 }
 
 void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
