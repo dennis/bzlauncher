@@ -1,0 +1,2 @@
+?package(bzlauncher):needs="X11|wm" section="Games/Arcade/BZLauncher"\
+  title="BZLauncher" command="/usr/games/bzlauncher"
