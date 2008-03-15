@@ -107,6 +107,7 @@ Section Uninstall
   Delete "$INSTDIR\README.txt"
   Delete "$INSTDIR\MIT-LICENSE.txt"
   Delete "$INSTDIR\bzlauncher.exe"
+  Delete "$INSTDIR\msvcr90.dll"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
