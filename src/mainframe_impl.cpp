@@ -178,11 +178,20 @@ void MainFrameImpl::RefreshServerGrid() {
 		// Name
 		list->SetItem(idx, 1, current->longName);
 
-		// Type
-		list->SetItem(idx, 2, current->GetType());
+		if(current->fullyParsed) {
+			// Type
+			list->SetItem(idx, 2, current->GetType());
 
-		// Player Count
-		list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
+			// Player Count
+			list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
+		}
+		else {
+			// Type
+			list->SetItem(idx, 2, _T("?"));
+
+			// Player Count
+			list->SetItem(idx, 3, _T("?"));
+		}
 		
 		// Ping
 		list->SetItem(idx, 4, _("..."));
