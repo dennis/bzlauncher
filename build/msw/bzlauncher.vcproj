@@ -205,9 +205,10 @@
 				RelativePath="..\..\src\serverdlg_impl.cpp"
 				>
 			</File>
-			<File
+      <File
 				RelativePath="..\..\src\serverping.cpp"
 				>
+      </File>
 			<File
 				RelativePath="..\..\src\serverparser.cpp"
 				>
