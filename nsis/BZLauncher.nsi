@@ -57,10 +57,14 @@ ShowUnInstDetails show
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "bzlauncher.exe"
-  File "README.txt"
+  File "..\bzlauncher.exe"
+  File "..\msvcr80.dll"
+  File "..\README"
+  File "..\MIT-LICENSE"
   File "BZLauncher.url"
-  File "msvcr90.dll"
+
+  Rename README ReadMe.txt
+  Rename MIT-LICENSE MIT-LICENSE.txt
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -107,7 +111,7 @@ Section Uninstall
   Delete "$INSTDIR\README.txt"
   Delete "$INSTDIR\MIT-LICENSE.txt"
   Delete "$INSTDIR\bzlauncher.exe"
-  Delete "$INSTDIR\msvcr90.dll"
+  Delete "$INSTDIR\msvcr80.dll"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"

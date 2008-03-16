@@ -30,15 +30,16 @@ THE SOFTWARE.
 #include "serverping.h"
 
 #ifdef _WIN32
-  // Visual C++ 2008 dosn't ship with stdint.h
-  typedef __int16 int16_t;
-  typedef unsigned __int16 uint16_t;
-  typedef __int8 int8_t;
-  typedef unsigned __int8 uint8_t;
+	// Visual C++ may not have the std int defines
+	#ifndef __int16
+		typedef __int16 int16_t;
+		typedef unsigned __int16 uint16_t;
+		typedef __int8 int8_t;
+		typedef unsigned __int8 uint8_t;
+	#endif
 #else
 # include <stdint.h>
 #endif
-
 
 /// BZFlag server description
 class Server {
