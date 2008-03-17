@@ -1,2 +1,7 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
 - BUG: Debian: Menu isnt added
+- Search
+- control what team you join as (via right clickmenu? "Join as Green", "Join as Red")
+- configuration menu
+- global auth
+- Rename RH to RC
