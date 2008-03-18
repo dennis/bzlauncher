@@ -3,5 +3,11 @@
 - Search
 - control what team you join as (via right clickmenu? "Join as Green", "Join as Red")
 - configuration menu
-- global auth
 - Rename RH to RC
+- protocol handlers. Start app and show "details"
+	optionally:
+		bzflag://dub.bzflag.org:5154?start 
+		bzflag://dub.bzflag.org:5154?details
+	default:
+		bzlauncher://..
+- Add launch button from server-view
