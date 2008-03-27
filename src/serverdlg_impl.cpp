@@ -38,16 +38,16 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), server->protocolVersion.c_str()));
 		this->notice->Show();
 	}
-	/*
 	else if(server->IsFull()) {
+		this->notice->SetForegroundColour(*wxBLACK);
 		this->notice->SetLabel(_("This server is full"));
 		this->notice->Show();
 	}
 	else if(server->IsEmpty()) {
-		this->notice->SetLabel(_("This server is deserted"));
+		this->notice->SetForegroundColour(*wxBLACK);
+		this->notice->SetLabel(_("This server is empty"));
 		this->notice->Show();
 	}
-	*/
 
 	// LEFT COLUMN
 
