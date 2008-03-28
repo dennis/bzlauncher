@@ -55,7 +55,7 @@ class MainFrame : public wxFrame
 		enum
 		{
 			ID_REFRESH_LIST = 1000,
-			ID_FILTER,
+			ID_SEARCH,
 			ID_QUIT,
 			ID_LAUNCH,
 			ID_PING,
@@ -81,11 +81,13 @@ class MainFrame : public wxFrame
 		virtual void EventLaunch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventFavoriteToggle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
+		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventColClick( wxListEvent& event ){ event.Skip(); }
 		virtual void EventActivated( wxListEvent& event ){ event.Skip(); }
 		virtual void EventRightClick( wxListEvent& event ){ event.Skip(); }
 		virtual void EventSelectServer( wxListEvent& event ){ event.Skip(); }
+		virtual void EventSearchText( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:

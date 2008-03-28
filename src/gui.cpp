@@ -22,8 +22,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	actionMenu = new wxMenu();
 	wxMenuItem* refreshList = new wxMenuItem( actionMenu, ID_REFRESH_LIST, wxString( _("Refresh list") ) + wxT('\t') + wxT("CTRL-R"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( refreshList );
-	wxMenuItem* Filter = new wxMenuItem( actionMenu, ID_FILTER, wxString( _("Filter") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
-	actionMenu->Append( Filter );
+	wxMenuItem* search = new wxMenuItem( actionMenu, ID_SEARCH, wxString( _("Search") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
+	actionMenu->Append( search );
 	
 	actionMenu->AppendSeparator();
 	wxMenuItem* menuItem2 = new wxMenuItem( actionMenu, wxID_ANY, wxString( _("&Configuration") ) , wxEmptyString, wxITEM_NORMAL );
@@ -65,7 +65,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	toolBar->AddTool( ID_LAUNCH, _("Play"), wxGetBitmapFromMemory(bzflag32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddTool( ID_FAVORITE, _("Favorite"), wxGetBitmapFromMemory(favorite32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddTool( ID_PING, _("Ping"), wxGetBitmapFromMemory(ping32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
-	toolBar->AddTool( wxID_ANY, _("Filter"), wxGetBitmapFromMemory(search32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
+	toolBar->AddTool( ID_SEARCH, _("Search"), wxGetBitmapFromMemory(search32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddSeparator();
 	toolBar->AddTool( ID_ABOUT, _("About"), wxGetBitmapFromMemory(about32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->Realize();
@@ -82,11 +82,11 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( findPanel, wxID_ANY, _("Filter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( findPanel, wxID_ANY, _("Search"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	fgSizer3->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	filterText = new wxTextCtrl( findPanel, wxID_ANY, _("type:ctf"), wxDefaultPosition, wxDefaultSize, 0 );
+	filterText = new wxTextCtrl( findPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	filterText->SetMaxLength( 20 ); 
 	fgSizer3->Add( filterText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 	
@@ -107,11 +107,13 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( joinServer->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventLaunch ) );
 	this->Connect( ID_FAVORITE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventFavoriteToggle ) );
 	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
+	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
 	serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrame::EventColClick ), NULL, this );
 	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrame::EventActivated ), NULL, this );
 	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrame::EventRightClick ), NULL, this );
 	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrame::EventSelectServer ), NULL, this );
+	filterText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
 }
 
 AboutDlg::AboutDlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

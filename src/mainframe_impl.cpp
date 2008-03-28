@@ -88,7 +88,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ), initialLoadTimer(this)  { 
+: MainFrame( parent ), initialLoadTimer(this), filterEnabled(false)  { 
 	ServerPingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
@@ -364,4 +364,16 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 			this->UpdateServer(item, current);
 		}
 	}
+}
+
+void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
+	this->filterEnabled = !this->filterEnabled;
+	if(this->filterEnabled)
+			this->filterText->SetFocus();
+	this->findPanel->Show(this->filterEnabled);
+	this->Layout();
+}
+
+void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
+	wxLogMessage(_("Sorry, this feature is not implemented"));
 }

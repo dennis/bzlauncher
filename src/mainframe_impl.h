@@ -50,22 +50,28 @@ private:
 	wxTimer			initialLoadTimer;
 	ServerPingTrackerTimer	pingTimer;
 
+	bool			filterEnabled;
+
 protected:
 	wxImageList*	imageList;
 	int				imgFavIdx;
 
+	void EventActivated(wxListEvent&);
+	void EventColClick(wxListEvent&);
+	void EventFavoriteToggle(wxCommandEvent&);
+	void EventLaunch(wxCommandEvent&);
+	void EventPingChanged(wxCommandEvent&);
+	void EventPingServer(wxCommandEvent&);
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);
-	void EventLaunch(wxCommandEvent&);
-	void EventActivated(wxListEvent&);
 	void EventRightClick(wxListEvent&);
+	void EventSearch(wxCommandEvent&);
+	void EventSearchText(wxCommandEvent&);
+
 	void EventSelectServer(wxListEvent&);
-	void EventColClick(wxListEvent&);
 	void EventShowAbout(wxCommandEvent&);
-	void EventFavoriteToggle(wxCommandEvent&);
-	void EventPingServer(wxCommandEvent&);
-	void EventPingChanged(wxCommandEvent&);
 	void EventTimer(wxTimerEvent&);
+
 
 public:
 	MainFrameImpl(wxWindow*);
