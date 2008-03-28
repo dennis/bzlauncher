@@ -104,7 +104,7 @@ public:
 	bool IsFull() const;
 	bool IsEmpty() const;
 	bool IsCTF() const;
-	bool IsRH() const;
+	bool IsRC() const;
 	bool IsFFA() const;
 
 	const wxString GetType() const;

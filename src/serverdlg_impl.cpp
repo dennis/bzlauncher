@@ -72,8 +72,8 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 		this->gameTypeVal->SetValue(_("CTF"));
 	else if(server->IsFFA()) 
 		this->gameTypeVal->SetValue(_("FFA"));
-	else if(server->IsRH()) 
-		this->gameTypeVal->SetValue(_("RH"));
+	else if(server->IsRC()) 
+		this->gameTypeVal->SetValue(_("RC"));
 	else
 		this->gameTypeVal->SetValue(_("???"));
 	

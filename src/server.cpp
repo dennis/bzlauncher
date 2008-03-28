@@ -65,12 +65,12 @@ bool Server::IsCTF() const {
 	return (this->gameStyle & TeamFlagGameStyle) == TeamFlagGameStyle;
 }
 
-bool Server::IsRH() const {
+bool Server::IsRC() const {
 	return (this->gameStyle & RabbitChaseGameStyle) == RabbitChaseGameStyle;
 }
 
 bool Server::IsFFA() const {
-	return !this->IsCTF() && !this->IsRH();
+	return !this->IsCTF() && !this->IsRC();
 }
 
 const wxString Server::GetType() const {
@@ -78,8 +78,8 @@ const wxString Server::GetType() const {
 		return wxT("CTF");
 	else if( this->IsFFA() )
 		return wxT("FFA");
-	else if( this->IsRH() )
-		return wxT("RH");
+	else if( this->IsRC() )
+		return wxT("RC");
 	else
 		return wxT("??");
 }
