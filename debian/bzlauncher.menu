@@ -1,2 +1,7 @@
-?package(bzlauncher):needs="X11|wm" section="Games/Arcade/BZLauncher"\
-  title="BZLauncher" command="/usr/games/bzlauncher"
+?package(bzlauncher):\
+ needs="X11"\
+ hints="3D,first-person"\
+ section="Games/Arcade"\
+ title="BZLauncher"\
+ icon="/usr/share/bzflag/bzflag-32x32.xpm"\
+ command="/usr/games/bzlauncher"

@@ -1,5 +1,4 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
-- BUG: Debian: Menu isnt added
 - Search
 - configuration menu
 - protocol handlers. Start app and show "details"
