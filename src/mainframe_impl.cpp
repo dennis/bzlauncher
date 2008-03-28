@@ -227,12 +227,6 @@ void MainFrameImpl::EventQuit(wxCommandEvent&) {
 	this->Close();
 }
 
-/*
-void MainFrameImpl::EventViewServer(wxCommandEvent&) {
-	this->ShowDetails();
-}
-*/
-
 void MainFrameImpl::ShowDetails() {
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
