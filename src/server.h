@@ -66,6 +66,14 @@ public:
 	/// Represents a team. How many players and maximum
 	typedef enum { TEAM_ROGUE, TEAM_RED, TEAM_GREEN, TEAM_BLUE, TEAM_PURPLE, TEAM_OBSERVER, TEAM_COUNT } team_t;
 
+	static team_t	TeamRogue;
+	static team_t	TeamRed;
+	static team_t	TeamGreen;
+	static team_t	TeamBlue;
+	static team_t	TeamPurple;
+	static team_t	TeamObserver;
+	static team_t	TeamAuto;
+
 	class Team {
 	public:
 		Team() : count(0), max(0) {};

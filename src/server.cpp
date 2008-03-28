@@ -23,6 +23,14 @@ THE SOFTWARE.
 */
 #include "server.h"
 
+Server::team_t	Server::TeamRogue    = Server::TEAM_ROGUE;
+Server::team_t	Server::TeamRed      = Server::TEAM_RED;
+Server::team_t	Server::TeamGreen    = Server::TEAM_GREEN;
+Server::team_t	Server::TeamBlue     = Server::TEAM_BLUE;
+Server::team_t	Server::TeamPurple   = Server::TEAM_PURPLE;
+Server::team_t	Server::TeamObserver = Server::TEAM_OBSERVER;
+Server::team_t	Server::TeamAuto     = Server::TEAM_COUNT;
+
 Server::Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
 	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false) {
 }

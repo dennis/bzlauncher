@@ -111,19 +111,12 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->teamCbx->Clear();
 	this->teamCbx->Append(_T("")); // Default
 
-	// FIXME Ugly hack
-	this->red = Server::TEAM_RED;
-	this->green = Server::TEAM_GREEN;
-	this->blue = Server::TEAM_BLUE;
-	this->purple = Server::TEAM_PURPLE;
-	this->observer = Server::TEAM_OBSERVER;
-
-	if(!server->fullyParsed || server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &this->rogue);
-	if(!server->fullyParsed || server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &this->red);
-	if(!server->fullyParsed || server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &this->green);
-	if(!server->fullyParsed || server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &this->blue);
-	if(!server->fullyParsed || server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &this->purple);
-	if(!server->fullyParsed || server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &this->observer);
+	if(!server->fullyParsed || server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &Server::TeamRogue);
+	if(!server->fullyParsed || server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &Server::TeamRed);
+	if(!server->fullyParsed || server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &Server::TeamGreen);
+	if(!server->fullyParsed || server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &Server::TeamBlue);
+	if(!server->fullyParsed || server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &Server::TeamPurple);
+	if(!server->fullyParsed || server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &Server::TeamObserver);
 	this->teamCbx->Refresh();
 	
 	this->closeBtn->SetFocus();
@@ -138,8 +131,7 @@ void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
-	Server::team_t autoteam = Server::TEAM_COUNT;
-	Server::team_t* team = &autoteam;
+	Server::team_t* team = &Server::TeamAuto;
 	int selected = this->teamCbx->GetSelection();
 	if(selected != wxNOT_FOUND)
 		team = (Server::team_t*)this->teamCbx->GetClientData(selected);

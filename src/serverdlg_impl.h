@@ -35,12 +35,6 @@ class ServerDlgImpl : public ServerDlg
 {
 private:
 	Server*	server;
-	Server::team_t	red;
-	Server::team_t	green;
-	Server::team_t	blue;
-	Server::team_t	purple;
-	Server::team_t	rogue;
-	Server::team_t	observer;
 protected:
 	void EventClose(wxCommandEvent&);
 
