@@ -100,6 +100,8 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
+
+	this->findPanel->Show(false);
 	this->initialLoadTimer.Start(300,true);
 }
 

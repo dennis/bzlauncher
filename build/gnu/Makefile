@@ -23,12 +23,11 @@ OBJS=\
 ICONS=\
 	$(SRCDIR)/about32.h \
 	$(SRCDIR)/bzflag32.h \
-	$(SRCDIR)/down22.h \
 	$(SRCDIR)/favorite32.h \
 	$(SRCDIR)/ping32.h \
 	$(SRCDIR)/refresh32.h \
-	$(SRCDIR)/stop22.h \
-	$(SRCDIR)/up22.h 
+	$(SRCDIR)/search32.h \
+	$(SRCDIR)/stop22.h 
 
 all: $(ROOTDIR)/bzlauncher
 

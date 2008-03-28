@@ -7,12 +7,11 @@
 
 #ifndef __gui__
 #define __gui__
-#include "up22.h"
 #include "stop22.h"
+#include "search32.h"
 #include "refresh32.h"
 #include "ping32.h"
 #include "favorite32.h"
-#include "down22.h"
 #include "bzflag32.h"
 #include "about32.h"
 #include "version.h"
@@ -29,17 +28,17 @@
 #include <wx/statusbr.h>
 #include <wx/toolbar.h>
 #include <wx/listctrl.h>
-#include <wx/bmpbuttn.h>
-#include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
+#include <wx/bmpbuttn.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/frame.h>
 #include <wx/hyperlink.h>
 #include <wx/statbmp.h>
 #include <wx/dialog.h>
+#include <wx/statline.h>
 #include <wx/combobox.h>
 #include <wx/gauge.h>
 
@@ -56,7 +55,7 @@ class MainFrame : public wxFrame
 		enum
 		{
 			ID_REFRESH_LIST = 1000,
-			ID_SEARCH,
+			ID_FILTER,
 			ID_QUIT,
 			ID_LAUNCH,
 			ID_PING,
@@ -72,12 +71,9 @@ class MainFrame : public wxFrame
 		wxToolBar* toolBar;
 		wxListCtrl* serverList;
 		wxPanel* findPanel;
-		wxBitmapButton* closeBtn;
 		wxStaticText* m_staticText1;
-		wxTextCtrl* m_textCtrl2;
-		wxStaticLine* m_staticline2;
-		wxBitmapButton* m_bpButton2;
-		wxBitmapButton* m_bpButton3;
+		wxTextCtrl* filterText;
+		wxBitmapButton* closeBtn;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void EventRefresh( wxCommandEvent& event ){ event.Skip(); }

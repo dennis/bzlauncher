@@ -22,10 +22,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	actionMenu = new wxMenu();
 	wxMenuItem* refreshList = new wxMenuItem( actionMenu, ID_REFRESH_LIST, wxString( _("Refresh list") ) + wxT('\t') + wxT("CTRL-R"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( refreshList );
-	wxMenuItem* search = new wxMenuItem( actionMenu, ID_SEARCH, wxString( _("Search") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
-	actionMenu->Append( search );
-	search->Enable( false );
-	
+	wxMenuItem* Filter = new wxMenuItem( actionMenu, ID_FILTER, wxString( _("Filter") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
+	actionMenu->Append( Filter );
 	
 	actionMenu->AppendSeparator();
 	wxMenuItem* menuItem2 = new wxMenuItem( actionMenu, wxID_ANY, wxString( _("&Configuration") ) , wxEmptyString, wxITEM_NORMAL );
@@ -67,6 +65,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	toolBar->AddTool( ID_LAUNCH, _("Play"), wxGetBitmapFromMemory(bzflag32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddTool( ID_FAVORITE, _("Favorite"), wxGetBitmapFromMemory(favorite32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddTool( ID_PING, _("Ping"), wxGetBitmapFromMemory(ping32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
+	toolBar->AddTool( wxID_ANY, _("Filter"), wxGetBitmapFromMemory(search32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddSeparator();
 	toolBar->AddTool( ID_ABOUT, _("About"), wxGetBitmapFromMemory(about32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->Realize();
@@ -77,43 +76,27 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	fgSizer1->Add( serverList, 0, wxALL|wxEXPAND, 0 );
 	
 	findPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	findPanel->Hide();
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 1, 6, 0, 0 );
+	fgSizer3->AddGrowableCol( 1 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	m_staticText1 = new wxStaticText( findPanel, wxID_ANY, _("Filter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	fgSizer3->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	filterText = new wxTextCtrl( findPanel, wxID_ANY, _("type:ctf"), wxDefaultPosition, wxDefaultSize, 0 );
+	filterText->SetMaxLength( 20 ); 
+	fgSizer3->Add( filterText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 	
 	closeBtn = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(stop22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer2->Add( closeBtn, 0, wxALL, 5 );
+	fgSizer3->Add( closeBtn, 0, wxALL, 5 );
 	
-	m_staticText1 = new wxStaticText( findPanel, wxID_ANY, _("Find"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_textCtrl2 = new wxTextCtrl( findPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrl2->SetMaxLength( 20 ); 
-	bSizer2->Add( m_textCtrl2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_staticline2 = new wxStaticLine( findPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-	
-	m_bpButton2 = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(down22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton2->SetToolTip( _("Find next") );
-	
-	m_bpButton2->SetToolTip( _("Find next") );
-	
-	bSizer2->Add( m_bpButton2, 0, wxALL, 5 );
-	
-	m_bpButton3 = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(up22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton3->SetToolTip( _("Find Previous") );
-	
-	m_bpButton3->SetToolTip( _("Find Previous") );
-	
-	bSizer2->Add( m_bpButton3, 0, wxALL, 5 );
-	
-	findPanel->SetSizer( bSizer2 );
+	findPanel->SetSizer( fgSizer3 );
 	findPanel->Layout();
-	bSizer2->Fit( findPanel );
-	fgSizer1->Add( findPanel, 1, wxEXPAND | wxALL, 5 );
+	fgSizer3->Fit( findPanel );
+	fgSizer1->Add( findPanel, 1, wxEXPAND | wxALL, 0 );
 	
 	this->SetSizer( fgSizer1 );
 	this->Layout();
