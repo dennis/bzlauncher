@@ -64,6 +64,8 @@ private:
 
 public:
 	/// Represents a team. How many players and maximum
+	typedef enum { TEAM_ROGUE, TEAM_RED, TEAM_GREEN, TEAM_BLUE, TEAM_PURPLE, TEAM_OBSERVER, TEAM_COUNT } team_t;
+
 	class Team {
 	public:
 		Team() : count(0), max(0) {};
@@ -85,12 +87,8 @@ public:
 	uint16_t	maxTeamScore;
 	uint16_t	maxTime;
 	uint8_t		maxPlayers;
-	Team		rogueTeam;
-	Team		redTeam;
-	Team		greenTeam;
-	Team		blueTeam;
-	Team		purpleTeam;
-	Team		observerTeam;
+
+	Team		team[TEAM_COUNT];
 
 	bool		fullyParsed;
 	bool		favorite;

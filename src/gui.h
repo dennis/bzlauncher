@@ -7,6 +7,8 @@
 
 #ifndef __gui__
 #define __gui__
+#include "version.h"
+
 #include "up22.h"
 #include "stop22.h"
 #include "refresh32.h"
@@ -40,6 +42,7 @@
 #include <wx/hyperlink.h>
 #include <wx/statbmp.h>
 #include <wx/dialog.h>
+#include <wx/combobox.h>
 #include <wx/gauge.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -160,9 +163,13 @@ class ServerDlg : public wxDialog
 		wxTextCtrl* observersVal;
 		wxStaticText* jumpLbl;
 		wxTextCtrl* jumpVal;
+		wxStaticLine* m_staticline3;
+		wxButton* launchBtn;
+		wxComboBox* teamCbx;
 		wxButton* closeBtn;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onLaunch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventClose( wxCommandEvent& event ){ event.Skip(); }
 		
 	

@@ -10,4 +10,3 @@
 		bzflag://dub.bzflag.org:5154?details
 	default:
 		bzlauncher://..
-- Add launch button from server-view

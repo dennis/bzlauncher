@@ -24,6 +24,7 @@ THE SOFTWARE.
 #include <wx/wx.h>
 
 #include "listserverhandler.h"
+#include "server.h"
 
 class MainFrameImpl;
 
@@ -46,7 +47,7 @@ public:
 	const wxString GetSelectedServer();
 	void SetSelectedServer(const wxString&);
 
-	void LaunchSelectedServer(wxWindow*);
+	void LaunchSelectedServer(wxWindow*, Server::team_t = Server::TEAM_COUNT);
 };
 
 

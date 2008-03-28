@@ -301,6 +301,21 @@ ServerDlg::ServerDlg( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	bSizer3->Add( serverDetailSizer, 1, wxALL|wxEXPAND|wxSHAPED, 5 );
 	
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer3->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	
+	launchBtn = new wxButton( this, wxID_ANY, _("Launch"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( launchBtn, 0, wxALL|wxEXPAND, 5 );
+	
+	teamCbx = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
+	teamCbx->Append( wxEmptyString );
+	bSizer5->Add( teamCbx, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
+	bSizer3->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	
 	closeBtn = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( closeBtn, 0, wxALL|wxEXPAND, 5 );
 	
@@ -309,6 +324,7 @@ ServerDlg::ServerDlg( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer3->Fit( this );
 	
 	// Connect Events
+	launchBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ServerDlg::onLaunch ), NULL, this );
 	closeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ServerDlg::EventClose ), NULL, this );
 }
 

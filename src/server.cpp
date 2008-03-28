@@ -46,11 +46,11 @@ const wxIPV4address& Server::getIP() const {
 
 int Server::GetPlayerCount() const {
 	return 
-		this->rogueTeam.count+
-		this->redTeam.count+
-		this->greenTeam.count+
-		this->blueTeam.count+
-		this->purpleTeam.count;
+		this->team[TEAM_ROGUE].count+
+		this->team[TEAM_RED].count+
+		this->team[TEAM_GREEN].count+
+		this->team[TEAM_BLUE].count+
+		this->team[TEAM_PURPLE].count;
 }
 
 bool Server::IsFull() const {

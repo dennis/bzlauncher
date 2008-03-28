@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include "serverdlg_impl.h"
+#include "main.h"
 
 #include <wx/msgdlg.h>
 
@@ -54,12 +55,12 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// Players
 	this->playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
 
-	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->rogueTeam.count, server->rogueTeam.max));
-	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->redTeam.count, server->redTeam.max));
-	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->greenTeam.count, server->greenTeam.max));
-	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->blueTeam.count, server->blueTeam.max));
-	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->purpleTeam.count, server->purpleTeam.max));
-	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->observerTeam.count, server->observerTeam.max));
+	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_ROGUE].count, server->team[Server::TEAM_ROGUE].max));
+	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_RED].count, server->team[Server::TEAM_RED].max));
+	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_GREEN].count, server->team[Server::TEAM_GREEN].max));
+	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_BLUE].count, server->team[Server::TEAM_BLUE].max));
+	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_PURPLE].count, server->team[Server::TEAM_PURPLE].max));
+	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_OBSERVER].count, server->team[Server::TEAM_OBSERVER].max));
 
 	// RIGHT COLUMN
 
@@ -106,9 +107,42 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	else
 		this->jumpVal->SetValue(_("No"));
 	
+	// Launch dropdown
+	this->teamCbx->Clear();
+	this->teamCbx->Append(_T("")); // Default
+
+	// FIXME Ugly hack
+	this->red = Server::TEAM_RED;
+	this->green = Server::TEAM_GREEN;
+	this->blue = Server::TEAM_BLUE;
+	this->purple = Server::TEAM_PURPLE;
+	this->observer = Server::TEAM_OBSERVER;
+
+	if(server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &this->rogue);
+	if(server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &this->red);
+	if(server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &this->green);
+	if(server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &this->blue);
+	if(server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &this->purple);
+	if(server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &this->observer);
+	this->teamCbx->Refresh();
+	
 	this->closeBtn->SetFocus();
+
+	// Select server
+	const wxString s = server->getName();
+	wxGetApp().SetSelectedServer(s);
 }
 
 void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 	this->EndModal(0);
 }
+
+void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
+	Server::team_t autoteam = Server::TEAM_COUNT;
+	Server::team_t* team = &autoteam;
+	int selected = this->teamCbx->GetSelection();
+	if(selected != wxNOT_FOUND)
+		team = (Server::team_t*)this->teamCbx->GetClientData(selected);
+	wxGetApp().LaunchSelectedServer(this, *team);
+}
+

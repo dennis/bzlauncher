@@ -66,9 +66,9 @@ void BZLauncherApp::SetSelectedServer(const wxString& s) {
 }
 
 #ifdef _WINDOWS
-void BZLauncherApp::LaunchSelectedServer(wxWindow* w) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_t team) {
 #else
-void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 #endif
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
@@ -99,6 +99,19 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 		appConfig.setBZFlagCommand(cmd);
 #endif
 	}
+
+	wxString	args;
+
+	if(team == Server::TEAM_RED) args += _T("-team red ");
+	if(team == Server::TEAM_GREEN) args += _T("-team green ");
+	if(team == Server::TEAM_BLUE) args += _T("-team blue ");
+	if(team == Server::TEAM_PURPLE) args += _T("-team purple ");
+	if(team == Server::TEAM_ROGUE) args += _T("-team rogue ");
+	if(team == Server::TEAM_OBSERVER) args += _T("-team observer ");
+
+	args += this->selectedServerHostPort;
+
+	// Launch BZFlag
 	wxSetWorkingDirectory(wxFileName::FileName(cmd).GetPath());
-	::wxExecute(wxString::Format(cmd,this->selectedServerHostPort.c_str()),wxEXEC_SYNC);
+	::wxExecute(wxString::Format(cmd,args.c_str()),wxEXEC_SYNC);
 }
