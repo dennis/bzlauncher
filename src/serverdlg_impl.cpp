@@ -118,12 +118,12 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->purple = Server::TEAM_PURPLE;
 	this->observer = Server::TEAM_OBSERVER;
 
-	if(server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &this->rogue);
-	if(server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &this->red);
-	if(server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &this->green);
-	if(server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &this->blue);
-	if(server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &this->purple);
-	if(server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &this->observer);
+	if(!server->fullyParsed || server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &this->rogue);
+	if(!server->fullyParsed || server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &this->red);
+	if(!server->fullyParsed || server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &this->green);
+	if(!server->fullyParsed || server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &this->blue);
+	if(!server->fullyParsed || server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &this->purple);
+	if(!server->fullyParsed || server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &this->observer);
 	this->teamCbx->Refresh();
 	
 	this->closeBtn->SetFocus();
