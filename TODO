@@ -2,7 +2,6 @@
 - Search
 	- Implement a SearchQuery that parses the text and can be compared to the
 	  servers in the serverlist.
-- configuration menu
 - protocol handlers. Start app and show "details"
 	optionally:
 		bzflag://dub.bzflag.org:5154?start 

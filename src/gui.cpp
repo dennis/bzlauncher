@@ -26,12 +26,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	actionMenu->Append( search );
 	
 	actionMenu->AppendSeparator();
-	wxMenuItem* menuItem2 = new wxMenuItem( actionMenu, wxID_ANY, wxString( _("&Configuration") ) , wxEmptyString, wxITEM_NORMAL );
-	actionMenu->Append( menuItem2 );
-	menuItem2->Enable( false );
-	
-	
-	actionMenu->AppendSeparator();
 	wxMenuItem* quit = new wxMenuItem( actionMenu, ID_QUIT, wxString( _("&Quit") ) + wxT('\t') + wxT("CTRL-Q"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( quit );
 	menubar->Append( actionMenu, _("&Action") );
