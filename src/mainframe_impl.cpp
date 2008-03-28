@@ -227,7 +227,13 @@ void MainFrameImpl::EventQuit(wxCommandEvent&) {
 	this->Close();
 }
 
+/*
 void MainFrameImpl::EventViewServer(wxCommandEvent&) {
+	this->ShowDetails();
+}
+*/
+
+void MainFrameImpl::ShowDetails() {
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
 	if(s) {
@@ -251,11 +257,11 @@ void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventActivated(wxListEvent& WXUNUSED(event)) {
-	this->LaunchGame();
+	this->ShowDetails();
 }
 
 void MainFrameImpl::EventLaunch(wxCommandEvent& WXUNUSED(event)) {
-	this->LaunchGame();
+	this->ShowDetails();
 }
 
 void MainFrameImpl::LaunchGame() {

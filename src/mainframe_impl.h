@@ -62,7 +62,7 @@ protected:
 	void EventSelectServer(wxListEvent&);
 	void EventColClick(wxListEvent&);
 	void EventShowAbout(wxCommandEvent&);
-	void EventViewServer(wxCommandEvent&);
+//	void EventViewServer(wxCommandEvent&);
 	void EventFavoriteToggle(wxCommandEvent&);
 	void EventPingServer(wxCommandEvent&);
 	void EventPingChanged(wxCommandEvent&);
@@ -76,6 +76,7 @@ public:
 	void RefreshServerGrid();
 
 	void LaunchGame();
+	void ShowDetails();
 };
 
 #endif 

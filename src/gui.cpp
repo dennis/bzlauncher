@@ -41,8 +41,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	serverMenu = new wxMenu();
 	wxMenuItem* joinServer = new wxMenuItem( serverMenu, ID_LAUNCH, wxString( _("Join server") ) , wxEmptyString, wxITEM_NORMAL );
 	serverMenu->Append( joinServer );
-	wxMenuItem* viewDetails = new wxMenuItem( serverMenu, ID_VIEW_DETAILS, wxString( _("View details") ) + wxT('\t') + wxT("CTRL-V"), wxEmptyString, wxITEM_NORMAL );
-	serverMenu->Append( viewDetails );
 	wxMenuItem* pingServer = new wxMenuItem( serverMenu, ID_PING, wxString( _("Ping server") ) , wxEmptyString, wxITEM_NORMAL );
 	serverMenu->Append( pingServer );
 	wxMenuItem* favoriteToggle = new wxMenuItem( serverMenu, ID_FAVORITE, wxString( _("Favorite?") ) , wxEmptyString, wxITEM_NORMAL );
@@ -124,7 +122,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( refreshList->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventRefresh ) );
 	this->Connect( quit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventQuit ) );
 	this->Connect( joinServer->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventLaunch ) );
-	this->Connect( viewDetails->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventViewServer ) );
 	this->Connect( ID_FAVORITE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventFavoriteToggle ) );
 	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
@@ -308,13 +305,13 @@ ServerDlg::ServerDlg( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
 	launchBtn = new wxButton( this, wxID_ANY, _("Launch"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( launchBtn, 0, wxALL|wxEXPAND, 5 );
+	bSizer5->Add( launchBtn, 0, 0, 5 );
 	
 	teamCbx = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
-	teamCbx->Append( wxEmptyString );
-	bSizer5->Add( teamCbx, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	teamCbx->Append( _("asdf") );
+	bSizer5->Add( teamCbx, 0, wxEXPAND, 5 );
 	
-	bSizer3->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer3->Add( bSizer5, 0, wxALIGN_CENTER, 5 );
 	
 	closeBtn = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( closeBtn, 0, wxALL|wxEXPAND, 5 );

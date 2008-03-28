@@ -7,8 +7,6 @@
 
 #ifndef __gui__
 #define __gui__
-#include "version.h"
-
 #include "up22.h"
 #include "stop22.h"
 #include "refresh32.h"
@@ -61,7 +59,6 @@ class MainFrame : public wxFrame
 			ID_SEARCH,
 			ID_QUIT,
 			ID_LAUNCH,
-			ID_VIEW_DETAILS,
 			ID_PING,
 			ID_FAVORITE,
 			ID_ABOUT,
@@ -86,7 +83,6 @@ class MainFrame : public wxFrame
 		virtual void EventRefresh( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventQuit( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventLaunch( wxCommandEvent& event ){ event.Skip(); }
-		virtual void EventViewServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventFavoriteToggle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }

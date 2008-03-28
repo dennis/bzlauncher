@@ -201,20 +201,6 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">ID_VIEW_DETAILS</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">View details</property>
-                        <property name="name">viewDetails</property>
-                        <property name="shortcut">CTRL-V</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">EventViewServer</event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
                         <property name="id">ID_PING</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Ping server</property>
@@ -2988,7 +2974,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="flag">wxALIGN_CENTER</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="0">
                         <property name="minimum_size"></property>
@@ -2997,7 +2983,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="flag"></property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="1">
                                 <property name="bg"></property>
@@ -3049,11 +3035,11 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                            <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxComboBox" expanded="1">
                                 <property name="bg"></property>
-                                <property name="choices">&apos;&apos;</property>
+                                <property name="choices">&apos;asdf&apos;</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
