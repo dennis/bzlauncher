@@ -2,7 +2,8 @@
 
 CXX=ccache g++
 CC=gcc
-CXXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
+WXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
+WXLIBS=`wx-config --libs`
 ROOTDIR=../..
 SRCDIR=$(ROOTDIR)/src
 CONTRIBDIR=$(ROOTDIR)/contrib
@@ -32,13 +33,13 @@ ICONS=\
 all: $(ROOTDIR)/bzlauncher
 
 $(ROOTDIR)/bzlauncher: $(OBJS)
-	$(CXX) *.o `wx-config --libs` -o $(ROOTDIR)/bzlauncher
+	$(CXX) *.o $(WXLIBS) -o $(ROOTDIR)/bzlauncher
 
 %.o: $(SRCDIR)/%.cpp $(SRCDIR)/%.h
-	$(CXX) -c $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(WXFLAGS) $< -o $@
 
 gui.o: $(SRCDIR)/gui.cpp $(SRCDIR)/gui.h
-	$(CXX) -c $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(WXFLAGS) $< -o $@
 
 # Pre compilation steps
 pre: gui_files $(ICONS)
