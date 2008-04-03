@@ -47,11 +47,11 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->SetMenuBar( menubar );
 	
 	statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 3, 1, 0, 0 );
-	fgSizer1->AddGrowableRow( 1 );
-	fgSizer1->SetFlexibleDirection( wxVERTICAL );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+	wxFlexGridSizer* bSizer2;
+	bSizer2 = new wxFlexGridSizer( 3, 1, 0, 0 );
+	bSizer2->AddGrowableRow( 1 );
+	bSizer2->SetFlexibleDirection( wxVERTICAL );
+	bSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	
 	toolBar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT ); 
 	toolBar->AddTool( ID_REFRESH_LIST, _("Refresh"), wxGetBitmapFromMemory(refresh32), wxNullBitmap, wxITEM_NORMAL, _("Refresh list"), _("Refresh list") );
@@ -64,12 +64,35 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	toolBar->AddTool( ID_ABOUT, _("About"), wxGetBitmapFromMemory(about32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->Realize();
 	
-	fgSizer1->Add( toolBar, 0, wxEXPAND, 5 );
+	bSizer2->Add( toolBar, 0, wxEXPAND, 5 );
 	
-	serverList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	fgSizer1->Add( serverList, 0, wxALL|wxEXPAND, 0 );
+	wxBoxSizer* mainSizer;
+	mainSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM );
+	tabAll = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 1, 1, 0, 0 );
+	fgSizer4->AddGrowableCol( 0 );
+	fgSizer4->AddGrowableRow( 0 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	serverList = new wxListCtrl( tabAll, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+	fgSizer4->Add( serverList, 0, wxEXPAND, 0 );
+	
+	tabAll->SetSizer( fgSizer4 );
+	tabAll->Layout();
+	fgSizer4->Fit( tabAll );
+	m_notebook1->AddPage( tabAll, _("All"), true );
+	
+	mainSizer->Add( m_notebook1, 1, wxALL|wxEXPAND, 0 );
+	
+	bSizer2->Add( mainSizer, 1, wxEXPAND, 5 );
 	
 	findPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	findPanel->Hide();
+	
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 1, 6, 0, 0 );
 	fgSizer3->AddGrowableCol( 1 );
@@ -90,9 +113,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	findPanel->SetSizer( fgSizer3 );
 	findPanel->Layout();
 	fgSizer3->Fit( findPanel );
-	fgSizer1->Add( findPanel, 1, wxEXPAND | wxALL, 0 );
+	bSizer2->Add( findPanel, 1, wxEXPAND | wxALL, 0 );
 	
-	this->SetSizer( fgSizer1 );
+	this->SetSizer( bSizer2 );
 	this->Layout();
 	
 	// Connect Events

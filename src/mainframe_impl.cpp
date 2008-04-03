@@ -102,6 +102,13 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 
 	this->findPanel->Show(false);
+
+	// Just a fake, to demo the idea
+	this->m_notebook1->AddPage( tabAll, _("Search1"), true );
+	this->m_notebook1->AddPage( tabAll, _("Search2"), true );
+	#warning These lines will make wx crash on exit (as it tries to free tabAll twice)
+	this->m_notebook1->ChangeSelection(0);
+
 	this->initialLoadTimer.Start(300,true);
 }
 

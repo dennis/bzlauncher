@@ -1,7 +1,27 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
-- Search
+
+- Search:
+	- If more than one search is in use, display tabs
+	- Each SearchQuery results in a SearchResult, which is a subset of the ServerList
+	- ServerList/Servers needs to use reference-counting - like ping
+	- All SearchResults are marked as invalid when serverlist is refreshed. The query is 
+	  re-executed to update the SearchResult
 	- Implement a SearchQuery that parses the text and can be compared to the
 	  servers in the serverlist.
+	- Implement a ServerAttribute that contains the server-data (of different type). 
+	- Each search is stored as a tab, and saved/stored on quit/launch
+		when storing config save for each tab:
+			tabnum=number-of-tabs
+			tab0_sortmode=..
+			tab0_query=ctf
+	- Query parsing (ideas)
+		Support AND + OR + NOT + Grouping... Needs more pondering
+		Support `name` which will name the tab "name" instead of the query
+- Recently played server view
+	- indirectly via Search
+- Store version in configuration file.
+	"cfgversion=1"
+
 - Use autotools
 - protocol handlers. Start app and show "details"
 	optionally:
