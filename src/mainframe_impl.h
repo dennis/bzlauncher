@@ -31,15 +31,26 @@ THE SOFTWARE.
 
 #include "serverping.h"
 
+/// This is the meta-data for a server-list query
+class ServerListView {
+public:
+	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
+	wxString	name;
+
+	const wxString GetName() const {
+		return _("allView");
+	}
+
+	wxPanel*	panel;
+	wxListCtrl*	serverList;
+};
+
 /// Main Window - presenting the servers online.
 /// This is the implementation of MainFrame (which is generated)
 /// this allows us to change how MainFrame is implemented without
 /// needing to reimplement everything the MainFrame class is updated.
 class MainFrameImpl : public MainFrame {
 private:
-
-	long currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
-
 	wxArrayString	favoriteServers;
 
 	void SetupColumns();
@@ -51,6 +62,8 @@ private:
 	ServerPingTrackerTimer	pingTimer;
 
 	bool			filterEnabled;
+
+	ServerListView	allView;
 
 protected:
 	wxImageList*	imageList;

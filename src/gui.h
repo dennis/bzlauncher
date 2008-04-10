@@ -27,14 +27,13 @@
 #include <wx/settings.h>
 #include <wx/statusbr.h>
 #include <wx/toolbar.h>
-#include <wx/listctrl.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
 #include <wx/notebook.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/frame.h>
 #include <wx/hyperlink.h>
 #include <wx/statbmp.h>
@@ -71,9 +70,7 @@ class MainFrame : public wxFrame
 wxFlexGridSizer* mainSizer;
 		wxStatusBar* statusBar;
 		wxToolBar* toolBar;
-		wxNotebook* m_notebook1;
-		wxPanel* tabAll;
-		wxListCtrl* serverList;
+		wxNotebook* tabs;
 		wxPanel* findPanel;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* filterText;
@@ -87,10 +84,6 @@ wxFlexGridSizer* mainSizer;
 		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }
-		virtual void EventColClick( wxListEvent& event ){ event.Skip(); }
-		virtual void EventActivated( wxListEvent& event ){ event.Skip(); }
-		virtual void EventRightClick( wxListEvent& event ){ event.Skip(); }
-		virtual void EventSelectServer( wxListEvent& event ){ event.Skip(); }
 		virtual void EventSearchText( wxCommandEvent& event ){ event.Skip(); }
 		
 	

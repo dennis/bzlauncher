@@ -69,24 +69,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM );
-	tabAll = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 1, 1, 0, 0 );
-	fgSizer4->AddGrowableCol( 0 );
-	fgSizer4->AddGrowableRow( 0 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM );
 	
-	serverList = new wxListCtrl( tabAll, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
-	fgSizer4->Add( serverList, 0, wxEXPAND, 0 );
-	
-	tabAll->SetSizer( fgSizer4 );
-	tabAll->Layout();
-	fgSizer4->Fit( tabAll );
-	m_notebook1->AddPage( tabAll, _("All"), true );
-	
-	mainSizer->Add( m_notebook1, 1, wxALL|wxEXPAND, 0 );
+	mainSizer->Add( tabs, 1, wxALL|wxEXPAND, 0 );
 	
 	bSizer2->Add( mainSizer, 1, wxEXPAND, 5 );
 	
@@ -126,10 +111,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
 	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
-	serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrame::EventColClick ), NULL, this );
-	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrame::EventActivated ), NULL, this );
-	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrame::EventRightClick ), NULL, this );
-	serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrame::EventSelectServer ), NULL, this );
 	filterText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
 }
 
