@@ -68,6 +68,8 @@ private:
 
 	ServerListView*	allView;
 
+	void SetupViews();
+
 protected:
 	wxImageList*	imageList;
 	int				imgFavIdx;

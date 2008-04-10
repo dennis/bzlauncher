@@ -125,10 +125,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->findPanel->Show(false);
 
-	// Initialize the "All" view
-	{
-		allView = new ServerListView(this->tabs,_("All"),0);
-	}
+	this->SetupViews();
 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
@@ -143,6 +140,10 @@ MainFrameImpl::~MainFrameImpl() {
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
 	appConfig.setSortMode(this->allView->currentSortMode);
+}
+
+void MainFrameImpl::SetupViews() {
+	allView = new ServerListView(this->tabs,_("All"),0);
 }
 
 void MainFrameImpl::SetupColumns() {
