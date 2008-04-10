@@ -27,15 +27,19 @@ THE SOFTWARE.
 #include <wx/string.h>
 #include <wx/list.h>
 #include <wx/filesys.h>
+#include <vector>
 
 #include "server.h"
 #include "serverping.h"
 
 WX_DECLARE_LIST(Server, ServerList);
+typedef std::vector<Server*> ServerResultSet;
+
 /// Performs the listserver interaction - mainly parsing the data
 /// received from i mainly parsing the data
 class ListServerHandler {
 private:
+
 	bool GetListServerResponse();
 	bool ParseLine(const wxString&);
 
@@ -43,13 +47,21 @@ private:
 
 	wxString	rawResponse;
 
+protected:
+	int version;
+
 	ServerPingList	pingList;
+	ServerList		serverList;
 
 public:
-	ServerList	serverList;
-
 	ListServerHandler();
 	~ListServerHandler();
+
+	int getVersion() {
+		return version;
+	}
+
+	ServerResultSet Query();
 
 	void GetServerList();
 	Server* FindByName(const wxString&);

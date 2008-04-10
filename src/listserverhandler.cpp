@@ -48,7 +48,7 @@ THE SOFTWARE.
  */
 WX_DEFINE_LIST(ServerList);
 
-ListServerHandler::ListServerHandler() {
+ListServerHandler::ListServerHandler() : version(0) {
 }
 
 ListServerHandler::~ListServerHandler() {
@@ -67,6 +67,7 @@ void ListServerHandler::GetServerList() {
 	// the ServerPing-classes to reuse ping-measurements without needing
 	// to reping them.
 	this->ClearList();
+	this->version++;
 
 	if( this->GetListServerResponse() ) {
 		app.SetStatusText(_("Parsing data from list-server..."));
@@ -197,5 +198,20 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 			return current;
 	}
 
-return NULL;
+	return NULL;
+}
+
+// TODO: This will perform a search of the this->serverList. For now, it dosn't really
+// do anything, except return a ServerResultSet (like searching that matches everything)
+ServerResultSet ListServerHandler::Query() {
+	ServerList		serverList;
+	ServerResultSet	resultSet;
+
+	for(ServerList::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i) {
+		Server*	current = *i;
+
+		resultSet.push_back(current);
+	}
+
+	return resultSet;
 }

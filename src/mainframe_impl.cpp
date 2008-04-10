@@ -170,10 +170,11 @@ void MainFrameImpl::RefreshServerGrid() {
 	list->DeleteAllItems();
 
 	// Content
-	ServerList::iterator i;
+	ServerResultSet::iterator i;
+	ServerResultSet	resultSet = app.listServerHandler.Query();
 
 	int idx = 0;
-	for(i = app.listServerHandler.serverList.begin(); i != app.listServerHandler.serverList.end(); ++i) {
+	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
 		dlg.Pulse();
 		Server*	current = *i;
 
