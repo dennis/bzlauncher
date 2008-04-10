@@ -33,13 +33,16 @@ THE SOFTWARE.
 
 /// This is the meta-data for a server-list query
 class ServerListView {
+private:
+	wxString	name;
 public:
 	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
-	wxString	name;
 
 	const wxString GetName() const {
-		return _("allView");
+		return name;
 	}
+
+	ServerListView(wxNotebook*, const wxString&, long);
 
 	wxPanel*	panel;
 	wxListCtrl*	serverList;
@@ -63,7 +66,7 @@ private:
 
 	bool			filterEnabled;
 
-	ServerListView	allView;
+	ServerListView*	allView;
 
 protected:
 	wxImageList*	imageList;
