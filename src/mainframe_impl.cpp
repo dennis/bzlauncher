@@ -129,21 +129,22 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
-	this->allView->currentSortMode = appConfig.getSortMode();
+	this->activeView->currentSortMode = appConfig.getSortMode();
 	this->favoriteServers   = appConfig.getFavorites();
 	this->initialLoadTimer.Start(300,true);
 }
 
 MainFrameImpl::~MainFrameImpl() {
 	for(int col = 0; col < Config::COL_COUNT; col++)
-		appConfig.setColumnWidth(Config::ColType(col), this->allView->serverList->GetColumnWidth(col));
+		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
-	appConfig.setSortMode(this->allView->currentSortMode);
+	appConfig.setSortMode(this->activeView->currentSortMode);
 }
 
 void MainFrameImpl::SetupViews() {
-	allView = new ServerListView(this->tabs,_("All"),0);
+	activeView = new ServerListView(this->tabs,_("All"),0);
+	this->viewList.push_back(activeView);
 }
 
 void MainFrameImpl::SetupColumns() {
@@ -153,8 +154,8 @@ void MainFrameImpl::SetupColumns() {
 	};
 
 	for(int col = 0; col < Config::COL_COUNT; col++) {
-		this->allView->serverList->InsertColumn(col,names[col]);
-		this->allView->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
+		this->activeView->serverList->InsertColumn(col,names[col]);
+		this->activeView->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
 	}
 }
 
@@ -191,7 +192,7 @@ void MainFrameImpl::RefreshServerGrid() {
 
 	app.RefreshServerList();
 
-	wxListCtrl* list = this->allView->serverList;
+	wxListCtrl* list = this->activeView->serverList;
 
 	list->DeleteAllItems();
 
@@ -250,7 +251,7 @@ void MainFrameImpl::RefreshServerGrid() {
 	}
 	
 	dlg.Pulse();
-	this->allView->serverList->SortItems(ServerSortCallback, this->allView->currentSortMode);
+	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
 	dlg.Pulse();
 }
 
@@ -300,11 +301,11 @@ void MainFrameImpl::LaunchGame() {
 }
 
 void MainFrameImpl::EventColClick(wxListEvent& event) {
-	if(abs(this->allView->currentSortMode) == (event.GetColumn()+1))
-		this->allView->currentSortMode *= -1;
+	if(abs(this->activeView->currentSortMode) == (event.GetColumn()+1))
+		this->activeView->currentSortMode *= -1;
 	else
-		this->allView->currentSortMode = event.GetColumn()+1;
-	this->allView->serverList->SortItems(ServerSortCallback, this->allView->currentSortMode);
+		this->activeView->currentSortMode = event.GetColumn()+1;
+	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
@@ -322,13 +323,13 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 			this->favoriteServers.Add(s->getName());
 		}
 		
-		int idx = this->allView->serverList->GetNextItem(-1,wxLIST_NEXT_ALL,wxLIST_STATE_SELECTED);
+		int idx = this->activeView->serverList->GetNextItem(-1,wxLIST_NEXT_ALL,wxLIST_STATE_SELECTED);
 		if(idx==-1) {
 			app.SetStatusText(_("Couldnt find row! :("));
 		}
 		else {
 			this->UpdateServer(idx,s);
-			this->allView->serverList->SortItems(ServerSortCallback, this->allView->currentSortMode);
+			this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
 		}
 	}
 	else {
@@ -338,19 +339,19 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::UpdateServer(int idx, Server* s) {
 	if(s->favorite) {
-		this->allView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
-		this->allView->serverList->SetItem(idx, 5, _("Yes"));
+		this->activeView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
+		this->activeView->serverList->SetItem(idx, 5, _("Yes"));
 	}
 	else {
-		this->allView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
-		this->allView->serverList->SetItem(idx, 5, _("No"));
+		this->activeView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
+		this->activeView->serverList->SetItem(idx, 5, _("No"));
 	}
 
 	if(s->ping.isOK()) {
-		this->allView->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
+		this->activeView->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
 	}
 	else {
-		this->allView->serverList->SetItem(idx, 4, _("n/a"));
+		this->activeView->serverList->SetItem(idx, 4, _("n/a"));
 	}
 }
 
@@ -387,12 +388,12 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 
 	long item = -1;
 	for ( ;; ) {
-		item = this->allView->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
+		item = this->activeView->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
 
 		if(item == -1)
 			break;
 
-		Server* current = reinterpret_cast<Server*>(this->allView->serverList->GetItemData(item));
+		Server* current = reinterpret_cast<Server*>(this->activeView->serverList->GetItemData(item));
 
 		if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() && ip.Service()) {
 			this->UpdateServer(item, current);
@@ -406,7 +407,7 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 	if(this->filterEnabled)
 		this->filterText->SetFocus();
 	else
-		this->allView->serverList->SetFocus();
+		this->activeView->serverList->SetFocus();
 	this->Layout();
 }
 

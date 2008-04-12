@@ -66,7 +66,10 @@ private:
 
 	bool			filterEnabled;
 
-	ServerListView*	allView;
+	typedef std::vector<ServerListView*>	viewlist_t;
+	viewlist_t		viewList;
+
+	ServerListView*	activeView;
 
 	void SetupViews();
 
