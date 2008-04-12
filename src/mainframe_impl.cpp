@@ -32,30 +32,9 @@ THE SOFTWARE.
 
 #include "serverping.h"
 
-ServerListView::ServerListView(wxNotebook* parent, const wxString& name, long sort) {
+ServerListView::ServerListView(const wxString& name, long sort) {
 	this->name = name;
 	this->currentSortMode = sort;
-
-	this->panel = new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-
-	wxFlexGridSizer* fgSizer;
-	fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
-	fgSizer->AddGrowableCol(0);
-	fgSizer->AddGrowableRow(0);
-	fgSizer->SetFlexibleDirection( wxBOTH );
-	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	this->serverList = new wxListCtrl( this->panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-	fgSizer->Add(this->serverList, 0, wxEXPAND, 0);
-
-	this->panel->SetSizer(fgSizer);
-	this->panel->Layout();
-	fgSizer->Fit( this->panel );
-
-	parent->AddPage( this->panel, this->GetName(), true );
-
-	assert(this->panel);
-	assert(this->serverList);
 }
 
 
@@ -125,6 +104,9 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->findPanel->Show(false);
 
+	activeView = new ServerListView(_("All"),0);
+	this->viewList.push_back(activeView);
+	
 	this->SetupViews();
 
 	this->SetSize(this->DetermineFrameSize());
@@ -140,11 +122,54 @@ MainFrameImpl::~MainFrameImpl() {
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
 	appConfig.setSortMode(this->activeView->currentSortMode);
+
+	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i )
+		delete *i;
 }
 
 void MainFrameImpl::SetupViews() {
-	activeView = new ServerListView(this->tabs,_("All"),0);
-	this->viewList.push_back(activeView);
+	bool multiViews = this->viewList.size() > 1;
+	wxFlexGridSizer* fgSizer;
+
+	if( multiViews ) {
+		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
+			fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
+			fgSizer->AddGrowableCol(0);
+			fgSizer->AddGrowableRow(0);
+			fgSizer->SetFlexibleDirection( wxBOTH );
+			fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+			wxPanel*	panel;
+			panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+
+			(*i)->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+			fgSizer->Add((*i)->serverList, 0, wxEXPAND, 0);
+
+			panel->SetSizer(fgSizer);
+			panel->Layout();
+			fgSizer->Fit( panel );
+
+			this->tabs->AddPage( panel, (*i)->GetName(), true );
+		}
+		this->tabs->Layout();
+	}
+	else {
+		fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
+		fgSizer->AddGrowableCol(0);
+		fgSizer->AddGrowableRow(0);
+		fgSizer->SetFlexibleDirection( wxBOTH );
+		fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+		activeView->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+		fgSizer->Add(activeView->serverList, 0, wxEXPAND, 0);
+
+		this->noTabs->SetSizer(fgSizer);
+		this->noTabs->Layout();
+		fgSizer->Fit( this->noTabs );
+	}
+
+	this->tabs->Show(multiViews);
+	this->noTabs->Show(!multiViews);
 }
 
 void MainFrameImpl::SetupColumns() {

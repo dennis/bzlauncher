@@ -1,9 +1,7 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
 
 - Search:
-	- If more than one search is in use, display tabs
-	- Each SearchQuery results in a SearchResult, which is a subset of the ServerList
-	- ServerList/Servers needs to use reference-counting - like ping
+	- Each SearchQuery results in a ServerView, which is a subset of the ServerList
 	- All SearchResults are marked as invalid when serverlist is refreshed. The query is 
 	  re-executed to update the SearchResult
 	- Implement a SearchQuery that parses the text and can be compared to the

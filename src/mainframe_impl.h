@@ -36,16 +36,15 @@ class ServerListView {
 private:
 	wxString	name;
 public:
+	wxListCtrl*	serverList;
+
 	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
 
 	const wxString GetName() const {
 		return name;
 	}
 
-	ServerListView(wxNotebook*, const wxString&, long);
-
-	wxPanel*	panel;
-	wxListCtrl*	serverList;
+	ServerListView(const wxString&, long);
 };
 
 /// Main Window - presenting the servers online.

@@ -51,22 +51,26 @@ $(SRCDIR)/gui_raw.cpp: $(ROOTDIR)/bzlauncher.fbp
 
 # wxformbuilder postprocessing: Add some code to top of gui_raw.cpp
 gui_files: $(SRCDIR)/gui_raw.cpp
+	# Change code so we can use the embedded PNG for the toolbar
 	sed '/#include "gui_raw.h"/ a #include <wx/mstream.h>\n#include "version.h"\n\ninline wxBitmap _wxGetBitmapFromMemory(const unsigned char *data, int length) { wxMemoryInputStream is(data, length); return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1); }\n #define wxGetBitmapFromMemory(name) _wxGetBitmapFromMemory(name ## _png, sizeof(name ## _png))' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp && \
 		mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
+	# Correct "gui_raw.h" to "gui.h"
 	sed 's/#include "gui_raw.h"/#include "gui.h"/' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp && \
 		mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
+	# Correct __gui_raw__ to __gui__
 	sed 's/__gui_raw__/__gui__/' <$(SRCDIR)/gui_raw.h >$(SRCDIR)/gui_raw.h.tmp \
 		&& mv $(SRCDIR)/gui_raw.h.tmp $(SRCDIR)/gui_raw.h
+	# Include "version.h", so we can use the VERSION define in next step
 	sed '/#define __gui__/ a #include "version.h"\n' <$(SRCDIR)/gui_raw.h >$(SRCDIR)/gui_raw.h.tmp \
 		&& mv $(SRCDIR)/gui_raw.h.tmp $(SRCDIR)/gui_raw.h
+	# Change #VERSION# to the VERSION define
 	sed 's/#VERSION#/" VERSION "/' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp \
 		&& mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
 	sed 's/#VERSION#/" VERSION "/' <$(SRCDIR)/gui_raw.h >$(SRCDIR)/gui_raw.h.tmp \
 		&& mv $(SRCDIR)/gui_raw.h.tmp $(SRCDIR)/gui_raw.h
-	sed 's/wxFlexGridSizer\* mainSizer;//'  <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp \
+	# Remove: tabs = new wxNotebook...
+	sed 's/tabs = new wxNotebook.+//' <$(SRCDIR)/gui_raw.cpp >$(SRCDIR)/gui_raw.cpp.tmp \
 		&& mv $(SRCDIR)/gui_raw.cpp.tmp $(SRCDIR)/gui_raw.cpp
-	sed '/wxMenu\* helpMenu;/ a wxFlexGridSizer* mainSizer;' < $(SRCDIR)/gui_raw.h >$(SRCDIR)/gui_raw.h.tmp \
-		&& mv $(SRCDIR)/gui_raw.h.tmp $(SRCDIR)/gui_raw.h
 
 # wxformbuilder postprocessing. 
 # - Convert the png icons to c-code

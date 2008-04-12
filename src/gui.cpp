@@ -70,8 +70,15 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM );
+	tabs->Hide();
+	
 	
 	mainSizer->Add( tabs, 1, wxALL|wxEXPAND, 0 );
+	
+	noTabs = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	noTabs->Hide();
+	
+	mainSizer->Add( noTabs, 1, wxEXPAND | wxALL, 0 );
 	
 	bSizer2->Add( mainSizer, 1, wxEXPAND, 5 );
 	
