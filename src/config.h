@@ -49,6 +49,8 @@ public:
 	Config();
 	~Config();
 
+	void versionCheck();
+
 	void setBZFlagCommand(const wxString&, const wxString& = _T("default"));
 	wxString getBZFlagCommand(const wxString&) const;
 

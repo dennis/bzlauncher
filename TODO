@@ -17,8 +17,6 @@
 		Support `name` which will name the tab "name" instead of the query
 - Recently played server view
 	- indirectly via Search
-- Store version in configuration file.
-	"cfgversion=1"
 
 - Use autotools
 - protocol handlers. Start app and show "details"

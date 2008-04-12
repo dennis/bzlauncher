@@ -39,6 +39,8 @@ bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
 	wxFileSystem::AddHandler(new wxInternetFSHandler);
 
+	appConfig.versionCheck();
+
 	this->mainFrame = new  MainFrameImpl(NULL);
 	this->mainFrame->Show(true);
 

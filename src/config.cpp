@@ -60,6 +60,32 @@ wxString Config::getBZFlagCommand(const wxString& proto) const {
 	return cmd;
 }
 
+void Config::versionCheck() {
+	int version = 0;
+	CFG_OP(cfg,
+		cfg->Read(_T("cfgversion"), &version);
+
+		// Migrate if needed
+		switch(version) {
+			case 0:
+				{
+					long sortmode = 0;
+					cfg->Read(_T("window/sortmode"), &sortmode);
+					cfg->DeleteEntry(_T("window/sortmode"));
+
+					cfg->Write(_T("views/0.sortmode"), sortmode);
+					cfg->Write(_T("views/0.query"), _T("`All`"));
+
+					cfg->Write(_T("cfgversion"), 1);
+				}
+				break;
+
+			case 1:
+				// Current
+				break;
+		}
+	);
+}
 
 void Config::setBZFlagCommand(const wxString& cmd, const wxString& proto) {
 	CFG_OP(cfg, cfg->Write(wxString::Format(_T("bzflag/%s"), proto.c_str()), cmd););
