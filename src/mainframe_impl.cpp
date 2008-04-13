@@ -223,9 +223,6 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 void MainFrameImpl::RefreshActiveView() {
 	BZLauncherApp& app = wxGetApp();
 
-	UpdatingDlgImpl dlg(this);
-	dlg.Show();
-
 	wxListCtrl* list = this->activeView->serverList;
 
 	wxLogDebug(_T("RefreshActiveView for view %lx"), (long int)this->activeView );
@@ -240,13 +237,12 @@ void MainFrameImpl::RefreshActiveView() {
 
 	// Content
 	ServerResultSet::iterator i;
-	ServerResultSet	resultSet = app.listServerHandler.Search(Query());
+	ServerResultSet	resultSet = app.listServerHandler.Search(this->activeView->query);
 	this->activeView->version = app.listServerHandler.getVersion();
 
 	int idx = 0;
 	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
 		Server*	current = *i;
-		dlg.Pulse();
 
 		// Check if its a favorite
 		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
@@ -294,9 +290,7 @@ void MainFrameImpl::RefreshActiveView() {
 
 	wxLogDebug(_T("AFTER: list->Size() = %d. activeView->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView->version, app.listServerHandler.getVersion());
 	
-	dlg.Pulse();
 	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
-	dlg.Pulse();
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
