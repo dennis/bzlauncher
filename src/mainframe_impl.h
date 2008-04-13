@@ -41,7 +41,7 @@ class MainFrameImpl : public MainFrame {
 private:
 	wxArrayString	favoriteServers;
 
-	void SetupColumns();
+	void SetupColumns(ServerListView*);
 	wxRect DetermineFrameSize() const;
 
 	void UpdateServer(int idx, Server*);

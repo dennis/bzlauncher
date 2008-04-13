@@ -105,7 +105,6 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->SetupViews();
 
 	this->SetSize(this->DetermineFrameSize());
-	this->SetupColumns();
 	this->favoriteServers   = appConfig.getFavorites();
 	this->initialLoadTimer.Start(300,true);
 }
@@ -151,6 +150,7 @@ void MainFrameImpl::SetupViews() {
 			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
 			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+			this->SetupColumns((*i));
 		}
 		this->tabs->SetSelection(0);
 		this->tabs->Layout();
@@ -174,21 +174,22 @@ void MainFrameImpl::SetupViews() {
 		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
 		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+		this->SetupColumns(this->activeView);
 	}
 
 	this->tabs->Show(multiViews);
 	this->noTabs->Show(!multiViews);
 }
 
-void MainFrameImpl::SetupColumns() {
+void MainFrameImpl::SetupColumns(ServerListView *view) {
 	wxString names[] = {
 		_("Server"), _("Name"), _("Type"),
 		_("#"), _("Ping"), _("Fav")
 	};
 
 	for(int col = 0; col < Config::COL_COUNT; col++) {
-		this->activeView->serverList->InsertColumn(col,names[col]);
-		this->activeView->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
+		view->serverList->InsertColumn(col,names[col]);
+		view->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
 	}
 }
 
@@ -245,7 +246,6 @@ void MainFrameImpl::RefreshActiveView() {
 	int idx = 0;
 	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
 		Server*	current = *i;
-		wxLogDebug(_T("Adding server: %s"), current->getName().c_str());
 		dlg.Pulse();
 
 		// Check if its a favorite
