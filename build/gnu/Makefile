@@ -19,7 +19,8 @@ OBJS=\
 	serverdlg_impl.o \
 	serverparser.o \
 	serverping.o \
-	updatingdlg_impl.o
+	updatingdlg_impl.o \
+	query.o
 ICONS=\
 	$(SRCDIR)/about32.h \
 	$(SRCDIR)/bzflag32.h \

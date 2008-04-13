@@ -21,53 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __listserver_handler__
-#define __listserver_handler__
+#ifndef __query__
+#define __query__
 
 #include <wx/string.h>
-#include <wx/list.h>
-#include <wx/filesys.h>
-#include <vector>
+class Server;
 
-#include "server.h"
-#include "serverping.h"
-#include "query.h"
-
-WX_DECLARE_LIST(Server, ServerList);
-typedef std::vector<Server*> ServerResultSet;
-
-/// Performs the listserver interaction - mainly parsing the data
-/// received from i mainly parsing the data
-class ListServerHandler {
+class Query {
 private:
-
-	bool GetListServerResponse();
-	bool ParseLine(const wxString&);
-
-	void ClearList();
-
-	wxString	rawResponse;
-
-protected:
-	int version;
-
-	ServerPingList	pingList;
-	ServerList		serverList;
-
+	wxString query;
+	
 public:
-	ListServerHandler();
-	~ListServerHandler();
-
-	int getVersion() {
-		return version;
+	Query(const wxString& q = _T("")) {
+		this->set(q);
 	}
 
-	ServerResultSet Search(const Query&);
+	wxString get() const {
+		return this->query;
+	}
 
-	void GetServerList();
-	Server* FindByName(const wxString&);
+	void set(const wxString &q) {
+		this->query = q;
+	}
+
+	bool operator==(const Server*) const;
 };
-
-
 
 #endif

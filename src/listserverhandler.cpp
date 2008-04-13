@@ -203,14 +203,16 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 
 // TODO: This will perform a search of the this->serverList. For now, it dosn't really
 // do anything, except return a ServerResultSet (like searching that matches everything)
-ServerResultSet ListServerHandler::Query() {
+ServerResultSet ListServerHandler::Search(const Query& query) {
 	ServerList		serverList;
 	ServerResultSet	resultSet;
 
 	for(ServerList::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
 
-		resultSet.push_back(current);
+		if(query == const_cast<Server*>(current)) {
+			resultSet.push_back(current);
+		}
 	}
 
 	return resultSet;

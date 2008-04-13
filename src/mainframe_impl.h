@@ -27,24 +27,24 @@ THE SOFTWARE.
 #include <wx/timer.h>
 #include <wx/imaglist.h>
 #include <wx/arrstr.h>
-#include "gui.h"
 
+#include "gui.h"
 #include "serverping.h"
+#include "query.h"
 
 /// This is the meta-data for a server-list query
 class ServerListView {
 private:
-	wxString	name;
 public:
 	wxListCtrl*	serverList;
-
 	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
+	Query		query;
 
 	const wxString GetName() const {
-		return name;
+		return this->query.get();
 	}
 
-	ServerListView(const wxString&, long);
+	ServerListView(const Query&, long);
 };
 
 /// Main Window - presenting the servers online.

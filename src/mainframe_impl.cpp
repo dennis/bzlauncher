@@ -32,8 +32,8 @@ THE SOFTWARE.
 
 #include "serverping.h"
 
-ServerListView::ServerListView(const wxString& name, long sort) {
-	this->name = name;
+ServerListView::ServerListView(const Query& query, long sort) {
+	this->query = query;
 	this->currentSortMode = sort;
 }
 
@@ -104,7 +104,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->findPanel->Show(false);
 
-	activeView = new ServerListView(_("All"),0);
+	activeView = new ServerListView(Query(_("`All`")),0);
 	this->viewList.push_back(activeView);
 	
 	this->SetupViews();
@@ -231,7 +231,7 @@ void MainFrameImpl::RefreshServerGrid() {
 
 	// Content
 	ServerResultSet::iterator i;
-	ServerResultSet	resultSet = app.listServerHandler.Query();
+	ServerResultSet	resultSet = app.listServerHandler.Search(Query());
 
 	int idx = 0;
 	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
