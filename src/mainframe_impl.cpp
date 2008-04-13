@@ -119,38 +119,45 @@ MainFrameImpl::~MainFrameImpl() {
 		delete *i;
 }
 
+void MainFrameImpl::SetupViewFor(ServerListView* view) {
+	wxFlexGridSizer* fgSizer;
+	fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
+	fgSizer->AddGrowableCol(0);
+	fgSizer->AddGrowableRow(0);
+	fgSizer->SetFlexibleDirection( wxBOTH );
+	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxPanel* panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+
+	view->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+	fgSizer->Add(view->serverList, 0, wxEXPAND, 0);
+
+	panel->SetSizer(fgSizer);
+	panel->Layout();
+	fgSizer->Fit( panel );
+
+	this->tabs->AddPage( panel, view->GetName(), true );
+
+	view->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
+	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
+	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+	this->SetupColumns(view);
+}
+
 void MainFrameImpl::SetupViews() {
 	wxLogDebug(_T("SetupViews()"));
 	this->viewList = appConfig.getViews();
 	
 	bool multiViews = this->viewList.size() > 1;
+	#warning singleView dosnt work at all
+	multiViews = true;
 	wxFlexGridSizer* fgSizer;
 
 	assert(this->viewList.size());
 
 	if( multiViews ) {
 		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
-			fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
-			fgSizer->AddGrowableCol(0);
-			fgSizer->AddGrowableRow(0);
-			fgSizer->SetFlexibleDirection( wxBOTH );
-			fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-			wxPanel* panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-
-			(*i)->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-			fgSizer->Add((*i)->serverList, 0, wxEXPAND, 0);
-
-			panel->SetSizer(fgSizer);
-			panel->Layout();
-			fgSizer->Fit( panel );
-
-			this->tabs->AddPage( panel, (*i)->GetName(), true );
-
-			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
-			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
-			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
-			this->SetupColumns((*i));
+			this->SetupViewFor((*i));
 		}
 		this->tabs->SetSelection(0);
 		this->tabs->Layout();
@@ -445,14 +452,20 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 	this->filterEnabled = !this->filterEnabled;
 	this->findPanel->Show(this->filterEnabled);
 	if(this->filterEnabled)
-		this->filterText->SetFocus();
+		this->queryText->SetFocus();
 	else
 		this->activeView->serverList->SetFocus();
 	this->Layout();
 }
 
 void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
-	wxLogMessage(_("Sorry, this feature is not implemented"));
+	ServerListView*	view = new ServerListView(Query(this->queryText->GetValue().c_str()), 0);
+	this->SetupViewFor(view);
+	this->tabs->Layout();
+	this->viewList.push_back(view);
+
+	this->activeView = view;
+	this->RefreshActiveView();
 }
 
 void MainFrameImpl::OnViewChangeEvent(wxNotebookEvent& event) {

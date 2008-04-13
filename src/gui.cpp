@@ -95,9 +95,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText1->Wrap( -1 );
 	fgSizer3->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	filterText = new wxTextCtrl( findPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	filterText->SetMaxLength( 20 ); 
-	fgSizer3->Add( filterText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
+	queryText = new wxTextCtrl( findPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	queryText->SetMaxLength( 20 ); 
+	fgSizer3->Add( queryText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 	
 	closeBtn = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(stop22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	fgSizer3->Add( closeBtn, 0, wxALL, 5 );
@@ -119,7 +119,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
 	tabs->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( MainFrame::OnViewChangeEvent ), NULL, this );
-	filterText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
+	queryText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
 }
 
 AboutDlg::AboutDlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

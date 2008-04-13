@@ -541,7 +541,7 @@
                     <property name="border">0</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">1</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="enabled">1</property>
@@ -661,7 +661,7 @@
                                     <property name="maximum_size">-1,-1</property>
                                     <property name="maxlength">20</property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">filterText</property>
+                                    <property name="name">queryText</property>
                                     <property name="permission">protected</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>

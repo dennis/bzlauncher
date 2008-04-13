@@ -56,6 +56,7 @@ private:
 	ServerListView*	activeView;
 
 	void SetupViews();
+	void SetupViewFor(ServerListView*);
 
 protected:
 	wxImageList*	imageList;

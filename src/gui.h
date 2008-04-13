@@ -7,6 +7,8 @@
 
 #ifndef __gui__
 #define __gui__
+#include "version.h"
+
 #include "stop22.h"
 #include "search32.h"
 #include "refresh32.h"
@@ -73,7 +75,7 @@ class MainFrame : public wxFrame
 		wxPanel* noTabs;
 		wxPanel* findPanel;
 		wxStaticText* m_staticText1;
-		wxTextCtrl* filterText;
+		wxTextCtrl* queryText;
 		wxBitmapButton* closeBtn;
 		
 		// Virtual event handlers, overide them in your derived class
