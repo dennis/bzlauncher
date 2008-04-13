@@ -21,55 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __config__
-#define __config__
-
-#include <wx/gdicmn.h> // wxRect
-#include <wx/arrstr.h>
 #include "view.h"
+#include "query.h"
 
-/// Manages configuration settings (load/save)
-class Config {
-public:
-	typedef enum {
-		COL_SERVER,
-		COL_NAME,
-		COL_TYPE,
-		COL_PLAYERS,
-		COL_PING,
-		COL_FAVORITE,
-		COL_COUNT
-	} ColType;
+ServerListView::ServerListView(const Query& query, long sort) {
+	this->query = query;
+	this->currentSortMode = sort;
+}
 
-protected:
-	int getColumnDefaultWidth(ColType) const;
-	wxString getColumnName(ColType) const;
-	wxString getColumnKey(ColType) const;
-
-public:
-	Config();
-	~Config();
-
-	void versionCheck();
-
-	void setBZFlagCommand(const wxString&, const wxString& = _T("default"));
-	wxString getBZFlagCommand(const wxString&) const;
-
-	wxRect getWindowDimensions() const;
-	void   setWindowDimensions(wxRect);
-
-	int getColumnWidth(ColType) const;
-	void setColumnWidth(ColType,int);
-
-	wxArrayString getFavorites() const;
-	void setFavorites(const wxArrayString&);
-
-	wxString getListServerURL(int=0) const;
-
-	viewlist_t getViews() const;
-};
-
-/// I prefer a global variable over static class and singleton
-extern Config appConfig;
-
-#endif

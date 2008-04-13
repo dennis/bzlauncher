@@ -30,22 +30,8 @@ THE SOFTWARE.
 
 #include "gui.h"
 #include "serverping.h"
+#include "view.h"
 #include "query.h"
-
-/// This is the meta-data for a server-list query
-class ServerListView {
-private:
-public:
-	wxListCtrl*	serverList;
-	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
-	Query		query;
-
-	const wxString GetName() const {
-		return this->query.get();
-	}
-
-	ServerListView(const Query&, long);
-};
 
 /// Main Window - presenting the servers online.
 /// This is the implementation of MainFrame (which is generated)
@@ -65,7 +51,6 @@ private:
 
 	bool			filterEnabled;
 
-	typedef std::vector<ServerListView*>	viewlist_t;
 	viewlist_t		viewList;
 
 	ServerListView*	activeView;

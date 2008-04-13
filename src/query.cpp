@@ -25,5 +25,9 @@ THE SOFTWARE.
 #include "query.h"
 
 bool Query::operator==(const Server* server) const {
-	return true;
+	// FIXME Implement this for real
+	if( this->query.Cmp(_T("`CTF`")) == 0 )
+		return server->IsCTF();
+	else
+		return true;
 }

@@ -32,11 +32,6 @@ THE SOFTWARE.
 
 #include "serverping.h"
 
-ServerListView::ServerListView(const Query& query, long sort) {
-	this->query = query;
-	this->currentSortMode = sort;
-}
-
 
 static int SortHelper(int res, bool reverse=false) {
 	if(res==0) return res;
@@ -104,14 +99,10 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->findPanel->Show(false);
 
-	activeView = new ServerListView(Query(_("`All`")),0);
-	this->viewList.push_back(activeView);
-	
 	this->SetupViews();
 
 	this->SetSize(this->DetermineFrameSize());
 	this->SetupColumns();
-	this->activeView->currentSortMode = appConfig.getSortMode();
 	this->favoriteServers   = appConfig.getFavorites();
 	this->initialLoadTimer.Start(300,true);
 }
@@ -121,13 +112,15 @@ MainFrameImpl::~MainFrameImpl() {
 		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
-	appConfig.setSortMode(this->activeView->currentSortMode);
 
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i )
 		delete *i;
 }
 
 void MainFrameImpl::SetupViews() {
+	this->viewList = appConfig.getViews();
+	this->activeView = this->viewList[0];
+	
 	bool multiViews = this->viewList.size() > 1;
 	wxFlexGridSizer* fgSizer;
 
@@ -155,6 +148,7 @@ void MainFrameImpl::SetupViews() {
 			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
 			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 		}
+		this->tabs->SetSelection(0);
 		this->tabs->Layout();
 	}
 	else {

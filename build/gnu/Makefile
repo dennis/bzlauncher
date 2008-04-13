@@ -20,6 +20,7 @@ OBJS=\
 	serverparser.o \
 	serverping.o \
 	updatingdlg_impl.o \
+	view.o \
 	query.o
 ICONS=\
 	$(SRCDIR)/about32.h \

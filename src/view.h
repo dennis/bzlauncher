@@ -21,55 +21,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __config__
-#define __config__
+#ifndef __view__
+#define __view__
 
-#include <wx/gdicmn.h> // wxRect
-#include <wx/arrstr.h>
-#include "view.h"
+#include <wx/listctrl.h>
+#include <vector>
+#include "query.h"
 
-/// Manages configuration settings (load/save)
-class Config {
+class ServerListView {
+private:
 public:
-	typedef enum {
-		COL_SERVER,
-		COL_NAME,
-		COL_TYPE,
-		COL_PLAYERS,
-		COL_PING,
-		COL_FAVORITE,
-		COL_COUNT
-	} ColType;
+	wxListCtrl*	serverList;
+	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
+	Query		query;
 
-protected:
-	int getColumnDefaultWidth(ColType) const;
-	wxString getColumnName(ColType) const;
-	wxString getColumnKey(ColType) const;
+	const wxString GetName() const {
+		return this->query.get();
+	}
 
-public:
-	Config();
-	~Config();
-
-	void versionCheck();
-
-	void setBZFlagCommand(const wxString&, const wxString& = _T("default"));
-	wxString getBZFlagCommand(const wxString&) const;
-
-	wxRect getWindowDimensions() const;
-	void   setWindowDimensions(wxRect);
-
-	int getColumnWidth(ColType) const;
-	void setColumnWidth(ColType,int);
-
-	wxArrayString getFavorites() const;
-	void setFavorites(const wxArrayString&);
-
-	wxString getListServerURL(int=0) const;
-
-	viewlist_t getViews() const;
+	ServerListView(const Query&, long);
 };
 
-/// I prefer a global variable over static class and singleton
-extern Config appConfig;
+typedef std::vector<ServerListView*>	viewlist_t;
 
 #endif

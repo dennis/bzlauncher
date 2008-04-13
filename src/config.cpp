@@ -91,16 +91,6 @@ void Config::setBZFlagCommand(const wxString& cmd, const wxString& proto) {
 	CFG_OP(cfg, cfg->Write(wxString::Format(_T("bzflag/%s"), proto.c_str()), cmd););
 }
 
-int Config::getSortMode() const {
-	int mode;
-	CFG_OP(cfg, mode = cfg->Read(_T("window/sortmode"), -4); );
-	return mode;
-}
-
-void Config::setSortMode(int s) {
-	CFG_OP(cfg, cfg->Write(_T("window/sortmode"), s); );
-}
-
 wxRect Config::getWindowDimensions() const {
 	wxRect wanted; 
 
@@ -206,4 +196,27 @@ wxString Config::getListServerURL(int n) const {
 		return _T("http://bzstats.strayer.de/stuff/listserver.php");
 	else
 		return _T("http://my.bzflag.org/db?action=LIST");
+}
+
+viewlist_t Config::getViews() const {
+	int count = 0;
+	
+	wxString query;
+	long sortmode;
+
+	viewlist_t	list;
+
+	CFG_OP(cfg,
+		while(
+			cfg->Read(wxString::Format(_T("views/%d.query"), count), &query) &&
+			cfg->Read(wxString::Format(_T("views/%d.sortmode"), count), &sortmode)
+		) {
+			// Read it into serverlist-thingy
+			ServerListView*	view = new ServerListView(Query(query), sortmode);
+			list.push_back(view);
+			count++;
+		}
+	);
+
+	return list;
 }
