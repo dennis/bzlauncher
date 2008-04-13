@@ -76,14 +76,15 @@ protected:
 	void EventSelectServer(wxListEvent&);
 	void EventShowAbout(wxCommandEvent&);
 	void EventTimer(wxTimerEvent&);
+	void OnViewChangeEvent(wxNotebookEvent&);
 
+	void RefreshActiveView();
 
 public:
 	MainFrameImpl(wxWindow*);
 	~MainFrameImpl();
 
 	void SetStatusText(const wxString&);
-	void RefreshServerGrid();
 
 	void LaunchGame();
 	void ShowDetails();

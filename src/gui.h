@@ -84,6 +84,7 @@ class MainFrame : public wxFrame
 		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnViewChangeEvent( wxNotebookEvent& event ){ event.Skip(); }
 		virtual void EventSearchText( wxCommandEvent& event ){ event.Skip(); }
 		
 	

@@ -42,6 +42,9 @@ static int SortHelper(int res, bool reverse=false) {
 static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 	Server* s1 = reinterpret_cast<Server*>(item1);
 	Server* s2 = reinterpret_cast<Server*>(item2);
+
+	if(!s1 || !s2) 
+		return 0;
 	
 	// Make sure fav's are placed at the top, no matter what
 	if(s1->favorite && !s2->favorite) return -1;
@@ -118,11 +121,13 @@ MainFrameImpl::~MainFrameImpl() {
 }
 
 void MainFrameImpl::SetupViews() {
+	wxLogDebug(_T("SetupViews()"));
 	this->viewList = appConfig.getViews();
-	this->activeView = this->viewList[0];
 	
 	bool multiViews = this->viewList.size() > 1;
 	wxFlexGridSizer* fgSizer;
+
+	assert(this->viewList.size());
 
 	if( multiViews ) {
 		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
@@ -132,8 +137,7 @@ void MainFrameImpl::SetupViews() {
 			fgSizer->SetFlexibleDirection( wxBOTH );
 			fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-			wxPanel*	panel;
-			panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+			wxPanel* panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 
 			(*i)->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
 			fgSizer->Add((*i)->serverList, 0, wxEXPAND, 0);
@@ -152,22 +156,24 @@ void MainFrameImpl::SetupViews() {
 		this->tabs->Layout();
 	}
 	else {
+		this->activeView = this->viewList[0];
+
 		fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
 		fgSizer->AddGrowableCol(0);
 		fgSizer->AddGrowableRow(0);
 		fgSizer->SetFlexibleDirection( wxBOTH );
 		fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-		activeView->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+		this->activeView->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
 		fgSizer->Add(activeView->serverList, 0, wxEXPAND, 0);
 
 		this->noTabs->SetSizer(fgSizer);
 		this->noTabs->Layout();
 		fgSizer->Fit( this->noTabs );
 
-		activeView->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
-		activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
-		activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
+		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
+		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 	}
 
 	this->tabs->Show(multiViews);
@@ -208,29 +214,39 @@ void MainFrameImpl::SetStatusText(const wxString& t) {
 }
 
 void MainFrameImpl::EventRefresh(wxCommandEvent&) {
-	this->RefreshServerGrid();
+	wxLogDebug(_T("EventRefresh()"));
+	wxGetApp().RefreshServerList();
+	this->RefreshActiveView();
 }
 
-void MainFrameImpl::RefreshServerGrid() {
+void MainFrameImpl::RefreshActiveView() {
+	BZLauncherApp& app = wxGetApp();
+
 	UpdatingDlgImpl dlg(this);
 	dlg.Show();
 
-	BZLauncherApp& app = wxGetApp();
-
-	app.RefreshServerList();
-
 	wxListCtrl* list = this->activeView->serverList;
+
+	wxLogDebug(_T("RefreshActiveView for view %lx"), (long int)this->activeView );
+	wxLogDebug(_T("BEFORE: list->Size() = %d. activeView(%lx)->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView, this->activeView->version, app.listServerHandler.getVersion());
+
+	if(app.listServerHandler.getVersion() == this->activeView->version) {
+		wxLogDebug(_T("This view is up-to-date"));
+		return;
+	}
 
 	list->DeleteAllItems();
 
 	// Content
 	ServerResultSet::iterator i;
 	ServerResultSet	resultSet = app.listServerHandler.Search(Query());
+	this->activeView->version = app.listServerHandler.getVersion();
 
 	int idx = 0;
 	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
-		dlg.Pulse();
 		Server*	current = *i;
+		wxLogDebug(_T("Adding server: %s"), current->getName().c_str());
+		dlg.Pulse();
 
 		// Check if its a favorite
 		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
@@ -272,10 +288,11 @@ void MainFrameImpl::RefreshServerGrid() {
 			list->SetItemTextColour(idx, *wxLIGHT_GREY);
 		else
 			list->SetItemTextColour(idx, *wxBLACK);
-											    
 
 		idx++;
 	}
+
+	wxLogDebug(_T("AFTER: list->Size() = %d. activeView->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView->version, app.listServerHandler.getVersion());
 	
 	dlg.Pulse();
 	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
@@ -394,7 +411,9 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
-	this->RefreshServerGrid();
+	wxLogDebug(_T("EventTimer()"));
+	wxGetApp().RefreshServerList();
+	this->RefreshActiveView();
 	this->pingTimer.Start(10);
 }
 
@@ -441,3 +460,13 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 	wxLogMessage(_("Sorry, this feature is not implemented"));
 }
+
+void MainFrameImpl::OnViewChangeEvent(wxNotebookEvent& event) {
+	int selected = event.GetSelection();
+	if( selected >= 0 && selected < this->viewList.size() ) {
+		wxLogDebug(_T("OnViewChangeEvent() - to view #%d"), selected);
+		this->activeView = this->viewList[event.GetSelection()];
+		this->RefreshActiveView();
+	}
+}
+

@@ -25,6 +25,7 @@ THE SOFTWARE.
 #define __view__
 
 #include <wx/listctrl.h>
+#include <wx/log.h>
 #include <vector>
 #include "query.h"
 
@@ -34,6 +35,7 @@ public:
 	wxListCtrl*	serverList;
 	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
 	Query		query;
+	int			version;
 
 	const wxString GetName() const {
 		return this->query.get();

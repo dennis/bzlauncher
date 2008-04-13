@@ -2,8 +2,8 @@
 
 CXX=ccache g++
 CC=gcc
-WXFLAGS=`wx-config --cxxflags` -ggdb -Wall -W 
-WXLIBS=`wx-config --libs`
+WXFLAGS=`wx-config --cxxflags --debug` -ggdb -Wall -W 
+WXLIBS=`wx-config --libs --debug`
 ROOTDIR=../..
 SRCDIR=$(ROOTDIR)/src
 CONTRIBDIR=$(ROOTDIR)/contrib

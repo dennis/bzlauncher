@@ -28,6 +28,7 @@ bool Query::operator==(const Server* server) const {
 	// FIXME Implement this for real
 	if( this->query.Cmp(_T("`CTF`")) == 0 )
 		return server->IsCTF();
-	else
-		return true;
+	if( this->query.Cmp(_T("`FFA`")) == 0 )
+		return server->IsFFA();
+	return true;
 }
