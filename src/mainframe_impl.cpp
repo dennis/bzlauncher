@@ -150,6 +150,10 @@ void MainFrameImpl::SetupViews() {
 			fgSizer->Fit( panel );
 
 			this->tabs->AddPage( panel, (*i)->GetName(), true );
+
+			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
+			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
+			(*i)->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 		}
 		this->tabs->Layout();
 	}
@@ -166,6 +170,10 @@ void MainFrameImpl::SetupViews() {
 		this->noTabs->SetSizer(fgSizer);
 		this->noTabs->Layout();
 		fgSizer->Fit( this->noTabs );
+
+		activeView->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
+		activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
+		activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 	}
 
 	this->tabs->Show(multiViews);
