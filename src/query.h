@@ -45,6 +45,9 @@ public:
 	}
 
 	bool operator==(const Server*) const;
+	bool operator!=(const Server* s) const {
+		return !(*this == s);
+	}
 };
 
 #endif
