@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include <algorithm>
+
 #include "main.h"
 #include "config.h"
 #include "mainframe_impl.h"
@@ -119,7 +121,51 @@ MainFrameImpl::~MainFrameImpl() {
 		delete *i;
 }
 
-void MainFrameImpl::SetupViewFor(ServerListView* view) {
+void MainFrameImpl::AddView(ServerListView* view) {
+	wxLogDebug(_T("AddView(%lx)"), view);
+
+	if(this->viewList.size()>1) {
+		this->viewList.push_back(view);
+		this->AddViewAsTab(view);
+		view->serverList->Layout();
+	}
+	else {
+		// We're switching from single to multi-views
+		wxLogDebug(_T("Switching from single to multi-views"));
+
+		ServerListView*	active = this->viewList[0];
+		this->ViewDisconnect(active);
+
+		this->tabs->Show(true);
+		this->noTabs->Show(false);
+		this->noTabs->SetSizer(NULL);
+
+		// Add the new view
+		this->viewList.push_back(view);
+
+		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
+			this->AddViewAsTab((*i));
+			(*i)->serverList->Layout();
+		}
+	}
+	this->tabs->Layout();
+}
+
+void MainFrameImpl::RemoveView(ServerListView* view) {
+	// Ignore the delete if we only got one view
+	if(this->viewList.size()==1) {
+		this->SetStatusText(_("I won't remove the last view"));
+		return;
+	}
+
+	viewlist_t::iterator i = find(this->viewList.begin(), this->viewList.end(), view);
+
+	if(i == this->viewList.end())
+		return;
+}
+
+void MainFrameImpl::AddViewAsTab(ServerListView* view) {
+	wxLogDebug(_T("AddViewAsTab(%lx)"), view);
 	wxFlexGridSizer* fgSizer;
 	fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
 	fgSizer->AddGrowableCol(0);
@@ -129,59 +175,83 @@ void MainFrameImpl::SetupViewFor(ServerListView* view) {
 
 	wxPanel* panel = new wxPanel( this->tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 
-	view->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+	if(! view->serverList ) {
+		view->serverList = new wxListCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+		this->SetupColumns(view);
+	}
+
 	fgSizer->Add(view->serverList, 0, wxEXPAND, 0);
 
 	panel->SetSizer(fgSizer);
 	panel->Layout();
 	fgSizer->Fit( panel );
 
-	this->tabs->AddPage( panel, view->GetName(), true );
+	view->serverList->Layout();
 
+	this->ViewConnect(view);
+	this->tabs->AddPage( panel, view->GetName(), true );
+}
+
+void MainFrameImpl::AddViewAsFull(ServerListView* view) {
+	wxLogDebug(_T("AddViewAsFull(%lx)"), view);
+	wxFlexGridSizer* fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
+	fgSizer->AddGrowableCol(0);
+	fgSizer->AddGrowableRow(0);
+	fgSizer->SetFlexibleDirection( wxBOTH );
+	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	if(!view->serverList) {
+		wxLogDebug(_T("Creating view->serverList"));
+		assert(this->noTabs);
+		view->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+		this->SetupColumns(view);
+	}
+
+	fgSizer->Add(view->serverList, 0, wxEXPAND, 0);
+
+	view->serverList->Layout();
+
+	this->ViewConnect(view);
+
+	this->noTabs->SetSizer(fgSizer);
+	this->noTabs->Layout();
+	fgSizer->Fit( this->noTabs );
+
+}
+
+void MainFrameImpl::ViewConnect(ServerListView* view) {
 	view->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
 	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
-	this->SetupColumns(view);
 }
+
+void MainFrameImpl::ViewDisconnect(ServerListView* view) {
+	view->serverList->Disconnect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
+	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
+	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+}
+
 
 void MainFrameImpl::SetupViews() {
 	wxLogDebug(_T("SetupViews()"));
 	this->viewList = appConfig.getViews();
 	
 	bool multiViews = this->viewList.size() > 1;
-	#warning singleView dosnt work at all
-	multiViews = true;
-	wxFlexGridSizer* fgSizer;
+	multiViews = true; // Always use Tabs, as "single -> tabs" dosnt work
 
 	assert(this->viewList.size());
 
+	this->activeView = this->viewList[0];
+
 	if( multiViews ) {
 		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
-			this->SetupViewFor((*i));
+			this->AddViewAsTab((*i));
 		}
-		this->tabs->SetSelection(0);
 		this->tabs->Layout();
 	}
 	else {
-		this->activeView = this->viewList[0];
-
-		fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
-		fgSizer->AddGrowableCol(0);
-		fgSizer->AddGrowableRow(0);
-		fgSizer->SetFlexibleDirection( wxBOTH );
-		fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-		this->activeView->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-		fgSizer->Add(activeView->serverList, 0, wxEXPAND, 0);
-
-		this->noTabs->SetSizer(fgSizer);
+		this->AddViewAsFull(this->activeView);
 		this->noTabs->Layout();
-		fgSizer->Fit( this->noTabs );
-
-		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
-		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
-		this->activeView->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
-		this->SetupColumns(this->activeView);
 	}
 
 	this->tabs->Show(multiViews);
@@ -189,6 +259,7 @@ void MainFrameImpl::SetupViews() {
 }
 
 void MainFrameImpl::SetupColumns(ServerListView *view) {
+	wxLogDebug(_T("SetupColumns(%lx)"), view);
 	wxString names[] = {
 		_("Server"), _("Name"), _("Type"),
 		_("#"), _("Ping"), _("Fav")
@@ -298,6 +369,7 @@ void MainFrameImpl::RefreshActiveView() {
 	wxLogDebug(_T("AFTER: list->Size() = %d. activeView->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView->version, app.listServerHandler.getVersion());
 	
 	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
+	this->activeView->serverList->Layout();
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -460,9 +532,7 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 	ServerListView*	view = new ServerListView(Query(this->queryText->GetValue().c_str()), 0);
-	this->SetupViewFor(view);
-	this->tabs->Layout();
-	this->viewList.push_back(view);
+	this->AddView(view);
 
 	this->activeView = view;
 	this->RefreshActiveView();
@@ -470,7 +540,7 @@ void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::OnViewChangeEvent(wxNotebookEvent& event) {
 	int selected = event.GetSelection();
-	if( selected >= 0 && selected < this->viewList.size() ) {
+	if( selected >= 0 && selected < (int)this->viewList.size() ) {
 		wxLogDebug(_T("OnViewChangeEvent() - to view #%d"), selected);
 		this->activeView = this->viewList[event.GetSelection()];
 		this->RefreshActiveView();

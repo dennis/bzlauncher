@@ -23,8 +23,9 @@ THE SOFTWARE.
 */
 #include "view.h"
 #include "query.h"
+#include "mainframe_impl.h"
 
-ServerListView::ServerListView(const Query& query, long sort) : version(0) {
+ServerListView::ServerListView(const Query& query, long sort) : serverList(NULL), version(0) {
 	this->query = query;
 	this->currentSortMode = sort;
 	wxLogDebug(_T("ServerListView() (%lx - version = %d - query = %s"), (long int)this, this->version, query.get().c_str());

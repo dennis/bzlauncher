@@ -56,7 +56,15 @@ private:
 	ServerListView*	activeView;
 
 	void SetupViews();
-	void SetupViewFor(ServerListView*);
+
+	void AddView(ServerListView*);
+	void AddViewAsTab(ServerListView*);
+	void AddViewAsFull(ServerListView*);
+
+	void RemoveView(ServerListView*);
+
+	void ViewConnect(ServerListView*);
+	void ViewDisconnect(ServerListView*);
 
 protected:
 	wxImageList*	imageList;

@@ -37,6 +37,11 @@ public:
 	Query		query;
 	int			version;
 
+	~ServerListView() {
+		if( this->serverList ) 
+			delete this->serverList;
+	}
+
 	const wxString GetName() const {
 		return this->query.get();
 	}
