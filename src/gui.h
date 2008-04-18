@@ -7,8 +7,6 @@
 
 #ifndef __gui__
 #define __gui__
-#include "version.h"
-
 #include "stop22.h"
 #include "search32.h"
 #include "refresh32.h"
@@ -16,7 +14,7 @@
 #include "favorite32.h"
 #include "bzflag32.h"
 #include "about32.h"
-#include "version.h"
+#include "../config.h"
 
 
 #include <wx/string.h>

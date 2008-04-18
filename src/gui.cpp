@@ -7,7 +7,7 @@
 
 #include "gui.h"
 #include <wx/mstream.h>
-#include "version.h"
+#include "../config.h"
 
 inline wxBitmap _wxGetBitmapFromMemory(const unsigned char *data, int length) { wxMemoryInputStream is(data, length); return wxBitmap(wxImage(is, wxBITMAP_TYPE_ANY, -1), -1); }
  #define wxGetBitmapFromMemory(name) _wxGetBitmapFromMemory(name ## _png, sizeof(name ## _png))

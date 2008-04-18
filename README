@@ -9,9 +9,8 @@ http://dennis.moellegaard.dk/projects/bzlauncher/
 Compiling - linux
 -----------------
  * To compile BZLauncher you need wxwidgets 2.8.4 or better and GNU c/c++.
- * cd build/gnu/ 
+ * ./configure
  * make
- * the executable is found in the main directory
 
 Compiling - Windows
 -------------------

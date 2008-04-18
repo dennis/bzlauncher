@@ -1,2 +1,6 @@
 gui_raw.cpp
 gui_raw.h
+*.o
+.deps
+Makefile.in
+Makefile
