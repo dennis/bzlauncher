@@ -220,3 +220,20 @@ viewlist_t Config::getViews() const {
 
 	return list;
 }
+
+void Config::setViews(viewlist_t list) {
+	int count = 0;
+
+	wxString query;
+	long sortmode;
+
+	CFG_OP(cfg,
+		for(viewlist_t::iterator i = list.begin(); i != list.end(); ++i ) {
+			sortmode = (*i)->currentSortMode;
+			query = (*i)->query.get();
+			cfg->Write(wxString::Format(_T("views/%d.query"), count), query);
+			cfg->Write(wxString::Format(_T("views/%d.sortmode"), count), sortmode);
+			count++;
+		}
+	);
+}

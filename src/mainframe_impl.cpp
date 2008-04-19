@@ -117,6 +117,8 @@ MainFrameImpl::~MainFrameImpl() {
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
 
+	appConfig.setViews(this->viewList);
+
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i )
 		delete *i;
 }
@@ -124,7 +126,9 @@ MainFrameImpl::~MainFrameImpl() {
 void MainFrameImpl::AddView(ServerListView* view) {
 	wxLogDebug(_T("AddView(%lx)"), view);
 	this->viewList.push_back(view);
+
 	this->AddViewAsTab(view);
+
 	view->serverList->Layout();
 	this->tabs->Layout();
 }
@@ -471,9 +475,8 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
-	ServerListView*	view = new ServerListView(Query(this->queryText->GetValue().c_str()), 0);
+	ServerListView*	view = new ServerListView(Query(this->queryText->GetValue().c_str()), this->activeView->currentSortMode);
 	this->AddView(view);
-
 	this->activeView = view;
 	this->RefreshActiveView();
 }

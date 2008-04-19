@@ -67,6 +67,7 @@ public:
 	wxString getListServerURL(int=0) const;
 
 	viewlist_t getViews() const;
+	void setViews(viewlist_t);
 };
 
 /// I prefer a global variable over static class and singleton
