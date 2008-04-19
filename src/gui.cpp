@@ -69,9 +69,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM );
-	tabs->Hide();
-	
+	tabs = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_SCROLL_BUTTONS|wxAUI_NB_WINDOWLIST_BUTTON );
 	
 	mainSizer->Add( tabs, 1, wxALL|wxEXPAND, 0 );
 	
@@ -113,7 +111,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
 	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
-	tabs->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( MainFrame::OnViewChangeEvent ), NULL, this );
+	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::EventViewChanged ), NULL, this );
+	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( MainFrame::EventViewClose ), NULL, this );
 	queryText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
 }
 

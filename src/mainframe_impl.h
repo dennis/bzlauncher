@@ -84,7 +84,7 @@ protected:
 	void EventSelectServer(wxListEvent&);
 	void EventShowAbout(wxCommandEvent&);
 	void EventTimer(wxTimerEvent&);
-	void OnViewChangeEvent(wxNotebookEvent&);
+	void EventViewChanged(wxAuiNotebookEvent&);
 
 	void RefreshActiveView();
 

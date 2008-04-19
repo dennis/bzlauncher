@@ -481,7 +481,7 @@ void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 	this->RefreshActiveView();
 }
 
-void MainFrameImpl::OnViewChangeEvent(wxNotebookEvent& event) {
+void MainFrameImpl::EventViewChanged(wxAuiNotebookEvent& event) {
 	int selected = event.GetSelection();
 	if( selected >= 0 && selected < (int)this->viewList.size() ) {
 		wxLogDebug(_T("OnViewChangeEvent() - to view #%d"), selected);

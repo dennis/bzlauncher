@@ -27,7 +27,7 @@
 #include <wx/settings.h>
 #include <wx/statusbr.h>
 #include <wx/toolbar.h>
-#include <wx/notebook.h>
+#include <wx/aui/auibook.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -69,7 +69,7 @@ class MainFrame : public wxFrame
 		wxMenu* helpMenu;
 		wxStatusBar* statusBar;
 		wxToolBar* toolBar;
-		wxNotebook* tabs;
+		wxAuiNotebook* tabs;
 		wxPanel* findPanel;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* queryText;
@@ -83,7 +83,8 @@ class MainFrame : public wxFrame
 		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnViewChangeEvent( wxNotebookEvent& event ){ event.Skip(); }
+		virtual void EventViewChanged( wxAuiNotebookEvent& event ){ event.Skip(); }
+		virtual void EventViewClose( wxAuiNotebookEvent& event ){ event.Skip(); }
 		virtual void EventSearchText( wxCommandEvent& event ){ event.Skip(); }
 		
 	
