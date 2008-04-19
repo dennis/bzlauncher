@@ -75,11 +75,6 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	mainSizer->Add( tabs, 1, wxALL|wxEXPAND, 0 );
 	
-	noTabs = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	noTabs->Hide();
-	
-	mainSizer->Add( noTabs, 1, wxEXPAND | wxALL, 0 );
-	
 	bSizer2->Add( mainSizer, 1, wxEXPAND, 5 );
 	
 	findPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

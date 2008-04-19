@@ -28,12 +28,12 @@
 #include <wx/statusbr.h>
 #include <wx/toolbar.h>
 #include <wx/notebook.h>
-#include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/frame.h>
 #include <wx/hyperlink.h>
 #include <wx/statbmp.h>
@@ -70,7 +70,6 @@ class MainFrame : public wxFrame
 		wxStatusBar* statusBar;
 		wxToolBar* toolBar;
 		wxNotebook* tabs;
-		wxPanel* noTabs;
 		wxPanel* findPanel;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* queryText;
