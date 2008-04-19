@@ -123,31 +123,9 @@ MainFrameImpl::~MainFrameImpl() {
 
 void MainFrameImpl::AddView(ServerListView* view) {
 	wxLogDebug(_T("AddView(%lx)"), view);
-
-	if(this->viewList.size()>1) {
-		this->viewList.push_back(view);
-		this->AddViewAsTab(view);
-		view->serverList->Layout();
-	}
-	else {
-		// We're switching from single to multi-views
-		wxLogDebug(_T("Switching from single to multi-views"));
-
-		ServerListView*	active = this->viewList[0];
-		this->ViewDisconnect(active);
-
-		this->tabs->Show(true);
-		this->noTabs->Show(false);
-		this->noTabs->SetSizer(NULL);
-
-		// Add the new view
-		this->viewList.push_back(view);
-
-		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
-			this->AddViewAsTab((*i));
-			(*i)->serverList->Layout();
-		}
-	}
+	this->viewList.push_back(view);
+	this->AddViewAsTab(view);
+	view->serverList->Layout();
 	this->tabs->Layout();
 }
 
@@ -192,33 +170,6 @@ void MainFrameImpl::AddViewAsTab(ServerListView* view) {
 	this->tabs->AddPage( panel, view->GetName(), true );
 }
 
-void MainFrameImpl::AddViewAsFull(ServerListView* view) {
-	wxLogDebug(_T("AddViewAsFull(%lx)"), view);
-	wxFlexGridSizer* fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
-	fgSizer->AddGrowableCol(0);
-	fgSizer->AddGrowableRow(0);
-	fgSizer->SetFlexibleDirection( wxBOTH );
-	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	if(!view->serverList) {
-		wxLogDebug(_T("Creating view->serverList"));
-		assert(this->noTabs);
-		view->serverList = new wxListCtrl( this->noTabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
-		this->SetupColumns(view);
-	}
-
-	fgSizer->Add(view->serverList, 0, wxEXPAND, 0);
-
-	view->serverList->Layout();
-
-	this->ViewConnect(view);
-
-	this->noTabs->SetSizer(fgSizer);
-	this->noTabs->Layout();
-	fgSizer->Fit( this->noTabs );
-
-}
-
 void MainFrameImpl::ViewConnect(ServerListView* view) {
 	view->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
@@ -235,27 +186,16 @@ void MainFrameImpl::ViewDisconnect(ServerListView* view) {
 void MainFrameImpl::SetupViews() {
 	wxLogDebug(_T("SetupViews()"));
 	this->viewList = appConfig.getViews();
-	
-	bool multiViews = this->viewList.size() > 1;
-	multiViews = true; // Always use Tabs, as "single -> tabs" dosnt work
 
 	assert(this->viewList.size());
 
 	this->activeView = this->viewList[0];
 
-	if( multiViews ) {
-		for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
-			this->AddViewAsTab((*i));
-		}
-		this->tabs->Layout();
+	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
+		this->AddViewAsTab((*i));
 	}
-	else {
-		this->AddViewAsFull(this->activeView);
-		this->noTabs->Layout();
-	}
-
-	this->tabs->Show(multiViews);
-	this->noTabs->Show(!multiViews);
+	this->tabs->Layout();
+	this->tabs->Show(true);
 }
 
 void MainFrameImpl::SetupColumns(ServerListView *view) {

@@ -59,7 +59,6 @@ private:
 
 	void AddView(ServerListView*);
 	void AddViewAsTab(ServerListView*);
-	void AddViewAsFull(ServerListView*);
 
 	void RemoveView(ServerListView*);
 
