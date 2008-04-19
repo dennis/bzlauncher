@@ -2,6 +2,7 @@
  * Renamed RH (RabbitHunt) to RC (Rabbit Chanse)
  * Change behaviour: "View details" is completely removed as "Play" now
    displays the "View details" dialog. Here you can launch BZFlag.
+ * Switched to autotools
 
 BZLauncher v0.9 (released 16th march 2008)
 ------------------------------------------
