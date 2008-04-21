@@ -2,11 +2,6 @@
 - BUG: Column width isnt properly stored/retrieved
 
 - Search:
-	- Each SearchQuery results in a ServerView, which is a subset of the ServerList
-	- All SearchResults are marked as invalid when serverlist is refreshed. The query is 
-	  re-executed to update the SearchResult
-	- Implement a SearchQuery that parses the text and can be compared to the
-	  servers in the serverlist.
 	- Implement a ServerAttribute that contains the server-data (of different type). 
 	- Each search is stored as a tab, and saved/stored on quit/launch
 		when storing config save for each tab:
@@ -18,8 +13,6 @@
 		Support `name` which will name the tab "name" instead of the query
 - Recently played server view
 	- indirectly via Search
-
-- Use autotools
 - protocol handlers. Start app and show "details"
 	optionally:
 		bzflag://dub.bzflag.org:5154?start 
