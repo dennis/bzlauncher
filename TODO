@@ -1,4 +1,5 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
+- BUG: Column width isnt properly stored/retrieved
 
 - Search:
 	- Each SearchQuery results in a ServerView, which is a subset of the ServerList

@@ -112,8 +112,11 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 }
 
 MainFrameImpl::~MainFrameImpl() {
+	/*
+	 * FIXME this will store zeros!
 	for(int col = 0; col < Config::COL_COUNT; col++)
 		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
+	*/
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
 
