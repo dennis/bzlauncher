@@ -94,7 +94,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ), initialLoadTimer(this), filterEnabled(false)  { 
+: MainFrame( parent ), initialLoadTimer(this), filterEnabled(false), activeView(NULL)  { 
 	ServerPingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
@@ -113,11 +113,8 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 }
 
 MainFrameImpl::~MainFrameImpl() {
-	/*
-	 * FIXME this will store zeros!
 	for(int col = 0; col < Config::COL_COUNT; col++)
 		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
-	*/
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setWindowDimensions(GetRect());
 
@@ -200,7 +197,7 @@ void MainFrameImpl::SetupViews() {
 
 	assert(this->viewList.size());
 
-	this->activeView = this->viewList[0];
+	this->SwitchView(this->viewList[0]);
 
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
 		this->AddViewAsTab((*i));
@@ -484,7 +481,7 @@ void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 	ServerListView*	view = new ServerListView(Query(this->queryText->GetValue().c_str()), this->activeView->currentSortMode);
 	this->AddView(view);
-	this->activeView = view;
+	this->SwitchView(view);
 	this->RefreshActiveView();
 }
 
@@ -492,11 +489,22 @@ void MainFrameImpl::EventViewChanged(wxAuiNotebookEvent& event) {
 	int selected = event.GetSelection();
 	if( selected >= 0 && selected < (int)this->viewList.size() ) {
 		wxLogDebug(_T("OnViewChangeEvent() - to view #%d"), selected);
-		this->activeView = this->viewList[event.GetSelection()];
+		this->SwitchView(this->viewList[event.GetSelection()]);
 		this->RefreshActiveView();
 	}
 }
 void MainFrameImpl::EventToolbarToggle(wxCommandEvent& event) {
 	this->toolBar->Show(event.IsChecked());
 	this->Layout();
+}
+
+void MainFrameImpl::SwitchView(ServerListView* newView) {
+	wxLogDebug(_T("SwitchView() - to view #%d"), newView);
+	// Make sure the newView got same column-widths as the current
+	if(this->activeView) {
+		for(int col = 0; col < Config::COL_COUNT; col++)
+			newView->serverList->SetColumnWidth(col,this->activeView->serverList->GetColumnWidth(col));
+	}
+	
+	this->activeView = newView;
 }

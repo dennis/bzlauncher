@@ -64,6 +64,7 @@ private:
 
 	void ViewConnect(ServerListView*);
 	void ViewDisconnect(ServerListView*);
+	void SwitchView(ServerListView*);
 
 protected:
 	wxImageList*	imageList;
