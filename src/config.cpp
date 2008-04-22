@@ -253,3 +253,25 @@ void Config::setToolbarVisible(bool b) {
 		cfg->Write(_T("window/toolbar"), b);
 	);
 }
+
+wxArrayString Config::getRecentServers() const {
+	wxString      str;
+	wxArrayString list;
+	int           count = 0;
+
+	CFG_OP(cfg,
+		while(cfg->Read(wxString::Format(_T("recent/%d"), count), &str)) {
+			list.Insert(str,0);
+			count++;
+		}
+	);
+
+	return list;
+}
+
+void Config::setRecentServers(const wxArrayString& list) {
+	CFG_OP(cfg,
+		for(unsigned int i = 0; i < list.GetCount(); i++ ) 
+			cfg->Write(wxString::Format(_T("recent/%d"), i), list.Item(i));
+	);
+}

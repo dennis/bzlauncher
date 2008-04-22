@@ -31,10 +31,10 @@ class MainFrameImpl;
 /// Starting point of BZLauncher 
 class BZLauncherApp : public wxApp {
 private:
-	MainFrameImpl*		mainFrame;
 	wxString 			selectedServerHostPort;
 
 public:
+	MainFrameImpl*		mainFrame;
 	ListServerHandler	listServerHandler;
 
 	virtual bool OnInit();

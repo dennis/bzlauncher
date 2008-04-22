@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 #include "serverdlg_impl.h"
 #include "main.h"
+#include "mainframe_impl.h"
 
 #include <wx/msgdlg.h>
 
@@ -135,6 +136,6 @@ void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
 	int selected = this->teamCbx->GetSelection();
 	if(selected != wxNOT_FOUND)
 		team = (Server::team_t*)this->teamCbx->GetClientData(selected);
+	wxGetApp().mainFrame->AddAsRecentServer(this->serverHostPort->GetLabel());
 	wxGetApp().LaunchSelectedServer(this, *team);
 }
-

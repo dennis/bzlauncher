@@ -40,6 +40,7 @@ THE SOFTWARE.
 class MainFrameImpl : public MainFrame {
 private:
 	wxArrayString	favoriteServers;
+	wxArrayString	recentServers;
 
 	void SetupColumns(ServerListView*);
 	wxRect DetermineFrameSize() const;
@@ -98,6 +99,8 @@ public:
 
 	void LaunchGame();
 	void ShowDetails();
+
+	void AddAsRecentServer(const wxString&);
 };
 
 #endif 

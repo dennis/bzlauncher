@@ -34,5 +34,9 @@ bool Query::operator==(const Server* server) const {
 		return server->IsFFA();
 	if( this->query.Cmp(_T("RC")) == 0 )
 		return server->IsRC();
+	if( this->query.Cmp(_T("FAVORITE")) == 0 )
+		return server->favorite;
+	if( this->query.Cmp(_T("RECENT")) == 0 )
+		return server->recent;
 	return server->getName().Cmp(this->query) == 0;
 }

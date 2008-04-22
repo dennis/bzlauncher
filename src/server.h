@@ -100,6 +100,7 @@ public:
 
 	bool		fullyParsed;
 	bool		favorite;
+	bool		recent;
 
 	Server();
 

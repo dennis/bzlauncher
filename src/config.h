@@ -71,6 +71,9 @@ public:
 
 	bool getToolbarVisible();
 	void setToolbarVisible(bool);
+
+	wxArrayString getRecentServers() const;
+	void setRecentServers(const wxArrayString&);
 };
 
 /// I prefer a global variable over static class and singleton

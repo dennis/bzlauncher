@@ -108,6 +108,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->SetSize(this->DetermineFrameSize());
 	this->favoriteServers   = appConfig.getFavorites();
+	this->recentServers 	= appConfig.getRecentServers();
 	this->toolBar->Show(appConfig.getToolbarVisible());
 	this->initialLoadTimer.Start(300,true);
 }
@@ -116,6 +117,7 @@ MainFrameImpl::~MainFrameImpl() {
 	for(int col = 0; col < Config::COL_COUNT; col++)
 		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
 	appConfig.setFavorites(this->favoriteServers);
+	appConfig.setRecentServers(this->recentServers);
 	appConfig.setWindowDimensions(GetRect());
 
 	appConfig.setViews(this->viewList);
@@ -272,6 +274,8 @@ void MainFrameImpl::RefreshActiveView() {
 
 		// Check if its a favorite
 		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
+		// .. and recent
+		current->recent = (this->recentServers.Index(current->getName()) != wxNOT_FOUND);
 	
 		// Server
 		list->InsertItem(idx, current->getName());
@@ -507,4 +511,13 @@ void MainFrameImpl::SwitchView(ServerListView* newView) {
 	}
 	
 	this->activeView = newView;
+}
+
+void MainFrameImpl::AddAsRecentServer(const wxString& server) {
+	this->recentServers.Add(server);
+
+	// Store max 10 servers
+	if( this->recentServers.Count() > 10 ) {
+		this->recentServers.RemoveAt(10, this->recentServers.Count() - 10);
+	}
 }
