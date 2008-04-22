@@ -492,4 +492,7 @@ void MainFrameImpl::EventViewChanged(wxAuiNotebookEvent& event) {
 		this->RefreshActiveView();
 	}
 }
-
+void MainFrameImpl::EventToolbarToggle(wxCommandEvent& event) {
+	this->toolBar->Show(event.IsChecked());
+	this->Layout();
+}

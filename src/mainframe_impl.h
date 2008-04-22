@@ -85,6 +85,7 @@ protected:
 	void EventShowAbout(wxCommandEvent&);
 	void EventTimer(wxTimerEvent&);
 	void EventViewChanged(wxAuiNotebookEvent&);
+	void EventToolbarToggle(wxCommandEvent&);
 
 	void RefreshActiveView();
 

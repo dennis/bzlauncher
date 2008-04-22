@@ -3,6 +3,7 @@
  * Change behaviour: "View details" is completely removed as "Play" now
    displays the "View details" dialog. Here you can launch BZFlag.
  * Switched to autotools
+ * Added a menuoption that toggles the visibility of the toolbar
 
 BZLauncher v0.9 (released 16th march 2008)
 ------------------------------------------

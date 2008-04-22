@@ -24,6 +24,10 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	actionMenu->Append( refreshList );
 	wxMenuItem* search = new wxMenuItem( actionMenu, ID_SEARCH, wxString( _("Search") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( search );
+	wxMenuItem* toolbar = new wxMenuItem( actionMenu, ID_TOOLBAR, wxString( _("Toolbar") ) , wxEmptyString, wxITEM_CHECK );
+	actionMenu->Append( toolbar );
+	toolbar->Check( true );
+	
 	
 	actionMenu->AppendSeparator();
 	wxMenuItem* quit = new wxMenuItem( actionMenu, ID_QUIT, wxString( _("&Quit") ) + wxT('\t') + wxT("CTRL-Q"), wxEmptyString, wxITEM_NORMAL );
@@ -105,6 +109,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	// Connect Events
 	this->Connect( refreshList->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventRefresh ) );
+	this->Connect( toolbar->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventToolbarToggle ) );
 	this->Connect( quit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventQuit ) );
 	this->Connect( joinServer->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventLaunch ) );
 	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );

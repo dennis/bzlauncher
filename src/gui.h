@@ -56,6 +56,7 @@ class MainFrame : public wxFrame
 		{
 			ID_REFRESH_LIST = 1000,
 			ID_SEARCH,
+			ID_TOOLBAR,
 			ID_QUIT,
 			ID_LAUNCH,
 			ID_PING,
@@ -77,6 +78,7 @@ class MainFrame : public wxFrame
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void EventRefresh( wxCommandEvent& event ){ event.Skip(); }
+		virtual void EventToolbarToggle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventQuit( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventLaunch( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
