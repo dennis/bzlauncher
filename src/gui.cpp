@@ -24,7 +24,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	actionMenu->Append( refreshList );
 	wxMenuItem* search = new wxMenuItem( actionMenu, ID_SEARCH, wxString( _("Search") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( search );
-	wxMenuItem* toolbar = new wxMenuItem( actionMenu, ID_TOOLBAR, wxString( _("Toolbar") ) , wxEmptyString, wxITEM_CHECK );
+	wxMenuItem* toolbar = new wxMenuItem( actionMenu, ID_TOOLBAR, wxString( _("Toolbar") ) + wxT('\t') + wxT("CTRL-T"), wxEmptyString, wxITEM_CHECK );
 	actionMenu->Append( toolbar );
 	toolbar->Check( true );
 	

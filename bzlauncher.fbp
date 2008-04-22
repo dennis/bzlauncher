@@ -156,7 +156,7 @@
                         <property name="kind">wxITEM_CHECK</property>
                         <property name="label">Toolbar</property>
                         <property name="name">toolbar</property>
-                        <property name="shortcut"></property>
+                        <property name="shortcut">CTRL-T</property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">EventToolbarToggle</event>
                         <event name="OnUpdateUI"></event>

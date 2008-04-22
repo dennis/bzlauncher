@@ -237,3 +237,19 @@ void Config::setViews(viewlist_t list) {
 		}
 	);
 }
+
+bool Config::getToolbarVisible() {
+	bool rc = true;
+
+	CFG_OP(cfg,
+		cfg->Read(_T("window/toolbar"), &rc);
+	);
+
+	return rc;
+}
+
+void Config::setToolbarVisible(bool b) {
+	CFG_OP(cfg,
+		cfg->Write(_T("window/toolbar"), b);
+	);
+}

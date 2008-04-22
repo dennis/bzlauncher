@@ -68,6 +68,9 @@ public:
 
 	viewlist_t getViews() const;
 	void setViews(viewlist_t);
+
+	bool getToolbarVisible();
+	void setToolbarVisible(bool);
 };
 
 /// I prefer a global variable over static class and singleton

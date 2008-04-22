@@ -108,6 +108,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->SetSize(this->DetermineFrameSize());
 	this->favoriteServers   = appConfig.getFavorites();
+	this->toolBar->Show(appConfig.getToolbarVisible());
 	this->initialLoadTimer.Start(300,true);
 }
 
@@ -121,6 +122,9 @@ MainFrameImpl::~MainFrameImpl() {
 	appConfig.setWindowDimensions(GetRect());
 
 	appConfig.setViews(this->viewList);
+	appConfig.setToolbarVisible(this->toolBar->IsShown());
+
+	this->toolBar->Show(appConfig.getToolbarVisible());
 
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i )
 		delete *i;
