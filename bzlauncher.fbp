@@ -352,6 +352,20 @@
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>
                         </object>
+                        <object class="tool" expanded="1">
+                            <property name="bitmap">icons/search32.png; Load From File</property>
+                            <property name="id">ID_SEARCH</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Search</property>
+                            <property name="name">searchTool</property>
+                            <property name="statusbar"></property>
+                            <property name="tooltip"></property>
+                            <event name="OnMenuSelection"></event>
+                            <event name="OnToolClicked">EventSearch</event>
+                            <event name="OnToolEnter"></event>
+                            <event name="OnToolRClicked"></event>
+                            <event name="OnUpdateUI"></event>
+                        </object>
                         <object class="toolSeparator" expanded="1" />
                         <object class="tool" expanded="1">
                             <property name="bitmap">icons/bzflag32.png; Load From File</property>
@@ -363,20 +377,6 @@
                             <property name="tooltip"></property>
                             <event name="OnMenuSelection"></event>
                             <event name="OnToolClicked"></event>
-                            <event name="OnToolEnter"></event>
-                            <event name="OnToolRClicked"></event>
-                            <event name="OnUpdateUI"></event>
-                        </object>
-                        <object class="tool" expanded="1">
-                            <property name="bitmap">icons/favorite32.png; Load From File</property>
-                            <property name="id">ID_FAVORITE</property>
-                            <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Favorite</property>
-                            <property name="name">favoriteTool</property>
-                            <property name="statusbar"></property>
-                            <property name="tooltip"></property>
-                            <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked">EventFavoriteToggle</event>
                             <event name="OnToolEnter"></event>
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>
@@ -396,15 +396,15 @@
                             <event name="OnUpdateUI"></event>
                         </object>
                         <object class="tool" expanded="1">
-                            <property name="bitmap">icons/search32.png; Load From File</property>
-                            <property name="id">ID_SEARCH</property>
+                            <property name="bitmap">icons/favorite32.png; Load From File</property>
+                            <property name="id">ID_FAVORITE</property>
                             <property name="kind">wxITEM_NORMAL</property>
-                            <property name="label">Search</property>
-                            <property name="name">searchTool</property>
+                            <property name="label">Favorite</property>
+                            <property name="name">favoriteTool</property>
                             <property name="statusbar"></property>
                             <property name="tooltip"></property>
                             <event name="OnMenuSelection"></event>
-                            <event name="OnToolClicked">EventSearch</event>
+                            <event name="OnToolClicked">EventFavoriteToggle</event>
                             <event name="OnToolEnter"></event>
                             <event name="OnToolRClicked"></event>
                             <event name="OnUpdateUI"></event>

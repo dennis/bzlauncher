@@ -79,9 +79,9 @@ class MainFrame : public wxFrame
 		virtual void EventRefresh( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventQuit( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventLaunch( wxCommandEvent& event ){ event.Skip(); }
-		virtual void EventFavoriteToggle( wxCommandEvent& event ){ event.Skip(); }
-		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventSearch( wxCommandEvent& event ){ event.Skip(); }
+		virtual void EventPingServer( wxCommandEvent& event ){ event.Skip(); }
+		virtual void EventFavoriteToggle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventShowAbout( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventViewChanged( wxAuiNotebookEvent& event ){ event.Skip(); }
 		virtual void EventViewClose( wxAuiNotebookEvent& event ){ event.Skip(); }

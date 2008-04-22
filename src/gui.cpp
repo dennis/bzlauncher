@@ -55,11 +55,11 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	toolBar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_TEXT ); 
 	toolBar->AddTool( ID_REFRESH_LIST, _("Refresh"), wxGetBitmapFromMemory(refresh32), wxNullBitmap, wxITEM_NORMAL, _("Refresh list"), _("Refresh list") );
+	toolBar->AddTool( ID_SEARCH, _("Search"), wxGetBitmapFromMemory(search32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddSeparator();
 	toolBar->AddTool( ID_LAUNCH, _("Play"), wxGetBitmapFromMemory(bzflag32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
-	toolBar->AddTool( ID_FAVORITE, _("Favorite"), wxGetBitmapFromMemory(favorite32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddTool( ID_PING, _("Ping"), wxGetBitmapFromMemory(ping32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
-	toolBar->AddTool( ID_SEARCH, _("Search"), wxGetBitmapFromMemory(search32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
+	toolBar->AddTool( ID_FAVORITE, _("Favorite"), wxGetBitmapFromMemory(favorite32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddSeparator();
 	toolBar->AddTool( ID_ABOUT, _("About"), wxGetBitmapFromMemory(about32), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->Realize();
@@ -107,9 +107,9 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Connect( refreshList->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventRefresh ) );
 	this->Connect( quit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventQuit ) );
 	this->Connect( joinServer->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventLaunch ) );
-	this->Connect( ID_FAVORITE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventFavoriteToggle ) );
-	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
 	this->Connect( ID_SEARCH, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ) );
+	this->Connect( ID_PING, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventPingServer ) );
+	this->Connect( ID_FAVORITE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventFavoriteToggle ) );
 	this->Connect( ID_ABOUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::EventShowAbout ) );
 	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::EventViewChanged ), NULL, this );
 	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( MainFrame::EventViewClose ), NULL, this );
