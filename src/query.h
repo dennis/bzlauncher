@@ -25,12 +25,15 @@ THE SOFTWARE.
 #define __query__
 
 #include <wx/string.h>
+#include <wx/arrstr.h>
+
 class Server;
 
 class Query {
 private:
 	wxString query;
-	
+	wxArrayString	tokens;
+
 public:
 	Query(const wxString& q = _T("")) {
 		this->set(q);
@@ -40,9 +43,7 @@ public:
 		return this->query;
 	}
 
-	void set(const wxString &q) {
-		this->query = q;
-	}
+	void set(const wxString &);
 
 	bool operator==(const Server*) const;
 	bool operator!=(const Server* s) const {

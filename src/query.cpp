@@ -21,22 +21,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include <wx/tokenzr.h>
 #include "server.h"
 #include "query.h"
 
 bool Query::operator==(const Server* server) const {
-	// FIXME Implement this for real
-	if( this->query.Cmp(_T("ALL")) == 0 )
-		return true;
-	if( this->query.Cmp(_T("CTF")) == 0 )
-		return server->IsCTF();
-	if( this->query.Cmp(_T("FFA")) == 0 )
-		return server->IsFFA();
-	if( this->query.Cmp(_T("RC")) == 0 )
-		return server->IsRC();
-	if( this->query.Cmp(_T("FAVORITE")) == 0 )
-		return server->favorite;
-	if( this->query.Cmp(_T("RECENT")) == 0 )
-		return server->recent;
-	return server->getName().Cmp(this->query) == 0;
+	bool result = true;
+	wxString token;
+
+	for(unsigned int i = 0; i < this->tokens.GetCount() && result; i++) {
+		token = this->tokens[i];
+
+		if( token.CmpNoCase(_T("ALL")) == 0 )
+			result &= true;
+		else if( token.CmpNoCase(_T("CTF")) == 0 )
+			result &= server->IsCTF();
+		else if( token.CmpNoCase(_T("FFA")) == 0 )
+			result &= server->IsFFA();
+		else if( token.CmpNoCase(_T("RC")) == 0 )
+			result &= server->IsRC();
+		else if( token.CmpNoCase(_T("FAVORITE")) == 0 )
+			result &= server->favorite;
+		else if( token.CmpNoCase(_T("RECENT")) == 0 )
+			result &= server->recent;
+		else 
+			result &= 
+				(server->getName().Find(token) != wxNOT_FOUND) ||
+				(server->longName.Find(token) != wxNOT_FOUND);
+	}
+
+	return result;
+}
+
+void Query::set(const wxString &q) {
+	this->query = q;
+
+	this->tokens.Clear();
+
+	wxStringTokenizer	tok(q, _T(" "));
+
+	while(tok.HasMoreTokens()) {
+		this->tokens.Add(tok.GetNextToken());
+	}
 }
