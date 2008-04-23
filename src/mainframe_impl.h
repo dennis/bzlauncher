@@ -97,7 +97,6 @@ public:
 
 	void SetStatusText(const wxString&);
 
-	void LaunchGame();
 	void ShowDetails();
 
 	void AddAsRecentServer(const wxString&);

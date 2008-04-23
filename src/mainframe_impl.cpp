@@ -365,11 +365,6 @@ void MainFrameImpl::EventLaunch(wxCommandEvent& WXUNUSED(event)) {
 	this->ShowDetails();
 }
 
-void MainFrameImpl::LaunchGame() {
-	BZLauncherApp& app = wxGetApp();
-	app.LaunchSelectedServer(this);
-}
-
 void MainFrameImpl::EventColClick(wxListEvent& event) {
 	if(abs(this->activeView->currentSortMode) == (event.GetColumn()+1))
 		this->activeView->currentSortMode *= -1;
