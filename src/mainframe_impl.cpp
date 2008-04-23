@@ -349,6 +349,7 @@ void MainFrameImpl::EventSelectServer(wxListEvent& event) {
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
 	const wxString s = srv->getName();
 	wxGetApp().SetSelectedServer(s);
+	this->ShowDetails();
 }
 
 
