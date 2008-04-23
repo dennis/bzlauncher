@@ -4,8 +4,6 @@
 	- Query parsing (ideas)
 		Support AND + OR + NOT + Grouping... Needs more pondering
 		Support `name` which will name the tab "name" instead of the query
-- Recently played server view
-	- indirectly via Search
 - protocol handlers. Start app and show "details"
 	optionally:
 		bzflag://dub.bzflag.org:5154?start 
