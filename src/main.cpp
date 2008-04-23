@@ -55,8 +55,8 @@ void BZLauncherApp::SetStatusText(const wxString& text) {
 	this->mainFrame->SetStatusText(text);
 }
 
-void BZLauncherApp::RefreshServerList() {
-	this->listServerHandler.GetServerList();
+void BZLauncherApp::RefreshServerList(wxArrayString& favs, wxArrayString& recents) {
+	this->listServerHandler.GetServerList(favs, recents);
 }
 
 const wxString BZLauncherApp::GetSelectedServer() {

@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include <wx/wx.h>
+#include <wx/arrstr.h>
 
 #include "listserverhandler.h"
 #include "server.h"
@@ -42,7 +43,7 @@ public:
 	~BZLauncherApp();
 
 	void SetStatusText(const wxString&);
-	void RefreshServerList();
+	void RefreshServerList(wxArrayString&, wxArrayString&);
 
 	const wxString GetSelectedServer();
 	void SetSelectedServer(const wxString&);

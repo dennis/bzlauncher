@@ -32,7 +32,7 @@ Server::team_t	Server::TeamObserver = Server::TEAM_OBSERVER;
 Server::team_t	Server::TeamAuto     = Server::TEAM_COUNT;
 
 Server::Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), maxPlayerScore(0), maxTeamScore(0),
-	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false) {
+	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false), recent(false) {
 }
 
 wxString Server::getName() const {

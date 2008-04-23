@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <wx/string.h>
 #include <wx/list.h>
 #include <wx/filesys.h>
+#include <wx/arrstr.h>
 #include <vector>
 
 #include "server.h"
@@ -42,7 +43,7 @@ class ListServerHandler {
 private:
 
 	bool GetListServerResponse();
-	bool ParseLine(const wxString&);
+	bool ParseLine(const wxString&, wxArrayString&, wxArrayString&);
 
 	void ClearList();
 
@@ -64,7 +65,7 @@ public:
 
 	ServerResultSet Search(const Query&);
 
-	void GetServerList();
+	void GetServerList(wxArrayString&,wxArrayString&);
 	Server* FindByName(const wxString&);
 };
 

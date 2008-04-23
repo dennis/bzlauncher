@@ -99,6 +99,9 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
 
+	this->favoriteServers   = appConfig.getFavorites();
+	this->recentServers 	= appConfig.getRecentServers();
+
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 
@@ -107,8 +110,6 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->SetupViews();
 
 	this->SetSize(this->DetermineFrameSize());
-	this->favoriteServers   = appConfig.getFavorites();
-	this->recentServers 	= appConfig.getRecentServers();
 	this->toolBar->Show(appConfig.getToolbarVisible());
 	this->initialLoadTimer.Start(300,true);
 }
@@ -244,7 +245,7 @@ void MainFrameImpl::SetStatusText(const wxString& t) {
 
 void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 	wxLogDebug(_T("EventRefresh()"));
-	wxGetApp().RefreshServerList();
+	wxGetApp().RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
 }
 
@@ -272,11 +273,10 @@ void MainFrameImpl::RefreshActiveView() {
 	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
 		Server*	current = *i;
 
-		// Check if its a favorite
+		// Check if its a favorite and recent
 		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
-		// .. and recent
-		current->recent = (this->recentServers.Index(current->getName()) != wxNOT_FOUND);
-	
+		current->recent   = (this->recentServers.Index(current->getName()) != wxNOT_FOUND);
+
 		// Server
 		list->InsertItem(idx, current->getName());
 		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
@@ -437,7 +437,7 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	wxLogDebug(_T("EventTimer()"));
-	wxGetApp().RefreshServerList();
+	wxGetApp().RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
 	this->pingTimer.Start(10);
 }

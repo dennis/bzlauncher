@@ -255,12 +255,14 @@ void Config::setToolbarVisible(bool b) {
 }
 
 wxArrayString Config::getRecentServers() const {
+	wxLogDebug(_T("getRecentservers()"));
 	wxString      str;
 	wxArrayString list;
 	int           count = 0;
 
 	CFG_OP(cfg,
 		while(cfg->Read(wxString::Format(_T("recent/%d"), count), &str)) {
+			wxLogDebug(str);
 			list.Insert(str,0);
 			count++;
 		}

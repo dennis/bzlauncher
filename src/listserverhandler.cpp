@@ -56,7 +56,7 @@ ListServerHandler::~ListServerHandler() {
 }
 
 
-void ListServerHandler::GetServerList() {
+void ListServerHandler::GetServerList(wxArrayString& favs,wxArrayString& recent) {
 	wxBusyCursor wait;
 	BZLauncherApp& app = wxGetApp();
 
@@ -76,16 +76,17 @@ void ListServerHandler::GetServerList() {
 		while(tok.HasMoreTokens()) {
 			wxString token = tok.GetNextToken();
 			
-			this->ParseLine(token);
+			this->ParseLine(token, favs, recent);
 		}
 	}
 	else {
 		wxLogError(_("Can't connect to listserver!"));
 	}
 	app.SetStatusText(wxString::Format(_("Found %d server(s)"), this->serverList.GetCount()));
+
 }
 
-bool ListServerHandler::ParseLine(const wxString& line) {
+bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxArrayString& recent) {
 	Server* s = new Server;
 
 	s->fullyParsed  = false;
@@ -138,6 +139,10 @@ bool ListServerHandler::ParseLine(const wxString& line) {
 		}
 		i++;
 	}
+
+	
+	s->favorite = (favs.Index(s->getName()) != wxNOT_FOUND);
+	s->recent   = (recent.Index(s->getName()) != wxNOT_FOUND);
 
 	this->serverList.Append(s);
 
