@@ -205,6 +205,8 @@ void MainFrameImpl::SetupViews() {
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
 		this->AddViewAsTab((*i));
 	}
+
+	this->tabs->SetSelection(0);
 	this->tabs->Layout();
 	this->tabs->Show(true);
 }
