@@ -227,6 +227,8 @@ void Config::setViews(viewlist_t list) {
 	wxString query;
 	long sortmode;
 
+	viewlist_t old_list = this->getViews();
+
 	CFG_OP(cfg,
 		for(viewlist_t::iterator i = list.begin(); i != list.end(); ++i ) {
 			sortmode = (*i)->currentSortMode;
@@ -234,6 +236,10 @@ void Config::setViews(viewlist_t list) {
 			cfg->Write(wxString::Format(_T("views/%d.query"), count), query);
 			cfg->Write(wxString::Format(_T("views/%d.sortmode"), count), sortmode);
 			count++;
+		}
+		for(;count < old_list.size(); count++) {
+			cfg->DeleteEntry(wxString::Format(_T("views/%d.query"), count));
+			cfg->DeleteEntry(wxString::Format(_T("views/%d.sortmode"), count));
 		}
 	);
 }

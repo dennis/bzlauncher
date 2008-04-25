@@ -142,15 +142,24 @@ void MainFrameImpl::AddView(ServerListView* view) {
 
 void MainFrameImpl::RemoveView(ServerListView* view) {
 	// Ignore the delete if we only got one view
+	wxLogDebug(_T("RemoveView(%lx)"), view);
 	if(this->viewList.size()==1) {
-		this->SetStatusText(_("I won't remove the last view"));
 		return;
 	}
 
 	viewlist_t::iterator i = find(this->viewList.begin(), this->viewList.end(), view);
-
 	if(i == this->viewList.end())
 		return;
+
+	wxLogDebug(_T("removing view from this->viewList"));	
+	this->viewList.erase(i);
+	this->ViewDisconnect(view);
+
+	wxLogDebug(_T("delete view"));
+	delete view;
+
+	this->activeView = NULL; // FIXME
+	wxLogDebug(_T("RemoveView() done"));
 }
 
 void MainFrameImpl::AddViewAsTab(ServerListView* view) {
@@ -501,21 +510,34 @@ void MainFrameImpl::EventToolbarToggle(wxCommandEvent& event) {
 }
 
 void MainFrameImpl::SwitchView(ServerListView* newView) {
-	wxLogDebug(_T("SwitchView() - to view #%d"), newView);
+	wxLogDebug(_T("SwitchView() - to view #%lx"), newView);
 	// Make sure the newView got same column-widths as the current
 	if(this->activeView) {
+		wxLogDebug(_T("SwitchView() - SetColumnWidth() from %lx"), this->activeView);
 		for(int col = 0; col < Config::COL_COUNT; col++)
 			newView->serverList->SetColumnWidth(col,this->activeView->serverList->GetColumnWidth(col));
 	}
 	
 	this->activeView = newView;
+	wxLogDebug(_T("SwitchView() - done"));
 }
 
 void MainFrameImpl::AddAsRecentServer(const wxString& server) {
+	const int max_recent = 10;
 	this->recentServers.Add(server);
 
 	// Store max 10 servers
-	if( this->recentServers.Count() > 10 ) {
-		this->recentServers.RemoveAt(10, this->recentServers.Count() - 10);
+	if( this->recentServers.Count() > max_recent ) {
+		this->recentServers.RemoveAt(max_recent, this->recentServers.Count() - max_recent);
 	}
+}
+
+void MainFrameImpl::EventViewClose(wxAuiNotebookEvent& event) {
+	wxLogDebug(_T("EventViewVlose()"));
+	if(this->viewList.size()==1) {
+		this->SetStatusText(_("I won't remove the last view"));
+		event.Veto();
+		return;
+	}
+	this->RemoveView(this->activeView);
 }
