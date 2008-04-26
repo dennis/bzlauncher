@@ -57,8 +57,8 @@ ShowUnInstDetails show
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "..\bzlauncher.exe"
-  File "..\msvcr80.dll"
+  File "..\Release\bzlauncher.exe"
+;  File "..\msvcr80.dll"
   File "..\README"
   File "..\MIT-LICENSE"
   File "BZLauncher.url"
@@ -72,6 +72,12 @@ Section "MainSection" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\BZLauncher.lnk" "$INSTDIR\bzlauncher.exe"
   CreateShortCut "$DESKTOP\BZLauncher.lnk" "$INSTDIR\bzlauncher.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
+  
+; bzlauncher:// protocol-handler
+  WriteRegStr HKCR "bzlauncher" "" "URL:BZLauncher Protocol Handler"
+  WriteRegStr HKCR "bzlauncher" "URL Protocol" ""
+  WriteRegStr HKCR "bzlauncher" "DefaultIcon" "$INSTDIR\bzlauncher.exe"
+  WriteRegStr HKCR "bzlauncher\shell\open\command" "" "$INSTDIR\bzlauncher.exe %1"
 SectionEnd
 
 Section -AdditionalIcons
@@ -111,7 +117,7 @@ Section Uninstall
   Delete "$INSTDIR\README.txt"
   Delete "$INSTDIR\MIT-LICENSE.txt"
   Delete "$INSTDIR\bzlauncher.exe"
-  Delete "$INSTDIR\msvcr80.dll"
+;  Delete "$INSTDIR\msvcr80.dll"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
@@ -123,5 +129,8 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  
+  DeleteRegKey HKCR "bzlauncher"
+  
   SetAutoClose true
 SectionEnd
