@@ -7,6 +7,9 @@
  * Added the concept of views. You can have multipe views of the
    server-list: E.g. One for CTF servers and one for the recent 
    played servers.
+ * BZLauncher now supports bzlauncher://server:port or bzflag://server:port
+   as arguments (this allows you to configure e.g firefox to start 
+   BZLauncher when you click bzlauncher://-links)
 
 BZLauncher v0.9 (released 16th march 2008)
 ------------------------------------------
