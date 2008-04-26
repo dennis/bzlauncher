@@ -4,6 +4,9 @@
    displays the "View details" dialog. Here you can launch BZFlag.
  * Switched to autotools
  * Added a menuoption that toggles the visibility of the toolbar
+ * Added the concept of views. You can have multipe views of the
+   server-list: E.g. One for CTF servers and one for the recent 
+   played servers.
 
 BZLauncher v0.9 (released 16th march 2008)
 ------------------------------------------
