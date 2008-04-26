@@ -489,10 +489,13 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 	this->filterEnabled = !this->filterEnabled;
 	this->findPanel->Show(this->filterEnabled);
-	if(this->filterEnabled)
+	if(this->filterEnabled) {
+		this->queryText->SetValue(this->activeView->query.get());
 		this->queryText->SetFocus();
-	else
+	}
+	else {
 		this->activeView->serverList->SetFocus();
+	}
 	this->Layout();
 }
 
