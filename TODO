@@ -3,7 +3,6 @@
 	- needs to support `name`
 - "Ping" dosn't seem to work (it ignores it?)
 - CTRL-W to close tab would be nice too
-- CTRL-TAB + CTRL-SHIFT-TAB to navigate views
 - protocol handlers. Start app and show "details"
 	optionally:
 		bzflag://dub.bzflag.org:5154?start 

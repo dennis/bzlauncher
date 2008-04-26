@@ -474,7 +474,7 @@
                                 <property name="uniform_bitmap_size"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style"></property>
+                                <property name="window_style">wxTAB_TRAVERSAL</property>
                                 <event name="OnAuiNotebookAllowDND"></event>
                                 <event name="OnAuiNotebookBeginDrag"></event>
                                 <event name="OnAuiNotebookButton"></event>
