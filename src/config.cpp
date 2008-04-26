@@ -73,9 +73,6 @@ void Config::versionCheck() {
 					cfg->Read(_T("window/sortmode"), &sortmode);
 					cfg->DeleteEntry(_T("window/sortmode"));
 
-					cfg->Write(_T("views/0.sortmode"), sortmode);
-					cfg->Write(_T("views/0.query"), _T("`All`"));
-
 					cfg->Write(_T("cfgversion"), 1);
 				}
 				break;
@@ -216,6 +213,15 @@ viewlist_t Config::getViews() const {
 			list.push_back(view);
 			count++;
 		}
+
+		// Make sure we got at least one view
+		if(list.size() == 0) {
+			ServerListView*	viewAll = new ServerListView(Query(_T("All")), sortmode);
+			list.push_back(viewAll);
+			ServerListView*	viewRecent = new ServerListView(Query(_T("Recent")), sortmode);
+			list.push_back(viewRecent);
+		}
+
 	);
 
 	return list;
