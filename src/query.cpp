@@ -47,7 +47,8 @@ bool Query::operator==(const Server* server) const {
 		else 
 			result &= 
 				(server->getName().Find(token) != wxNOT_FOUND) ||
-				(server->longName.Find(token) != wxNOT_FOUND);
+				(server->longName.Find(token) != wxNOT_FOUND) ||
+				(server->protocolVersion.Find(token) != wxNOT_FOUND);
 	}
 
 	return result;
