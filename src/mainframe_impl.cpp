@@ -316,7 +316,7 @@ void MainFrameImpl::RefreshActiveView() {
 		list->SetItem(idx, 4, _("..."));
 
 		// Favorite
-		this->UpdateServer(idx,current);
+		this->UpdateServer(this->activeView, idx,current);
 
 		// Use colors to show if servers are supported by bzlauncher(Red), full (Blue), empty (grey)
 		if(!current->fullyParsed)
@@ -407,7 +407,7 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 			app.SetStatusText(_("Couldnt find row! :("));
 		}
 		else {
-			this->UpdateServer(idx,s);
+			this->UpdateServer(this->activeView,idx,s);
 			this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
 		}
 	}
@@ -416,21 +416,21 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 	}
 }
 
-void MainFrameImpl::UpdateServer(int idx, Server* s) {
+void MainFrameImpl::UpdateServer(ServerListView* view, int idx, Server* s) {
 	if(s->favorite) {
-		this->activeView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
-		this->activeView->serverList->SetItem(idx, 5, _("Yes"));
+		view->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
+		view->serverList->SetItem(idx, 5, _("Yes"));
 	}
 	else {
-		this->activeView->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
-		this->activeView->serverList->SetItem(idx, 5, _("No"));
+		view->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Sans") ));
+		view->serverList->SetItem(idx, 5, _("No"));
 	}
 
 	if(s->ping.isOK()) {
-		this->activeView->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
+		view->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
 	}
 	else {
-		this->activeView->serverList->SetItem(idx, 4, _("n/a"));
+		view->serverList->SetItem(idx, 4, _("n/a"));
 	}
 }
 
@@ -468,16 +468,20 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	ip.Service(port);
 
 	long item = -1;
-	for ( ;; ) {
-		item = this->activeView->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
+	ServerListView* view= NULL;
+	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
+		view = *i;
+		for ( ;; ) {
+			item = view->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
 
-		if(item == -1)
-			break;
+			if(item == -1)
+				break;
 
-		Server* current = reinterpret_cast<Server*>(this->activeView->serverList->GetItemData(item));
+			Server* current = reinterpret_cast<Server*>(view->serverList->GetItemData(item));
 
-		if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() && ip.Service()) {
-			this->UpdateServer(item, current);
+			if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() && ip.Service()) {
+				this->UpdateServer(view, item, current);
+			}
 		}
 	}
 }

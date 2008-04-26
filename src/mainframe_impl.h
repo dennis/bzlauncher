@@ -45,7 +45,7 @@ private:
 	void SetupColumns(ServerListView*);
 	wxRect DetermineFrameSize() const;
 
-	void UpdateServer(int idx, Server*);
+	void UpdateServer(ServerListView*, int idx, Server*);
 
 	wxTimer			initialLoadTimer;
 	ServerPingTrackerTimer	pingTimer;
