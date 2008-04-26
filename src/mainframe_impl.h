@@ -67,6 +67,8 @@ private:
 	void ViewDisconnect(ServerListView*);
 	void SwitchView(ServerListView*);
 
+	bool CanCloseView(ServerListView*);
+
 protected:
 	wxImageList*	imageList;
 	int				imgFavIdx;

@@ -578,21 +578,35 @@ void MainFrameImpl::AddAsRecentServer(const wxString& server) {
 
 void MainFrameImpl::EventViewClose(wxAuiNotebookEvent& event) {
 	wxLogDebug(_T("EventViewVlose()"));
-	if(this->viewList.size()==1) {
-		this->SetStatusText(_("I won't remove the last view"));
+	if(!this->CanCloseView(this->activeView)) {
 		event.Veto();
-		return;
 	}
-	this->RemoveView(this->activeView);
+	else {
+		this->RemoveView(this->activeView);
+	}
 }
 
 void MainFrameImpl::EventCloseView(wxCommandEvent&) {
 	wxLogDebug(_T("EventCloseView()"));
+	if(this->CanCloseView(this->activeView)) {
+		ServerListView*	deleting = this->activeView;
+		this->RemoveView(deleting);
+		this->tabs->RemovePage(this->tabs->GetSelection());
+	}
+}
+
+bool MainFrameImpl::CanCloseView(ServerListView* view) {
 	if(this->viewList.size()==1) {
 		this->SetStatusText(_("I won't remove the last view"));
-		return;
+		return false;
 	}
-	ServerListView*	deleting = this->activeView;
-	this->RemoveView(deleting);
-	this->tabs->RemovePage(this->tabs->GetSelection());
+	
+	// "All", and "Recent" are protected
+	if( view->query.get().CmpNoCase(_T("All")) == 0 ||
+		view->query.get().CmpNoCase(_T("Recent")) == 0 ) {
+		wxMessageBox(_("'All' and 'Recent' are protected so don't delete them, please"), _("Hey"), wxICON_INFORMATION | wxOK);
+		return false;
+	}
+
+	return true;
 }
