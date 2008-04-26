@@ -26,7 +26,9 @@ build: build-stamp
 
 build-stamp: configure-stamp 
 	dh_testdir
-	cd build/gnu && $(MAKE)
+	./configure --prefix=/usr
+
+	$(MAKE)
 
 	touch $@
 
@@ -35,7 +37,7 @@ clean:
 	dh_testroot
 	rm -f build-stamp configure-stamp
 
-	-(cd build/gnu && $(MAKE) clean)
+	-$(MAKE)
 
 	dh_clean 
 
@@ -44,7 +46,7 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	dh_installdirs usr/games
-	cp -p bzlauncher debian/bzlauncher/usr/games/
+	cp -p src/bzlauncher debian/bzlauncher/usr/games/
 
 binary-indep: build install
 
