@@ -93,7 +93,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	fgSizer3->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	queryText = new wxTextCtrl( findPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	queryText->SetMaxLength( 20 ); 
+	queryText->SetMaxLength( 255 ); 
 	fgSizer3->Add( queryText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 	
 	closeBtn = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(stop22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );

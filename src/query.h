@@ -31,8 +31,9 @@ class Server;
 
 class Query {
 private:
-	wxString query;
+	wxString		query;
 	wxArrayString	tokens;
+	wxString		name;
 
 public:
 	Query(const wxString& q = _T("")) {
@@ -44,6 +45,13 @@ public:
 			return wxString(_T("All"));
 		else
 			return this->query;
+	}
+
+	wxString getName() const {
+		if( this->name.IsEmpty() )
+			return this->get();
+		else
+			return this->name;
 	}
 
 	void set(const wxString &);

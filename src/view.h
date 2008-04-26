@@ -43,7 +43,7 @@ public:
 	}
 
 	const wxString GetName() const {
-		return this->query.get();
+		return this->query.getName();
 	}
 
 	ServerListView(const Query&, long);

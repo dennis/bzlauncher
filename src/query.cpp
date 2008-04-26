@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include <wx/tokenzr.h>
+#include <wx/log.h>
 #include "server.h"
 #include "query.h"
 
@@ -62,6 +63,11 @@ void Query::set(const wxString &q) {
 	wxStringTokenizer	tok(q, _T(" "));
 
 	while(tok.HasMoreTokens()) {
-		this->tokens.Add(tok.GetNextToken());
+		wxString str = tok.GetNextToken();
+		wxLogDebug(_T("str.Len() = %d, first = %c, last = %c"), str.Len(), str[0], str[str.Len()-1]);
+		if(str.Len() > 2 && str[0] == '\'' && str[str.Len()-1] == '\'')
+			this->name = str.Mid(1,str.Len()-2);
+		else
+			this->tokens.Add(str);
 	}
 }
