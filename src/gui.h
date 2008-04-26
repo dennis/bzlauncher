@@ -54,7 +54,8 @@ class MainFrame : public wxFrame
 	protected:
 		enum
 		{
-			ID_REFRESH_LIST = 1000,
+			ID_CLOSE_VIEW = 1000,
+			ID_REFRESH_LIST,
 			ID_SEARCH,
 			ID_TOOLBAR,
 			ID_QUIT,
@@ -77,6 +78,7 @@ class MainFrame : public wxFrame
 		wxBitmapButton* closeBtn;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void EventCloseView( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventRefresh( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventToolbarToggle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void EventQuit( wxCommandEvent& event ){ event.Skip(); }

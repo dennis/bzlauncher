@@ -20,6 +20,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	menubar = new wxMenuBar( 0 );
 	actionMenu = new wxMenu();
+	wxMenuItem* closeView = new wxMenuItem( actionMenu, ID_CLOSE_VIEW, wxString( _("Close View") ) + wxT('\t') + wxT("CTRL-W"), wxEmptyString, wxITEM_NORMAL );
+	actionMenu->Append( closeView );
 	wxMenuItem* refreshList = new wxMenuItem( actionMenu, ID_REFRESH_LIST, wxString( _("Refresh list") ) + wxT('\t') + wxT("CTRL-R"), wxEmptyString, wxITEM_NORMAL );
 	actionMenu->Append( refreshList );
 	wxMenuItem* search = new wxMenuItem( actionMenu, ID_SEARCH, wxString( _("Search") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
@@ -108,6 +110,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Layout();
 	
 	// Connect Events
+	this->Connect( closeView->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventCloseView ) );
 	this->Connect( refreshList->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventRefresh ) );
 	this->Connect( toolbar->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventToolbarToggle ) );
 	this->Connect( quit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::EventQuit ) );

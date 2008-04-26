@@ -89,6 +89,7 @@ protected:
 	void EventViewChanged(wxAuiNotebookEvent&);
 	void EventViewClose(wxAuiNotebookEvent&);
 	void EventToolbarToggle(wxCommandEvent&);
+	void EventCloseView(wxCommandEvent&);
 
 	void RefreshActiveView();
 

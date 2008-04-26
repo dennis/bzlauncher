@@ -124,6 +124,20 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
+                        <property name="id">ID_CLOSE_VIEW</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Close View</property>
+                        <property name="name">closeView</property>
+                        <property name="shortcut">CTRL-W</property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">EventCloseView</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
                         <property name="id">ID_REFRESH_LIST</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Refresh list</property>

@@ -112,6 +112,8 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->SetSize(this->DetermineFrameSize());
 	this->toolBar->Show(appConfig.getToolbarVisible());
 	this->initialLoadTimer.Start(300,true);
+
+	this->activeView->serverList->SetFocus();
 }
 
 MainFrameImpl::~MainFrameImpl() {
@@ -143,6 +145,7 @@ void MainFrameImpl::AddView(ServerListView* view) {
 void MainFrameImpl::RemoveView(ServerListView* view) {
 	// Ignore the delete if we only got one view
 	wxLogDebug(_T("RemoveView(%lx)"), view);
+	wxLogDebug(_T("We got %d views"), this->viewList.size());
 	if(this->viewList.size()==1) {
 		return;
 	}
@@ -550,4 +553,15 @@ void MainFrameImpl::EventViewClose(wxAuiNotebookEvent& event) {
 		return;
 	}
 	this->RemoveView(this->activeView);
+}
+
+void MainFrameImpl::EventCloseView(wxCommandEvent&) {
+	wxLogDebug(_T("EventCloseView()"));
+	if(this->viewList.size()==1) {
+		this->SetStatusText(_("I won't remove the last view"));
+		return;
+	}
+	ServerListView*	deleting = this->activeView;
+	this->RemoveView(deleting);
+	this->tabs->RemovePage(this->tabs->GetSelection());
 }
