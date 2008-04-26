@@ -704,7 +704,7 @@
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
                                     <property name="hover"></property>
-                                    <property name="id">wxID_ANY</property>
+                                    <property name="id">ID_SEARCH</property>
                                     <property name="label">Close</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
@@ -719,7 +719,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick"></event>
+                                    <event name="OnButtonClick">EventSearch</event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>

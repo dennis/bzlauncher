@@ -98,7 +98,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	queryText->SetMaxLength( 255 ); 
 	fgSizer3->Add( queryText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0 );
 	
-	closeBtn = new wxBitmapButton( findPanel, wxID_ANY, wxGetBitmapFromMemory(stop22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	closeBtn = new wxBitmapButton( findPanel, ID_SEARCH, wxGetBitmapFromMemory(stop22), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	fgSizer3->Add( closeBtn, 0, wxALL, 5 );
 	
 	findPanel->SetSizer( fgSizer3 );
@@ -122,6 +122,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::EventViewChanged ), NULL, this );
 	tabs->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( MainFrame::EventViewClose ), NULL, this );
 	queryText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::EventSearchText ), NULL, this );
+	closeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::EventSearch ), NULL, this );
 }
 
 AboutDlg::AboutDlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
