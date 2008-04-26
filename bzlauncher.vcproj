@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8,00"
 	Name="bzlauncher"
 	ProjectGUID="{AECB3EBC-1A63-4FBD-88BE-A81321B721C4}"
 	RootNamespace="bzlauncher"
-	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -17,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="0"
@@ -40,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\wx\wxMSW-2.8.7\include&quot;;&quot;C:\wx\wxMSW-2.8.7\lib\vc_lib\mswd&quot;;."
+				AdditionalIncludeDirectories="$(WX_WIDGETS_DIR)\include\&quot;;&quot;$(WX_WIDGETS_DIR)\include\MSVC\"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_WINDOWS;NOPCH"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +60,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib wxbase28d_net.lib wxmsw28d_adv.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib odbc32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\wx\wxMSW-2.8.7\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="$(WX_WIDGETS_DIR)\Lib\vc_lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -86,12 +85,14 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -116,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;C:\wx\wxMSW-2.8.7\include&quot;;&quot;C:\wx\wxMSW-2.8.7\lib\vc_lib\mswd&quot;;."
+				AdditionalIncludeDirectories="$(WX_WIDGETS_DIR)\include\;$(WX_WIDGETS_DIR)\include\MSVC\"
 				PreprocessorDefinitions="WIN32;__WXMSW__;_WINDOWS;NOPCH"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,10 +137,12 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib wxbase28_net.lib wxmsw28_adv.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib odbc32.lib"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;C:\wx\wxMSW-2.8.7\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="$(WX_WIDGETS_DIR)\lib\vc_lib"
 				GenerateDebugInformation="false"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -174,47 +177,55 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\src\aboutdlg_impl.cpp"
+				RelativePath=".\src\aboutdlg_impl.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\config.cpp"
+				RelativePath=".\src\config.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\gui.cpp"
+				RelativePath=".\src\gui.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\listserverhandler.cpp"
+				RelativePath=".\src\listserverhandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\main.cpp"
+				RelativePath=".\src\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mainframe_impl.cpp"
+				RelativePath=".\src\mainframe_impl.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\server.cpp"
+				RelativePath=".\src\query.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\serverdlg_impl.cpp"
-				>
-			</File>
-      <File
-				RelativePath="..\..\src\serverping.cpp"
-				>
-      </File>
-			<File
-				RelativePath="..\..\src\serverparser.cpp"
+				RelativePath=".\src\server.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\updatingdlg_impl.cpp"
+				RelativePath=".\src\serverdlg_impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\serverparser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\serverping.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\updatingdlg_impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\view.cpp"
 				>
 			</File>
 		</Filter>
@@ -230,47 +241,55 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\src\aboutdlg_impl.h"
+				RelativePath=".\src\aboutdlg_impl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\config.h"
+				RelativePath=".\src\config.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\gui.h"
+				RelativePath=".\src\gui.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\listserverhandler.h"
+				RelativePath=".\src\listserverhandler.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\main.h"
+				RelativePath=".\src\main.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mainframe_impl.h"
+				RelativePath=".\src\mainframe_impl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\server.h"
+				RelativePath=".\src\query.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\serverdlg_impl.h"
+				RelativePath=".\src\server.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\serverping.h"
+				RelativePath=".\src\serverdlg_impl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\serverparser.h"
+				RelativePath=".\src\serverparser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\updatingdlg_impl.h"
+				RelativePath=".\src\serverping.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\updatingdlg_impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\view.h"
 				>
 			</File>
 		</Filter>
@@ -278,35 +297,35 @@
 			Name="PNG Source"
 			>
 			<File
-				RelativePath="..\..\src\about32.h"
+				RelativePath=".\src\about32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\bzflag32.h"
+				RelativePath=".\src\bzflag32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\down22.h"
+				RelativePath=".\src\down22.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\favorite32.h"
+				RelativePath=".\src\favorite32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\ping32.h"
+				RelativePath=".\src\ping32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\refresh32.h"
+				RelativePath=".\src\refresh32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\stop22.h"
+				RelativePath=".\src\stop22.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\up22.h"
+				RelativePath=".\src\up22.h"
 				>
 			</File>
 		</Filter>

@@ -15,11 +15,10 @@ Compiling - linux
 Compiling - Windows
 -------------------
  * To compile BZLauncher you need wxwidgets 2.8.4 and Microsoft Visual C++ 2005
-   or 2008
  * Build wxWidgets (the non dll targets), and set one environment variable on
    your system (system control panel -> advanced tab -> environment variables
    button -> system variables) WX_WIDGETS DIR, to the root dir of your wx
    install
- * Open the project: build/msw/bzlauncher.sln for VC 2008, and build/msw8/bzlauncher.sln for VC 2005
+ * Open the project: bzlauncher.sln
  * Compile!
  * The executable is found in the main directory

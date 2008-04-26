@@ -1,5 +1,7 @@
 SUBDIRS = src
 
+EXTRA_DIST=bzlauncher.sln bzlauncher.vcproj
+
 ICONS=\
 	src/about32.h \
 	src/bzflag32.h \
