@@ -193,13 +193,15 @@ void MainFrameImpl::AddViewAsTab(ServerListView* view) {
 void MainFrameImpl::ViewConnect(ServerListView* view) {
 	view->serverList->Connect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
-	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrameImpl::EventActivated ), NULL, this );
+	view->serverList->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 }
 
 void MainFrameImpl::ViewDisconnect(ServerListView* view) {
 	view->serverList->Disconnect( wxEVT_COMMAND_LIST_COL_CLICK, wxListEventHandler( MainFrameImpl::EventColClick ), NULL, this );
 	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( MainFrameImpl::EventRightClick ), NULL, this );
-	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
+	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( MainFrameImpl::EventActivated ), NULL, this );
+	view->serverList->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( MainFrameImpl::EventSelectServer ), NULL, this );
 }
 
 
@@ -357,10 +359,10 @@ void MainFrameImpl::ShowDetails() {
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
+	wxLogDebug(_T("EventSelectServer()"));
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
 	const wxString s = srv->getName();
 	wxGetApp().SetSelectedServer(s);
-	this->ShowDetails();
 }
 
 
@@ -369,6 +371,7 @@ void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventActivated(wxListEvent& WXUNUSED(event)) {
+	wxLogDebug(_T("EventActivated"));
 	this->ShowDetails();
 }
 
