@@ -199,7 +199,7 @@ viewlist_t Config::getViews() const {
 	int count = 0;
 	
 	wxString query;
-	long sortmode;
+	long sortmode = 0;
 
 	viewlist_t	list;
 
