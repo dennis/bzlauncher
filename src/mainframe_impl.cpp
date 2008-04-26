@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include <algorithm>
+#include <wx/uri.h>
 
 #include "main.h"
 #include "config.h"
@@ -449,9 +450,39 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
+	BZLauncherApp& app = wxGetApp();
 	wxLogDebug(_T("EventTimer()"));
-	wxGetApp().RefreshServerList(this->favoriteServers, this->recentServers);
+	app.RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
+	
+	// Check if we got an argument, if so, this might be
+	//   bzlauncher://server:port
+	//   bzflag://server:port
+	//   - these will all show the server-dialog for the server (if found)
+	if(app.argv[1]) {
+		wxURI	arg(app.argv[1]);
+		wxString	server = arg.GetServer();
+		wxString	port   = arg.GetPort();
+
+		if(port.IsEmpty()) 
+			port = _T("5154");
+
+		wxString	serverPort = wxString::Format(_T("%s:%s"), server.c_str(), port.c_str());
+
+		wxLogDebug(_T("Scheme: %s"), arg.GetScheme().c_str());
+		wxLogDebug(_T("Server: %s"), serverPort.c_str());
+
+		if( !server.IsEmpty() && ( arg.GetScheme().CmpNoCase(_T("bzflag")) || arg.GetScheme().CmpNoCase(_T("bzlauncher")))) {
+			wxGetApp().SetSelectedServer(serverPort);
+			if(app.listServerHandler.FindByName(app.GetSelectedServer())) {
+				ShowDetails();
+			}
+		}
+		else {
+			wxMessageBox(wxString::Format(_("Unknown argument: %s"), app.argv[1]), _("Error"), wxOK |wxICON_ERROR);
+		}
+	}
+	
 	this->pingTimer.Start(10);
 }
 

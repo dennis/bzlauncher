@@ -24,6 +24,7 @@ THE SOFTWARE.
 #include "main.h"
 
 #include <wx/fs_inet.h>
+#include <wx/log.h>
 
 #include "config.h"
 #include "listserverhandler.h"
