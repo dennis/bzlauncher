@@ -40,7 +40,10 @@ public:
 	}
 
 	wxString get() const {
-		return this->query;
+		if( this->query.IsEmpty() )
+			return wxString(_T("All"));
+		else
+			return this->query;
 	}
 
 	void set(const wxString &);
