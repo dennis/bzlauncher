@@ -1,6 +1,6 @@
 SUBDIRS = src
 
-EXTRA_DIST=bzlauncher.sln bzlauncher.vcproj
+EXTRA_DIST=bzlauncher.sln bzlauncher.vcproj README MIT-LICENSE
 
 ICONS=\
 	src/about32.h \
