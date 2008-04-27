@@ -567,10 +567,13 @@ void MainFrameImpl::SwitchView(ServerListView* newView) {
 }
 
 void MainFrameImpl::AddAsRecentServer(const wxString& server) {
-	const int max_recent = 10;
+	const int max_recent = 20;
+	
+	if(this->recentServers.Index(server) != wxNOT_FOUND)
+		this->recentServers.Remove(server);
 	this->recentServers.Add(server);
 
-	// Store max 10 servers
+	// Store max max_recent servers
 	if( this->recentServers.Count() > max_recent ) {
 		this->recentServers.RemoveAt(max_recent, this->recentServers.Count() - max_recent);
 	}

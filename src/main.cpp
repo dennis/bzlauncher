@@ -116,5 +116,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 
 	// Launch BZFlag
 	wxSetWorkingDirectory(wxFileName::FileName(cmd).GetPath());
+	wxLogDebug(_T("CMD: %s"), wxString::Format(cmd,args.c_str()));
 	::wxExecute(wxString::Format(cmd,args.c_str()),wxEXEC_SYNC);
 }
