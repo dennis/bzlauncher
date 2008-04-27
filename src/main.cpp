@@ -73,6 +73,7 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_t team) {
 #else
 void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 #endif
+	wxLogDebug(_T("LaunchSelectedServeR()"));
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
 	if(this->selectedServerHostPort.IsEmpty() || !server ) {
@@ -103,6 +104,7 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 #endif
 	}
 
+	wxLogDebug(_T("Setting Args"));
 	wxString	args;
 
 	if(team == Server::TEAM_RED) args += _T("-team red ");
@@ -115,7 +117,12 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 	args += this->selectedServerHostPort;
 
 	// Launch BZFlag
-	wxSetWorkingDirectory(wxFileName::FileName(cmd).GetPath());
-	wxLogDebug(_T("CMD: %s"), wxString::Format(cmd,args.c_str()));
+	wxString cwd = wxFileName::FileName(cmd).GetPath();
+	if(!cwd.IsEmpty())  {
+		wxLogDebug(_T("Setting CWD: '%s'"), cwd.c_str());
+		wxSetWorkingDirectory(wxFileName::FileName(cmd).GetPath());
+	}
+	wxLogDebug(_T("cmd: %s"), cmd.c_str());
+	wxLogDebug(_T("args: %s"), args.c_str());
 	::wxExecute(wxString::Format(cmd,args.c_str()),wxEXEC_SYNC);
 }
