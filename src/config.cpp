@@ -216,10 +216,10 @@ viewlist_t Config::getViews() const {
 
 		// Make sure we got at least one view
 		if(list.size() == 0) {
-			ServerListView*	viewAll = new ServerListView(Query(_T("All")), sortmode);
-			list.push_back(viewAll);
-			ServerListView*	viewRecent = new ServerListView(Query(_T("Recent")), sortmode);
-			list.push_back(viewRecent);
+			list.push_back(new ServerListView(Query(_T("All")), sortmode));
+			list.push_back(new ServerListView(Query(_T("CTF")), sortmode));
+			list.push_back(new ServerListView(Query(_T("FFA")), sortmode));
+			list.push_back(new ServerListView(Query(_T("RC")), sortmode));
 		}
 
 	);
