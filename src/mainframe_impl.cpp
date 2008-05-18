@@ -297,6 +297,7 @@ void MainFrameImpl::RefreshActiveView() {
 		// Server
 		list->InsertItem(idx, current->getName());
 		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
+		wxLogDebug(_T("Adding %s pointing at %lx"), current->getName().c_str(), (int long)current);
 
 		// Name
 		list->SetItem(idx, 1, current->longName);
@@ -501,10 +502,13 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	}
 	ip.Service(port);
 
+	wxLogDebug(_T("EventPingChanged(%s)"), event.GetString().c_str());
+
 	long item = -1;
 	ServerListView* view= NULL;
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
 		view = *i;
+
 		for ( ;; ) {
 			item = view->serverList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
 
@@ -513,7 +517,7 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 
 			Server* current = reinterpret_cast<Server*>(view->serverList->GetItemData(item));
 
-			if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() && ip.Service()) {
+			if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() == ip.Service()) {
 				this->UpdateServer(view, item, current);
 			}
 		}
@@ -567,7 +571,7 @@ void MainFrameImpl::SwitchView(ServerListView* newView) {
 }
 
 void MainFrameImpl::AddAsRecentServer(const wxString& server) {
-	const int max_recent = 20;
+	const unsigned int max_recent = 20;
 	
 	if(this->recentServers.Index(server) != wxNOT_FOUND)
 		this->recentServers.Remove(server);
