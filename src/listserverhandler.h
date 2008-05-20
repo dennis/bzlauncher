@@ -53,9 +53,10 @@ protected:
 	int version;
 
 	ServerPingList	pingList;
-	ServerList		serverList;
 
 public:
+	ServerList		serverList;
+
 	ListServerHandler();
 	~ListServerHandler();
 

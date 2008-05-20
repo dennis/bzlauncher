@@ -279,7 +279,10 @@ void MainFrameImpl::RefreshActiveView() {
 		return;
 	}
 
-	list->DeleteAllItems();
+	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
+		if( (*i)->version < app.listServerHandler.getVersion())
+			(*i)->serverList->DeleteAllItems();
+	}
 
 	// Content
 	ServerResultSet::iterator i;
@@ -297,7 +300,6 @@ void MainFrameImpl::RefreshActiveView() {
 		// Server
 		list->InsertItem(idx, current->getName());
 		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
-		wxLogDebug(_T("Adding %s pointing at %lx"), current->getName().c_str(), (int long)current);
 
 		// Name
 		list->SetItem(idx, 1, current->longName);
@@ -488,8 +490,13 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
-	wxIPV4address	ip;
+	// Make sure the list is up-to-date
+	if(wxGetApp().listServerHandler.getVersion() != this->activeView->version) {
+		wxLogDebug(_T("This view is not up-to-date"));
+		return;
+	}
 
+	wxIPV4address	ip;
 	long port = 5154;
 	int pos;
 	if((pos = event.GetString().Find(':',true)) != wxNOT_FOUND) {
@@ -502,8 +509,6 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	}
 	ip.Service(port);
 
-	wxLogDebug(_T("EventPingChanged(%s)"), event.GetString().c_str());
-
 	long item = -1;
 	ServerListView* view= NULL;
 	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
@@ -515,11 +520,8 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 			if(item == -1)
 				break;
 
-			Server* current = reinterpret_cast<Server*>(view->serverList->GetItemData(item));
-
-			if(current->ip.IPAddress() == ip.IPAddress() && current->ip.Service() == ip.Service()) {
-				this->UpdateServer(view, item, current);
-			}
+			Server* s = reinterpret_cast<Server*>(view->serverList->GetItemData(item));
+			this->UpdateServer(view, item, s);
 		}
 	}
 }
@@ -527,6 +529,7 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 	this->filterEnabled = !this->filterEnabled;
 	this->findPanel->Show(this->filterEnabled);
+
 	if(this->filterEnabled) {
 		this->queryText->SetValue(this->activeView->query.get());
 		this->queryText->SetFocus();
