@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <vector>
 
 #include "server.h"
-#include "serverping.h"
+#include "ping.h"
 #include "query.h"
 
 WX_DECLARE_LIST(Server, ServerList);
@@ -52,7 +52,7 @@ private:
 protected:
 	int version;
 
-	ServerPingList	pingList;
+	PingList	pingList;
 
 public:
 	ServerList		serverList;

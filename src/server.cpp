@@ -45,7 +45,7 @@ void Server::setName(const wxString& n) {
 
 void Server::setIP(const wxIPV4address& val) {
 	this->ip = val;
-	this->ping = ServerPing(val);
+	this->ping = Ping(val);
 }
 
 const wxIPV4address& Server::getIP() const {

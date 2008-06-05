@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include <wx/string.h>
 #include <wx/socket.h>
 
-#include "serverping.h"
+#include "ping.h"
 
 #ifdef _WIN32
 	// Visual C++ may not have the std int defines
@@ -82,7 +82,7 @@ public:
 	};
 	
 	wxIPV4address	ip;
-	ServerPing		ping;
+	Ping		ping;
 
 	wxString	protocolVersion;
 	wxString	flags;

@@ -21,36 +21,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#include "serverping.h"
+#include "ping.h"
 #include <wx/listimpl.cpp>
 #include <wx/log.h>
 
-WX_DEFINE_LIST(ServerPingList);
+WX_DEFINE_LIST(PingList);
 DEFINE_EVENT_TYPE(wxEVT_PING_CHANGED)
 
-ServerPing::ServerPing() : impl(NULL)  {
+Ping::Ping() : impl(NULL)  {
 }
 
-ServerPing::ServerPing(const wxIPV4address& ip) : impl(ServerPingTracker::Ping(ip)) {
+Ping::Ping(const wxIPV4address& ip) : impl(PingTracker::Ping(ip)) {
 	this->impl->refcount++;
 	assert(this->impl->refcount);
 }
 
-ServerPing::ServerPing(const ServerPing& s) : impl(s.impl) { 
+Ping::Ping(const Ping& s) : impl(s.impl) { 
 	this->impl->refcount++;
 	assert(this->impl->refcount);
 }
 
-ServerPing::~ServerPing() { 
+Ping::~Ping() { 
 	assert(this->impl->refcount);
 	this->impl->refcount--;
 	if( this->impl && this->impl->refcount == 0) {
-		ServerPingTracker::Unping(this);
+		PingTracker::Unping(this);
 		delete impl; 
 	}
 }
 
-ServerPing& ServerPing::operator=(const ServerPing& s) {
+Ping& Ping::operator=(const Ping& s) {
 	this->impl = s.impl;
 	this->impl->refcount++;
 	assert(this->impl->refcount);
@@ -58,29 +58,29 @@ ServerPing& ServerPing::operator=(const ServerPing& s) {
 	return *this;
 }
 
-bool ServerPing::isOK() {
+bool Ping::isOK() {
 	return this->impl->isSuccess();
 }
 
-long ServerPing::getDuration() {
+long Ping::getDuration() {
 	return this->impl->getDuration();
 }
 
-void ServerPing::ping() {
+void Ping::ping() {
 	assert(this->impl);
 	this->impl->ping();
 }
 
-ServerPingList ServerPingTracker::list;
-const int ServerPingTracker::maxpings = 5;
-wxWindow* ServerPingTracker::receiver = NULL;
+PingList PingTracker::list;
+const int PingTracker::maxpings = 5;
+wxWindow* PingTracker::receiver = NULL;
 
-ServerPingImpl* ServerPingTracker::Ping(const wxIPV4address &ip) {
-	ServerPingImpl*	ping = NULL;
+PingImpl* PingTracker::Ping(const wxIPV4address &ip) {
+	PingImpl*	ping = NULL;
 	wxString ipReal = ip.IPAddress();
 
 	// Try to find existing ping object for requested ip
-	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
+	for(PingList::iterator i = PingTracker::list.begin(); i != PingTracker::list.end(); ++i) {
 		ping = *i;
 		if(ipReal.compare(ping->ip.IPAddress()) == 0) {
 			return ping;
@@ -89,22 +89,22 @@ ServerPingImpl* ServerPingTracker::Ping(const wxIPV4address &ip) {
 	}
 
 	// None found, add new
-	ping = new ServerPingImpl(ip);
-	ServerPingTracker::list.push_back(ping);
+	ping = new PingImpl(ip);
+	PingTracker::list.push_back(ping);
 
 	return ping;
 }
 
-void ServerPingTracker::Unping(ServerPing* ping) {
-	ServerPingTracker::list.DeleteObject(ping->impl);
+void PingTracker::Unping(class Ping* ping) {
+	PingTracker::list.DeleteObject(ping->impl);
 }
 
-void ServerPingTracker::Work() {
-	int queued = ServerPingTracker::CountQueued();
+void PingTracker::Work() {
+	int queued = PingTracker::CountQueued();
 
-	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
+	for(PingList::iterator i = PingTracker::list.begin(); i != PingTracker::list.end(); ++i) {
 		// Start pinging more IPs, if queued is below maxpings
-		if((*i)->isPending() && queued < ServerPingTracker::maxpings ) {
+		if((*i)->isPending() && queued < PingTracker::maxpings ) {
 			(*i)->measurePingStart();
 			queued++;
 		}
@@ -114,9 +114,9 @@ void ServerPingTracker::Work() {
 	}
 }
 
-int ServerPingTracker::CountQueued() {
+int PingTracker::CountQueued() {
 	int queued = 0;
-	for(ServerPingList::iterator i = ServerPingTracker::list.begin(); i != ServerPingTracker::list.end(); ++i) {
+	for(PingList::iterator i = PingTracker::list.begin(); i != PingTracker::list.end(); ++i) {
 		if((*i)->isQueued())
 			queued++;
 	}
@@ -124,19 +124,19 @@ int ServerPingTracker::CountQueued() {
 	return queued;
 }
 
-ServerPingImpl::ServerPingImpl() : refcount(0), status(PING_FAILED)  {
+PingImpl::PingImpl() : refcount(0), status(PING_FAILED)  {
 }
-ServerPingImpl::ServerPingImpl(const wxIPV4address& _ip) : ip(_ip), refcount(0), status(PING_PENDING)  {
-}
-
-ServerPingImpl::~ServerPingImpl() {
+PingImpl::PingImpl(const wxIPV4address& _ip) : ip(_ip), refcount(0), status(PING_PENDING)  {
 }
 
-void ServerPingImpl::measurePingStart() {
+PingImpl::~PingImpl() {
+}
+
+void PingImpl::measurePingStart() {
 	this->ping();
 }
 
-void ServerPingImpl::measurePingContinue() {
+void PingImpl::measurePingContinue() {
 	if( this->sock.WaitOnConnect(0,0) ) {
 		// Connected
 		if(this->sock.IsConnected()) {
@@ -148,11 +148,11 @@ void ServerPingImpl::measurePingContinue() {
 			this->status = PING_FAILED;
 			this->duration = 9999;
 		}
-		ServerPingTracker::SendEvent(this->ip);
+		PingTracker::SendEvent(this->ip);
 	}
 }
 
-void ServerPingImpl::ping() {
+void PingImpl::ping() {
 	this->timer.Start();
 	this->sock.Connect(ip,false);
 	this->sock.SetFlags(wxSOCKET_NOWAIT);
@@ -160,12 +160,12 @@ void ServerPingImpl::ping() {
 	this->status = PING_QUEUED;
 }
 
-void ServerPingTrackerTimer::Notify() {
-	ServerPingTracker::Work();
+void PingTrackerTimer::Notify() {
+	PingTracker::Work();
 }
 
-void ServerPingTracker::SendEvent(const wxIPV4address& ip) {
+void PingTracker::SendEvent(const wxIPV4address& ip) {
 	wxCommandEvent event(wxEVT_PING_CHANGED);
 	event.SetString(wxString::Format(_T("%s:%ld"), ip.IPAddress().c_str(), ip.Service()));
-	ServerPingTracker::receiver->GetEventHandler()->ProcessEvent(event);
+	PingTracker::receiver->GetEventHandler()->ProcessEvent(event);
 }

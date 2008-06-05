@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "listserverhandler.h"
 
-#include "serverping.h"
+#include "ping.h"
 
 
 static int SortHelper(int res, bool reverse=false) {
@@ -96,7 +96,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), initialLoadTimer(this), filterEnabled(false), activeView(NULL)  { 
-	ServerPingTracker::receiver = this;
+	PingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
 

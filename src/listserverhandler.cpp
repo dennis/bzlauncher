@@ -64,7 +64,7 @@ void ListServerHandler::GetServerList(wxArrayString& favs,wxArrayString& recent)
 
 	// TODO: Dont clear the list just yet. keep it while building the 
 	// newer version and after doing this, delete it. This will allow
-	// the ServerPing-classes to reuse ping-measurements without needing
+	// the Ping-classes to reuse ping-measurements without needing
 	// to reping them.
 	this->ClearList();
 	this->version++;

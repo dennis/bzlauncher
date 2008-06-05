@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <wx/arrstr.h>
 
 #include "gui.h"
-#include "serverping.h"
+#include "ping.h"
 #include "view.h"
 #include "query.h"
 
@@ -48,7 +48,7 @@ private:
 	void UpdateServer(ServerListView*, int idx, Server*);
 
 	wxTimer			initialLoadTimer;
-	ServerPingTrackerTimer	pingTimer;
+	PingTrackerTimer	pingTimer;
 
 	bool			filterEnabled;
 
