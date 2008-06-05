@@ -21,8 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __serverping_h__
-#define __serverping_h__
+#ifndef __ping_h__
+#define __ping_h__
 
 #include <wx/socket.h>
 #include <wx/list.h>
