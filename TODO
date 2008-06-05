@@ -1,3 +1,4 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 
+- Change Server class, so that all data is stored in Attribute<>
