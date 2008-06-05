@@ -38,8 +38,12 @@ public:
 	}
 	Attribute<T> operator=(const T& val) {
 		this->value = val;
+		return *this;
 	}
 	operator wxString() const {
+		return this->value;
+	}
+	wxString operator()() const {
 		return this->value;
 	}
 };
