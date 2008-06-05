@@ -35,14 +35,6 @@ Server::Server() : gameStyle(0), maxShots(0), shakeWins(0), shakeTimeout(0), max
 	maxTime(0), maxPlayers(0), fullyParsed(false), favorite(false), recent(false) {
 }
 
-wxString Server::getName() const {
-	return this->name;
-}
-
-void Server::setName(const wxString& n) {
-	this->name = n;
-}
-
 void Server::setIP(const wxIPV4address& val) {
 	this->ip = val;
 	this->ping = Ping(val);

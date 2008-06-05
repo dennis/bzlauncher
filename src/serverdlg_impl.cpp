@@ -31,13 +31,13 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 : ServerDlg( parent ) {
 
 	// ServerHostPort + Name
-	this->serverHostPort->SetLabel(server->getName());
+	this->serverHostPort->SetLabel(server->name());
 	this->serverName->SetLabel(server->longName);
 
 	// Server-notice. If any
 	if(!server->fullyParsed) {
 		this->notice->SetForegroundColour(*wxRED);
-		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), server->protocolVersion.c_str()));
+		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), server->protocolVersion().c_str()));
 		this->notice->Show();
 	}
 	else if(server->IsFull()) {
@@ -123,7 +123,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->closeBtn->SetFocus();
 
 	// Select server
-	const wxString s = server->getName();
+	const wxString s = server->name();
 	wxGetApp().SetSelectedServer(s);
 }
 

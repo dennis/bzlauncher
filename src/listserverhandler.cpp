@@ -101,7 +101,7 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 		wxString token = tok.GetNextToken();
 		switch(i) {
 		case 0:	{ // servername:port
-			s->setName(token);
+			s->name = token;
 
 			port = 5154;
 			host = token;
@@ -141,8 +141,8 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 	}
 
 	
-	s->favorite = (favs.Index(s->getName()) != wxNOT_FOUND);
-	s->recent   = (recent.Index(s->getName()) != wxNOT_FOUND);
+	s->favorite = (favs.Index(s->name()) != wxNOT_FOUND);
+	s->recent   = (recent.Index(s->name()) != wxNOT_FOUND);
 
 	this->serverList.Append(s);
 
@@ -199,7 +199,7 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
 
-		if(n.Cmp(current->getName()) == 0)
+		if(n.Cmp(current->name()) == 0)
 			return current;
 	}
 

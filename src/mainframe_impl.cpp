@@ -59,10 +59,10 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 	switch(col) {
 		case 1: // ServerHostPort
-			return SortHelper(s1->getName().CmpNoCase(s2->getName()),ascending);
+			return SortHelper(s1->name().CmpNoCase(s2->name()),ascending);
 			break;
 		case 2: // Name
-			return SortHelper(s1->longName.CmpNoCase(s2->longName),ascending);
+			return SortHelper(s1->longName().CmpNoCase(s2->longName()),ascending);
 			break;
 		case 3:	// Type
 			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
@@ -294,11 +294,11 @@ void MainFrameImpl::RefreshActiveView() {
 		Server*	current = *i;
 
 		// Check if its a favorite and recent
-		current->favorite = (this->favoriteServers.Index(current->getName()) != wxNOT_FOUND);
-		current->recent   = (this->recentServers.Index(current->getName()) != wxNOT_FOUND);
+		current->favorite = (this->favoriteServers.Index(current->name()) != wxNOT_FOUND);
+		current->recent   = (this->recentServers.Index(current->name()) != wxNOT_FOUND);
 
 		// Server
-		list->InsertItem(idx, current->getName());
+		list->InsertItem(idx, current->name());
 		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
 
 		// Name
@@ -368,7 +368,7 @@ void MainFrameImpl::ShowDetails() {
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
 	wxLogDebug(_T("EventSelectServer()"));
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
-	const wxString s = srv->getName();
+	const wxString s = srv->name();
 	wxGetApp().SetSelectedServer(s);
 }
 
@@ -401,12 +401,12 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 		if(s->favorite) {
 			// Remove from favoriteServers
 			s->favorite = false;
-			this->favoriteServers.Remove(s->getName());
+			this->favoriteServers.Remove(s->name());
 		}
 		else {
 			// Add to favoriteServers
 			s->favorite = true;
-			this->favoriteServers.Add(s->getName());
+			this->favoriteServers.Add(s->name());
 		}
 		
 		int idx = this->activeView->serverList->GetNextItem(-1,wxLIST_NEXT_ALL,wxLIST_STATE_SELECTED);

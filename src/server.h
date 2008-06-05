@@ -83,9 +83,6 @@ public:
 	wxIPV4address	ip;
 	Ping		ping;
 
-	wxString	protocolVersion;
-	wxString	flags;
-	wxString	longName;
 	uint16_t	gameStyle;
 	uint16_t	maxShots;
 	uint16_t	shakeWins;
@@ -102,9 +99,6 @@ public:
 	bool		recent;
 
 	Server();
-
-	wxString getName() const;
-	void     setName(const wxString&);
 
 	void setIP(const wxIPV4address&);
 	const wxIPV4address& getIP() const;
@@ -128,6 +122,8 @@ public:
 	//
 	
 	Attribute<wxString>	name;
+	Attribute<wxString> protocolVersion;
+	Attribute<wxString> longName;
 };
 
 #endif
