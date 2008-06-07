@@ -29,18 +29,7 @@ THE SOFTWARE.
 
 #include "attribute.h"
 #include "ping.h"
-
-#ifdef _WIN32
-	// Visual C++ may not have the std int defines
-	#ifndef __int16
-		typedef __int16 int16_t;
-		typedef unsigned __int16 uint16_t;
-		typedef __int8 int8_t;
-		typedef unsigned __int8 uint8_t;
-	#endif
-#else
-# include <stdint.h>
-#endif
+#include "types.h"
 
 /// BZFlag server description
 class Server {
@@ -84,13 +73,6 @@ public:
 	Ping		ping;
 
 	uint16_t	gameStyle;
-	uint16_t	maxShots;
-	uint16_t	shakeWins;
-	uint16_t	shakeTimeout;
-	uint16_t	maxPlayerScore;
-	uint16_t	maxTeamScore;
-	uint16_t	maxTime;
-	uint8_t		maxPlayers;
 
 	Team		team[TEAM_COUNT];
 
@@ -121,9 +103,17 @@ public:
 
 	//
 	
-	Attribute<wxString>	name;
-	Attribute<wxString> protocolVersion;
-	Attribute<wxString> longName;
+	Attribute<wxString>	name;					// server:port
+	Attribute<wxString> protocolVersion;		// bzfs00057
+	Attribute<wxString> longName;				// Home of DUB. Welcome. 
+	
+	Attribute<uint8_t>	maxPlayers;
+	Attribute<uint16_t>	maxShots;
+	Attribute<uint16_t>	shakeWins;
+	Attribute<uint16_t>	shakeTimeout;
+	Attribute<uint16_t>	maxPlayerScore;
+	Attribute<uint16_t>	maxTeamScore;
+	Attribute<uint16_t>	maxTime;
 };
 
 #endif

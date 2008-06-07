@@ -22,44 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef __attribute_h__
-#define __attribute_h__
-
-#include <wx/string.h>
-#include <wx/log.h>
-#include "types.h"
-
-template< typename T >
-class Attribute {
-private:
-	T	value;
-public:
-	Attribute() {};
-	Attribute(T val) {
-		this->value = val;
-	}
-	Attribute<T> operator=(const T& val) {
-		this->value = val;
-		return *this;
-	}
-	Attribute<T> operator+=(const T& val) {
-		this->value += val;
-		return *this;
-	}
-	operator wxString() const {
-		return convertTowxString(this->value);
-	}
-	wxString operator()() const {
-		return convertTowxString(this->value);
-	}
-};
-
-inline wxString convertTowxString(const wxString& v) {
-	return wxString(v);
-}
-
-inline wxString convertTowxString(uint16_t v) {
-	return wxString::Format(_T("%d"), v);
-}
-
+#ifdef _WIN32
+	// Visual C++ may not have the std int defines
+	#ifndef __int16
+		typedef __int16 int16_t;
+		typedef unsigned __int16 uint16_t;
+		typedef __int8 int8_t;
+		typedef unsigned __int8 uint8_t;
+	#endif
+#else
+# include <stdint.h>
 #endif
+

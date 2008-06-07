@@ -54,8 +54,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// LEFT COLUMN
 
 	// Players
-	this->playersVal->SetValue(wxString::Format(_T("%d/%d"), server->GetPlayerCount(), server->maxPlayers));
-
+	this->playersVal->SetValue(wxString::Format(_T("%d/%s"), server->GetPlayerCount(), server->maxPlayers().c_str()));
 	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_ROGUE].count, server->team[Server::TEAM_ROGUE].max));
 	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_RED].count, server->team[Server::TEAM_RED].max));
 	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_GREEN].count, server->team[Server::TEAM_GREEN].max));
@@ -66,7 +65,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// RIGHT COLUMN
 
 	// Shots
-	this->shotsVal->SetValue(wxString::Format(_T("%d"), server->maxShots));
+	this->shotsVal->SetValue(server->maxShots());
 
 	// Game type
 	if(server->IsCTF())

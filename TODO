@@ -2,3 +2,5 @@
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 
 - Change Server class, so that all data is stored in Attribute<>
+	- Create a GameStyle class, to represents the different flags
+	- Add a Attribute.operator==(wxString token) used by Query
