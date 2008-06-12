@@ -54,7 +54,7 @@ private:
 public:
 	typedef enum { team_observer, team_red, team_green, team_blue, team_purple, team_rogue, team_count } team_color_t;
 	wxIPV4address	ip;
-	Ping		ping;
+	Ping			ping;
 
 	uint16_t	gameStyle;
 
@@ -78,9 +78,6 @@ public:
 		teammap_t	color;
 	};
 		
-
-
-
 	bool		fullyParsed;
 	bool		favorite;
 	bool		recent;
@@ -105,7 +102,6 @@ public:
 	bool IsFull() const;
 	bool IsEmpty() const;
 	int GetPlayerCount() const;
-
 
 	Attribute<wxString>	name;					// server:port
 	Attribute<wxString> protocolVersion;		// bzfs00057
