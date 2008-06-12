@@ -27,25 +27,33 @@ THE SOFTWARE.
 
 #include <wx/msgdlg.h>
 
-ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
-: ServerDlg( parent ) {
+// These variables are used with the ComboBox.. It got a ClientData ptr, which is pointed as these variables
+static const Server::team_color_t	TeamRogue = Server::team_rogue;
+static const Server::team_color_t	TeamRed = Server::team_red;
+static const Server::team_color_t	TeamGreen = Server::team_green;
+static const Server::team_color_t	TeamBlue = Server::team_blue;
+static const Server::team_color_t	TeamPurple = Server::team_purple;
+static const Server::team_color_t	TeamObserver = Server::team_observer;
+static const Server::team_color_t	TeamAny = Server::team_count;
 
+ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
+: ServerDlg( parent ) {
 	// ServerHostPort + Name
-	this->serverHostPort->SetLabel(server->name());
-	this->serverName->SetLabel(server->longName);
+	this->serverHostPort->SetLabel(selectedServer->name());
+	this->serverName->SetLabel(selectedServer->longName);
 
 	// Server-notice. If any
-	if(!server->fullyParsed) {
+	if(!selectedServer->fullyParsed) {
 		this->notice->SetForegroundColour(*wxRED);
-		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), server->protocolVersion().c_str()));
+		this->notice->SetLabel(wxString::Format(_("This server uses an unsupported protocol (%s)"), selectedServer->protocolVersion().c_str()));
 		this->notice->Show();
 	}
-	else if(server->IsFull()) {
+	else if(selectedServer->IsFull()) {
 		this->notice->SetForegroundColour(*wxBLACK);
 		this->notice->SetLabel(_("This server is full"));
 		this->notice->Show();
 	}
-	else if(server->IsEmpty()) {
+	else if(selectedServer->IsEmpty()) {
 		this->notice->SetForegroundColour(*wxBLACK);
 		this->notice->SetLabel(_("This server is empty"));
 		this->notice->Show();
@@ -54,55 +62,56 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	// LEFT COLUMN
 
 	// Players
-	this->playersVal->SetValue(wxString::Format(_T("%d/%s"), server->GetPlayerCount(), server->maxPlayers().c_str()));
-	this->rogueVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_ROGUE].count, server->team[Server::TEAM_ROGUE].max));
-	this->redVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_RED].count, server->team[Server::TEAM_RED].max));
-	this->greenVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_GREEN].count, server->team[Server::TEAM_GREEN].max));
-	this->blueVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_BLUE].count, server->team[Server::TEAM_BLUE].max));
-	this->purpleVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_PURPLE].count, server->team[Server::TEAM_PURPLE].max));
-	this->observersVal->SetValue(wxString::Format(_T("%d/%d"), server->team[Server::TEAM_OBSERVER].count, server->team[Server::TEAM_OBSERVER].max));
+	this->playersVal->SetValue(wxString::Format(_T("%d/%s"), selectedServer->GetPlayerCount(), selectedServer->maxPlayers().c_str()));
+
+	this->rogueVal->SetValue(selectedServer->teams.color[Server::team_rogue]);
+	this->redVal->SetValue(selectedServer->teams.color[Server::team_red]);
+	this->greenVal->SetValue(selectedServer->teams.color[Server::team_green]);
+	this->blueVal->SetValue(selectedServer->teams.color[Server::team_blue]);
+	this->purpleVal->SetValue(selectedServer->teams.color[Server::team_purple]);
+	this->observersVal->SetValue(selectedServer->teams.color[Server::team_observer]);
 
 	// RIGHT COLUMN
 
 	// Shots
-	this->shotsVal->SetValue(server->maxShots());
+	this->shotsVal->SetValue(selectedServer->maxShots());
 
 	// Game type
-	if(server->IsCTF())
+	if(selectedServer->IsCTF())
 		this->gameTypeVal->SetValue(_("CTF"));
-	else if(server->IsFFA()) 
+	else if(selectedServer->IsFFA()) 
 		this->gameTypeVal->SetValue(_("FFA"));
-	else if(server->IsRC()) 
+	else if(selectedServer->IsRC()) 
 		this->gameTypeVal->SetValue(_("RC"));
 	else
 		this->gameTypeVal->SetValue(_("???"));
 	
 	// Super flags
-	if(server->GotSuperFlags())
+	if(selectedServer->GotSuperFlags())
 		this->superFlagsVal->SetValue(_("Yes"));
 	else
 		this->superFlagsVal->SetValue(_("No"));
 	
 	// Antidote flags
-	if(server->GotAntidote())
+	if(selectedServer->GotAntidote())
 		this->antidoteVal->SetValue(_("Yes"));
 	else
 		this->antidoteVal->SetValue(_("No"));
 
 	// Ricochet
-	if(server->GotRicochet())
+	if(selectedServer->GotRicochet())
 		this->ricochetVal->SetValue(_("Yes"));
 	else
 		this->ricochetVal->SetValue(_("No"));
 
 	// Handicap
-	if(server->GotHandicap())
+	if(selectedServer->GotHandicap())
 		this->handicapVal->SetValue(_("Yes"));
 	else
 		this->handicapVal->SetValue(_("No"));
 
 	// Jumping
-	if(server->GotJumping())
+	if(selectedServer->GotJumping())
 		this->jumpVal->SetValue(_("Yes"));
 	else
 		this->jumpVal->SetValue(_("No"));
@@ -111,18 +120,18 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* server)
 	this->teamCbx->Clear();
 	this->teamCbx->Append(_T("")); // Default
 
-	if(!server->fullyParsed || server->team[Server::TEAM_ROGUE].max) this->teamCbx->Append(_("as Rogue"), &Server::TeamRogue);
-	if(!server->fullyParsed || server->team[Server::TEAM_RED].max) this->teamCbx->Append(_("as Red"), &Server::TeamRed);
-	if(!server->fullyParsed || server->team[Server::TEAM_GREEN].max) this->teamCbx->Append(_("as Green"), &Server::TeamGreen);
-	if(!server->fullyParsed || server->team[Server::TEAM_BLUE].max) this->teamCbx->Append(_("as Blue"), &Server::TeamBlue);
-	if(!server->fullyParsed || server->team[Server::TEAM_PURPLE].max) this->teamCbx->Append(_("as Purple"), &Server::TeamPurple);
-	if(!server->fullyParsed || server->team[Server::TEAM_OBSERVER].max) this->teamCbx->Append(_("as Observer"), &Server::TeamObserver);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_rogue].value.max) this->teamCbx->Append(_("as Rogue"), (void*)&TeamRogue);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_red].value.max) this->teamCbx->Append(_("as Red"), (void*)&TeamRed);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_green].value.max) this->teamCbx->Append(_("as Green"), (void*)&TeamGreen);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_blue].value.max) this->teamCbx->Append(_("as Blue"), (void*)&TeamBlue);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_purple].value.max) this->teamCbx->Append(_("as Purple"), (void*)&TeamPurple);
+	if(!selectedServer->fullyParsed || selectedServer->teams.color[Server::team_observer].value.max) this->teamCbx->Append(_("as Observer"), (void*)&TeamObserver);
 	this->teamCbx->Refresh();
 	
 	this->closeBtn->SetFocus();
 
 	// Select server
-	const wxString s = server->name();
+	const wxString s = selectedServer->name();
 	wxGetApp().SetSelectedServer(s);
 }
 
@@ -131,10 +140,11 @@ void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
-	Server::team_t* team = &Server::TeamAuto;
+	Server::team_color_t*	team = NULL;
 	int selected = this->teamCbx->GetSelection();
 	if(selected != wxNOT_FOUND)
-		team = (Server::team_t*)this->teamCbx->GetClientData(selected);
+		team = (Server::team_color_t*)this->teamCbx->GetClientData(selected);
+	if(team == NULL) team = const_cast<Server::team_color_t*>(&TeamAny);
 	wxGetApp().mainFrame->AddAsRecentServer(this->serverHostPort->GetLabel());
 	wxGetApp().LaunchSelectedServer(this, *team);
 }

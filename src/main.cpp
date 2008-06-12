@@ -69,11 +69,11 @@ void BZLauncherApp::SetSelectedServer(const wxString& s) {
 }
 
 #ifdef _WINDOWS
-void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_t team) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_color_t team) {
 #else
-void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 #endif
-	wxLogDebug(_T("LaunchSelectedServeR()"));
+	wxLogDebug(_T("LaunchSelectedServer()"));
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
 	if(this->selectedServerHostPort.IsEmpty() || !server ) {
@@ -107,12 +107,29 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_t team) {
 	wxLogDebug(_T("Setting Args"));
 	wxString	args;
 
-	if(team == Server::TEAM_RED) args += _T("-team red ");
-	if(team == Server::TEAM_GREEN) args += _T("-team green ");
-	if(team == Server::TEAM_BLUE) args += _T("-team blue ");
-	if(team == Server::TEAM_PURPLE) args += _T("-team purple ");
-	if(team == Server::TEAM_ROGUE) args += _T("-team rogue ");
-	if(team == Server::TEAM_OBSERVER) args += _T("-team observer ");
+	switch(team) {
+		case Server::team_observer:
+			args += _T("-team observer ");
+			break;
+		case Server::team_red:
+			args += _T("-team red ");
+			break;
+		case Server::team_green:
+			args += _T("-team green ");
+			break;
+		case Server::team_blue:
+			args += _T("-team blue ");
+			break;
+		case Server::team_purple:
+			args += _T("-team purple ");
+			break;
+		case Server::team_rogue:
+			args += _T("-team rogue ");
+			break;
+		default:
+			/* Nothing */
+			break;
+	}
 
 	args += this->selectedServerHostPort;
 

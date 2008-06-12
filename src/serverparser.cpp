@@ -90,18 +90,18 @@ void ServerHexParserBZFS0026::parse(const wxString hex, Server& s) {
 	p = UnpackHex16(p, ui16); s.maxTeamScore = ui16;
 	p = UnpackHex16(p, ui16); s.maxTime = ui16;
 	p = UnpackHex8(p, ui8); s.maxPlayers = ui8;
-	p = UnpackHex8(p, s.team[Server::TEAM_ROGUE].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_ROGUE].max);
-	p = UnpackHex8(p, s.team[Server::TEAM_RED].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_RED].max);
-	p = UnpackHex8(p, s.team[Server::TEAM_GREEN].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_GREEN].max);
-	p = UnpackHex8(p, s.team[Server::TEAM_BLUE].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_BLUE].max);
-	p = UnpackHex8(p, s.team[Server::TEAM_PURPLE].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_PURPLE].max);
-	p = UnpackHex8(p, s.team[Server::TEAM_OBSERVER].count);
-	p = UnpackHex8(p, s.team[Server::TEAM_OBSERVER].max);
+	p = UnpackHex8(p, s.teams.color[Server::team_rogue].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_rogue].value.max);
+	p = UnpackHex8(p, s.teams.color[Server::team_red].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_red].value.max);
+	p = UnpackHex8(p, s.teams.color[Server::team_green].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_green].value.max);
+	p = UnpackHex8(p, s.teams.color[Server::team_blue].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_blue].value.max);
+	p = UnpackHex8(p, s.teams.color[Server::team_purple].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_purple].value.max);
+	p = UnpackHex8(p, s.teams.color[Server::team_observer].value.count);
+	p = UnpackHex8(p, s.teams.color[Server::team_observer].value.max);
 
 	s.fullyParsed = true;
 }

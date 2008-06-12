@@ -23,15 +23,28 @@ THE SOFTWARE.
 */
 #include "server.h"
 
-Server::team_t	Server::TeamRogue    = Server::TEAM_ROGUE;
-Server::team_t	Server::TeamRed      = Server::TEAM_RED;
-Server::team_t	Server::TeamGreen    = Server::TEAM_GREEN;
-Server::team_t	Server::TeamBlue     = Server::TEAM_BLUE;
-Server::team_t	Server::TeamPurple   = Server::TEAM_PURPLE;
-Server::team_t	Server::TeamObserver = Server::TEAM_OBSERVER;
-Server::team_t	Server::TeamAuto     = Server::TEAM_COUNT;
-
 Server::Server() : gameStyle(0), fullyParsed(false), favorite(false), recent(false) {
+}
+
+int Server::GetPlayerCount() const {
+	// This it to avoid discarding qualifiers. As we operate only with a handfull
+	// of different teams, the performance hit won't be any issue. But there gotta
+	// be a better way.
+	Teams::teammap_t	color_const = this->teams.color;	
+	return 
+		color_const[Server::team_rogue].value.getCount()+
+		color_const[Server::team_red].value.getCount()+
+		color_const[Server::team_green].value.getCount()+
+		color_const[Server::team_blue].value.getCount()+
+		color_const[Server::team_purple].value.getCount();
+}
+
+bool Server::IsFull() const {
+	return this->GetPlayerCount() == this->maxPlayers;
+}
+
+bool Server::IsEmpty() const {
+	return this->GetPlayerCount() == 0;
 }
 
 void Server::setIP(const wxIPV4address& val) {
@@ -41,23 +54,6 @@ void Server::setIP(const wxIPV4address& val) {
 
 const wxIPV4address& Server::getIP() const {
 	return this->ip;
-}
-
-int Server::GetPlayerCount() const {
-	return 
-		this->team[TEAM_ROGUE].count+
-		this->team[TEAM_RED].count+
-		this->team[TEAM_GREEN].count+
-		this->team[TEAM_BLUE].count+
-		this->team[TEAM_PURPLE].count;
-}
-
-bool Server::IsFull() const {
-	return this->GetPlayerCount() == this->maxPlayers;
-}
-
-bool Server::IsEmpty() const {
-	return this->GetPlayerCount() == 0;
 }
 
 bool Server::IsCTF() const {

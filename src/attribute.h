@@ -27,13 +27,12 @@ THE SOFTWARE.
 
 #include <wx/string.h>
 #include <wx/log.h>
-#include "types.h"
 
 template< typename T >
 class Attribute {
-private:
-	T	value;
 public:
+	T	value;
+
 	Attribute() {};
 	Attribute(T val) {
 		this->value = val;

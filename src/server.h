@@ -24,6 +24,7 @@ THE SOFTWARE.
 #ifndef __server_h__
 #define __server_h__
 
+#include <map>
 #include <wx/string.h>
 #include <wx/socket.h>
 
@@ -51,30 +52,34 @@ private:
 	};
 
 public:
-	/// Represents a team. How many players and maximum
-	typedef enum { TEAM_ROGUE, TEAM_RED, TEAM_GREEN, TEAM_BLUE, TEAM_PURPLE, TEAM_OBSERVER, TEAM_COUNT } team_t;
+	typedef enum { team_observer, team_red, team_green, team_blue, team_purple, team_rogue, team_count } team_color_t;
+	wxIPV4address	ip;
+	Ping		ping;
 
-	static team_t	TeamRogue;
-	static team_t	TeamRed;
-	static team_t	TeamGreen;
-	static team_t	TeamBlue;
-	static team_t	TeamPurple;
-	static team_t	TeamObserver;
-	static team_t	TeamAuto;
+	uint16_t	gameStyle;
 
 	class Team {
 	public:
 		Team() : count(0), max(0) {};
 		uint8_t count;
 		uint8_t max;
+
+		uint8_t getCount() const {
+			return this->count;
+		}
+		uint8_t getMax() const {
+			return this->max;
+		}
 	};
-	
-	wxIPV4address	ip;
-	Ping		ping;
 
-	uint16_t	gameStyle;
+	class Teams {
+	public:
+		typedef std::map< team_color_t, Attribute<Team> > teammap_t;
+		teammap_t	color;
+	};
+		
 
-	Team		team[TEAM_COUNT];
+
 
 	bool		fullyParsed;
 	bool		favorite;
@@ -85,8 +90,6 @@ public:
 	void setIP(const wxIPV4address&);
 	const wxIPV4address& getIP() const;
 
-	bool IsFull() const;
-	bool IsEmpty() const;
 	bool IsCTF() const;
 	bool IsRC() const;
 	bool IsFFA() const;
@@ -99,21 +102,28 @@ public:
 	bool GotRicochet() const;
 	bool GotSuperFlags() const;
 
+	bool IsFull() const;
+	bool IsEmpty() const;
 	int GetPlayerCount() const;
 
-	//
-	
+
 	Attribute<wxString>	name;					// server:port
 	Attribute<wxString> protocolVersion;		// bzfs00057
 	Attribute<wxString> longName;				// Home of DUB. Welcome. 
 	
-	Attribute<uint8_t>	maxPlayers;
+	Attribute<uint8_t>	maxPlayers;				// Integers..
 	Attribute<uint16_t>	maxShots;
 	Attribute<uint16_t>	shakeWins;
 	Attribute<uint16_t>	shakeTimeout;
 	Attribute<uint16_t>	maxPlayerScore;
 	Attribute<uint16_t>	maxTeamScore;
 	Attribute<uint16_t>	maxTime;
+
+	Teams				teams;
 };
+
+inline wxString convertTowxString(const Server::Team& v) {
+	return wxString::Format(_T("%d/%d"), v.count, v.max);
+}
 
 #endif
