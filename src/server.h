@@ -54,7 +54,6 @@ private:
 public:
 	typedef enum { team_observer, team_red, team_green, team_blue, team_purple, team_rogue, team_count } team_color_t;
 	wxIPV4address	ip;
-	Ping			ping;
 
 	uint16_t	gameStyle;
 
@@ -106,6 +105,8 @@ public:
 	Attribute<wxString>	name;					// server:port
 	Attribute<wxString> protocolVersion;		// bzfs00057
 	Attribute<wxString> longName;				// Home of DUB. Welcome. 
+
+	Attribute<Ping>		ping;
 	
 	Attribute<uint8_t>	maxPlayers;				// Integers..
 	Attribute<uint16_t>	maxShots;

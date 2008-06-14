@@ -58,13 +58,13 @@ public:
 	PingImpl(const wxIPV4address&);
 	~PingImpl();
 
-	bool isQueued() { return this->status == PING_QUEUED; }
-	bool isPending() { return this->status == PING_PENDING; }
-	bool isReady()  { return (this->status == PING_SUCCESS || this->status == PING_FAILED); }
-	bool isFailed()  { return this->status == PING_FAILED; }
-	bool isSuccess()  { return this->status == PING_SUCCESS; }
+	bool isQueued() const { return this->status == PING_QUEUED; }
+	bool isPending() const { return this->status == PING_PENDING; }
+	bool isReady() const { return (this->status == PING_SUCCESS || this->status == PING_FAILED); }
+	bool isFailed() const { return this->status == PING_FAILED; }
+	bool isSuccess() const  { return this->status == PING_SUCCESS; }
 
-	long getDuration() {
+	long getDuration() const {
 		return this->duration;
 	}
 
@@ -87,8 +87,8 @@ public:
 
 	Ping& operator=(const Ping&);
 	
-	bool isOK();
-	long getDuration();
+	bool isOK() const;
+	long getDuration() const;
 	void ping();
 };
 
@@ -128,5 +128,12 @@ class PingTrackerTimer : public wxTimer {
 public:
 	void Notify();
 };
+
+inline wxString convertTowxString(const Ping& v) {
+	if(v.isOK())
+		return wxString::Format(_T("%d"), v.getDuration());
+	else
+		return (_("..."));
+}
 
 #endif

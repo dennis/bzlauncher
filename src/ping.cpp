@@ -58,11 +58,11 @@ Ping& Ping::operator=(const Ping& s) {
 	return *this;
 }
 
-bool Ping::isOK() {
+bool Ping::isOK() const {
 	return this->impl->isSuccess();
 }
 
-long Ping::getDuration() {
+long Ping::getDuration() const {
 	return this->impl->getDuration();
 }
 

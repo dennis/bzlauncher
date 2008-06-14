@@ -80,9 +80,9 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 		case 5: // Ping
 			{
 			int r = 0;
-			if(s1->ping.getDuration() < s2->ping.getDuration())
+			if(s1->ping.value.getDuration() < s2->ping.value.getDuration())
 				r = -1;
-			else if(s1->ping.getDuration() > s2->ping.getDuration())
+			else if(s1->ping.value.getDuration() > s2->ping.value.getDuration())
 				r = 1;
 			return SortHelper(r,ascending);
 			}
@@ -433,19 +433,14 @@ void MainFrameImpl::UpdateServer(ServerListView* view, int idx, Server* s) {
 		view->serverList->SetItem(idx, 5, _("No"));
 	}
 
-	if(s->ping.isOK()) {
-		view->serverList->SetItem(idx, 4, wxString::Format(_T("%d"), s->ping.getDuration()));
-	}
-	else {
-		view->serverList->SetItem(idx, 4, _("n/a"));
-	}
+	view->serverList->SetItem(idx, 4, s->ping);
 }
 
 void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
 	if(s) {
-		s->ping.ping();
+		s->ping.value.ping();
 	}
 	else {
 		app.SetStatusText(_("No server selected"));
