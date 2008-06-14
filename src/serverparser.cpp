@@ -80,16 +80,14 @@ void ServerHexParserBZFS0026::parse(const wxString hex, Server& s) {
 	theBuf[54] = (char)NULL;
 
 	char* p = theBuf;
-	uint8_t ui8;
-	uint16_t ui16;
 	p = UnpackHex16(p, s.gameStyle);
-	p = UnpackHex16(p, ui16); s.maxShots = ui16;
-	p = UnpackHex16(p, ui16); s.shakeWins = ui16;
-	p = UnpackHex16(p, ui16); s.shakeTimeout = ui16;
-	p = UnpackHex16(p, ui16); s.maxPlayerScore = ui16;
-	p = UnpackHex16(p, ui16); s.maxTeamScore = ui16;
-	p = UnpackHex16(p, ui16); s.maxTime = ui16;
-	p = UnpackHex8(p, ui8); s.maxPlayers = ui8;
+	p = UnpackHex16(p, s.maxShots.value); 
+	p = UnpackHex16(p, s.shakeWins.value);
+	p = UnpackHex16(p, s.shakeTimeout.value);
+	p = UnpackHex16(p, s.maxPlayerScore.value);
+	p = UnpackHex16(p, s.maxTeamScore.value);
+	p = UnpackHex16(p, s.maxTime.value);
+	p = UnpackHex8(p, s.maxPlayers.value);
 	p = UnpackHex8(p, s.teams.color[Server::team_rogue].value.count);
 	p = UnpackHex8(p, s.teams.color[Server::team_rogue].value.max);
 	p = UnpackHex8(p, s.teams.color[Server::team_red].value.count);
