@@ -62,7 +62,9 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 	// LEFT COLUMN
 
 	// Players
-	this->playersVal->SetValue(wxString::Format(_T("%d/%s"), selectedServer->GetPlayerCount(), selectedServer->maxPlayers().c_str()));
+	this->playersVal->SetValue(wxString::Format(_T("%d/%d"), 
+		selectedServer->GetPlayerCount(), 
+		selectedServer->maxPlayers.value));
 
 	this->rogueVal->SetValue(selectedServer->teams.color[Server::team_rogue]);
 	this->redVal->SetValue(selectedServer->teams.color[Server::team_red]);
@@ -77,6 +79,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 	this->shotsVal->SetValue(selectedServer->maxShots());
 
 	// Game type
+	/*
 	if(selectedServer->IsCTF())
 		this->gameTypeVal->SetValue(_("CTF"));
 	else if(selectedServer->IsFFA()) 
@@ -85,36 +88,13 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 		this->gameTypeVal->SetValue(_("RC"));
 	else
 		this->gameTypeVal->SetValue(_("???"));
-	
-	// Super flags
-	if(selectedServer->GotSuperFlags())
-		this->superFlagsVal->SetValue(_("Yes"));
-	else
-		this->superFlagsVal->SetValue(_("No"));
-	
-	// Antidote flags
-	if(selectedServer->GotAntidote())
-		this->antidoteVal->SetValue(_("Yes"));
-	else
-		this->antidoteVal->SetValue(_("No"));
 
-	// Ricochet
-	if(selectedServer->GotRicochet())
-		this->ricochetVal->SetValue(_("Yes"));
-	else
-		this->ricochetVal->SetValue(_("No"));
-
-	// Handicap
-	if(selectedServer->GotHandicap())
-		this->handicapVal->SetValue(_("Yes"));
-	else
-		this->handicapVal->SetValue(_("No"));
-
-	// Jumping
-	if(selectedServer->GotJumping())
-		this->jumpVal->SetValue(_("Yes"));
-	else
-		this->jumpVal->SetValue(_("No"));
+	*/
+	this->superFlagsVal->SetValue(selectedServer->gotSuperFlags()); // Super flags
+	this->antidoteVal->SetValue(selectedServer->gotAntidote()); 	// Antidote flags
+	this->ricochetVal->SetValue(selectedServer->gotRicochet());		// Ricochet
+	this->handicapVal->SetValue(selectedServer->gotHandicap());		// Handicap
+	this->jumpVal->SetValue(selectedServer->gotJumping()); 			// Jumping
 	
 	// Launch dropdown
 	this->teamCbx->Clear();

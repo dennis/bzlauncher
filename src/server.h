@@ -34,28 +34,9 @@ THE SOFTWARE.
 
 /// BZFlag server description
 class Server {
-private:	
-	/// GameStyle as defined in BZFlag source
-	enum GameStyle {
-	  PlainGameStyle =       0x0000,
-	  TeamFlagGameStyle =    0x0001, // capture the flag
-	  SuperFlagGameStyle =   0x0002, // superflags allowed
-	  //FormerRogueStyle =   0x0004, // used to be rogue, but now we have rogue maxplayers 
-	  JumpingGameStyle =     0x0008, // jumping allowed
-	  InertiaGameStyle =     0x0010, // momentum for all
-	  RicochetGameStyle =    0x0020, // all shots ricochet
-	  ShakableGameStyle =    0x0040, // can drop bad flags
-	  AntidoteGameStyle =    0x0080, // anti-bad flags
-	  HandicapGameStyle =    0x0100, // handicap players based on score (eek! was TimeSyncGameStyle)
-	  RabbitChaseGameStyle = 0x0200  // rabbit chase
-	  // add here before reusing old ones above
-	};
-
 public:
 	typedef enum { team_observer, team_red, team_green, team_blue, team_purple, team_rogue, team_count } team_color_t;
 	wxIPV4address	ip;
-
-	uint16_t	gameStyle;
 
 	class Team {
 	public:
@@ -76,6 +57,19 @@ public:
 		typedef std::map< team_color_t, Attribute<Team> > teammap_t;
 		teammap_t	color;
 	};
+
+	class GameType {
+	public:
+		typedef enum { FFA, CTF, RC } gametype_t;
+	private:
+		gametype_t	value;
+	public:
+		GameType& operator=(gametype_t v) { this->value = v; return *this; };
+
+		bool isFFA() const { return this->value == FFA; };
+		bool isCTF() const { return this->value == CTF; };
+		bool isRC() const { return this->value == RC; };
+	};
 		
 	bool		fullyParsed;
 	bool		favorite;
@@ -86,17 +80,7 @@ public:
 	void setIP(const wxIPV4address&);
 	const wxIPV4address& getIP() const;
 
-	bool IsCTF() const;
-	bool IsRC() const;
-	bool IsFFA() const;
-
 	const wxString GetType() const;
-
-	bool GotAntidote() const;
-	bool GotHandicap() const;
-	bool GotJumping() const;
-	bool GotRicochet() const;
-	bool GotSuperFlags() const;
 
 	bool IsFull() const;
 	bool IsEmpty() const;
@@ -105,6 +89,15 @@ public:
 	Attribute<wxString>	name;					// server:port
 	Attribute<wxString> protocolVersion;		// bzfs00057
 	Attribute<wxString> longName;				// Home of DUB. Welcome. 
+
+	Attribute<GameType>		gameType;
+	Attribute<bool>		gotSuperFlags;
+	Attribute<bool>		gotJumping;
+	Attribute<bool>		gotInertia;
+	Attribute<bool>		gotRicochet;
+	Attribute<bool>		gotShakable;
+	Attribute<bool>		gotAntidote;
+	Attribute<bool>		gotHandicap;
 
 	Attribute<Ping>		ping;
 	
@@ -121,6 +114,21 @@ public:
 
 inline wxString convertTowxString(const Server::Team& v) {
 	return wxString::Format(_T("%d/%d"), v.count, v.max);
+}
+
+inline wxString convertTowxString(const Server::GameType& v) {
+	if(v.isCTF()) {
+		return wxString(_("CTF"));
+	}
+	else if(v.isFFA()) {
+		return wxString(_("FFA"));
+	}
+	else if(v.isRC()) {
+		return wxString(_("RC")); 
+	}
+	else {
+		return wxString(_("???"));
+	}
 }
 
 #endif

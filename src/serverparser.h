@@ -44,6 +44,22 @@ public:
 
 /// Parser for BZFS0026 
 class ServerHexParserBZFS0026 : public ServerHexParser {
+private:	
+	/// GameStyle as defined in BZFlag source
+	enum GameStyle {
+	  PlainGameStyle =       0x0000,
+	  TeamFlagGameStyle =    0x0001, // capture the flag
+	  SuperFlagGameStyle =   0x0002, // superflags allowed
+	  //FormerRogueStyle =   0x0004, // used to be rogue, but now we have rogue maxplayers 
+	  JumpingGameStyle =     0x0008, // jumping allowed
+	  InertiaGameStyle =     0x0010, // momentum for all
+	  RicochetGameStyle =    0x0020, // all shots ricochet
+	  ShakableGameStyle =    0x0040, // can drop bad flags
+	  AntidoteGameStyle =    0x0080, // anti-bad flags
+	  HandicapGameStyle =    0x0100, // handicap players based on score (eek! was TimeSyncGameStyle)
+	  RabbitChaseGameStyle = 0x0200  // rabbit chase
+	  // add here before reusing old ones above
+	};
 public:
 	void parse(const wxString, Server&);
 };

@@ -35,12 +35,14 @@ bool Query::operator==(const Server* server) const {
 
 		if( token.CmpNoCase(_T("ALL")) == 0 )
 			result &= true;
+		/*
 		else if( token.CmpNoCase(_T("CTF")) == 0 )
-			result &= server->IsCTF();
+			result &= server->isCTF.value;
 		else if( token.CmpNoCase(_T("FFA")) == 0 )
-			result &= server->IsFFA();
+			result &= server->isFFA.value;
 		else if( token.CmpNoCase(_T("RC")) == 0 )
-			result &= server->IsRC();
+			result &= server->isRC.value;
+		*/
 		else if( token.CmpNoCase(_T("FAVORITE")) == 0 )
 			result &= server->favorite;
 		else if( token.CmpNoCase(_T("RECENT")) == 0 )

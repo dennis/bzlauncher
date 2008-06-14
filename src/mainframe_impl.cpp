@@ -65,7 +65,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 			return SortHelper(s1->longName().CmpNoCase(s2->longName()),ascending);
 			break;
 		case 3:	// Type
-			return SortHelper(s1->GetType().CmpNoCase(s2->GetType()),ascending);
+			return SortHelper(s1->gameType().CmpNoCase(s2->gameType()),ascending);
 			break;
 		case 4: // Players
 			{
@@ -306,7 +306,7 @@ void MainFrameImpl::RefreshActiveView() {
 
 		if(current->fullyParsed) {
 			// Type
-			list->SetItem(idx, 2, current->GetType());
+			list->SetItem(idx, 2, current->gameType());
 
 			// Player Count
 			list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));

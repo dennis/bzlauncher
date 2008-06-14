@@ -53,6 +53,13 @@ public:
 	}
 };
 
+inline wxString convertTowxString(const bool& v) {
+	if(v)
+		return wxString(_T("Yes"));
+	else
+		return wxString(_T("No"));
+}
+
 inline wxString convertTowxString(const wxString& v) {
 	return wxString(v);
 }

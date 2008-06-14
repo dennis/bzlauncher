@@ -23,7 +23,7 @@ THE SOFTWARE.
 */
 #include "server.h"
 
-Server::Server() : gameStyle(0), fullyParsed(false), favorite(false), recent(false) {
+Server::Server() : fullyParsed(false), favorite(false), recent(false) {
 }
 
 int Server::GetPlayerCount() const {
@@ -40,7 +40,7 @@ int Server::GetPlayerCount() const {
 }
 
 bool Server::IsFull() const {
-	return this->GetPlayerCount() == this->maxPlayers;
+	return this->GetPlayerCount() == this->maxPlayers.value;
 }
 
 bool Server::IsEmpty() const {
@@ -55,47 +55,3 @@ void Server::setIP(const wxIPV4address& val) {
 const wxIPV4address& Server::getIP() const {
 	return this->ip;
 }
-
-bool Server::IsCTF() const {
-	return (this->gameStyle & TeamFlagGameStyle) == TeamFlagGameStyle;
-}
-
-bool Server::IsRC() const {
-	return (this->gameStyle & RabbitChaseGameStyle) == RabbitChaseGameStyle;
-}
-
-bool Server::IsFFA() const {
-	return !this->IsCTF() && !this->IsRC();
-}
-
-const wxString Server::GetType() const {
-	if( this->IsCTF() )
-		return wxT("CTF");
-	else if( this->IsFFA() )
-		return wxT("FFA");
-	else if( this->IsRC() )
-		return wxT("RC");
-	else
-		return wxT("??");
-}
-
-bool Server::GotSuperFlags() const {
-	return this->gameStyle && SuperFlagGameStyle;
-}
-
-bool Server::GotJumping() const {
-	return this->gameStyle && JumpingGameStyle;
-}
-
-bool Server::GotAntidote() const {
-	return this->gameStyle && AntidoteGameStyle;
-}
-
-bool Server::GotRicochet() const {
-	return this->gameStyle && RicochetGameStyle;
-}
-
-bool Server::GotHandicap() const {
-	return this->gameStyle && HandicapGameStyle;
-}
-

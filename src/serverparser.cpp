@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include "server.h"
 #include "serverparser.h"
 
 static int Hex2bin(char d) {
@@ -80,7 +81,28 @@ void ServerHexParserBZFS0026::parse(const wxString hex, Server& s) {
 	theBuf[54] = (char)NULL;
 
 	char* p = theBuf;
-	p = UnpackHex16(p, s.gameStyle);
+
+	uint16_t	gamestyle;
+	p = UnpackHex16(p, gamestyle);
+
+	if((gamestyle & TeamFlagGameStyle) == TeamFlagGameStyle) {
+		s.gameType.value = Server::GameType::CTF;
+	}
+	else if((gamestyle & RabbitChaseGameStyle) == RabbitChaseGameStyle) {
+		s.gameType.value = Server::GameType::RC;
+	}
+	else {
+		s.gameType.value = Server::GameType::FFA;
+	}
+
+	s.gotSuperFlags		= (gamestyle & SuperFlagGameStyle) == SuperFlagGameStyle;
+	s.gotJumping		= (gamestyle & JumpingGameStyle)  == JumpingGameStyle;
+	s.gotInertia		= (gamestyle & InertiaGameStyle)  == InertiaGameStyle;
+	s.gotAntidote		= (gamestyle & AntidoteGameStyle) == AntidoteGameStyle;
+	s.gotShakable		= (gamestyle & ShakableGameStyle) == ShakableGameStyle;
+	s.gotRicochet		= (gamestyle & RicochetGameStyle) == RicochetGameStyle;
+	s.gotHandicap		= (gamestyle & HandicapGameStyle) == HandicapGameStyle;
+
 	p = UnpackHex16(p, s.maxShots.value); 
 	p = UnpackHex16(p, s.shakeWins.value);
 	p = UnpackHex16(p, s.shakeTimeout.value);
