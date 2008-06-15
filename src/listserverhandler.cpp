@@ -206,8 +206,6 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 	return NULL;
 }
 
-// TODO: This will perform a search of the this->serverList. For now, it dosn't really
-// do anything, except return a ServerResultSet (like searching that matches everything)
 ServerResultSet ListServerHandler::Search(const Query& query) {
 	ServerResultSet	resultSet;
 
