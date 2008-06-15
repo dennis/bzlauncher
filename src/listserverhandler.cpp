@@ -133,7 +133,7 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 				ip.Hostname(token);
 				ip.Service(port);
 				s->setIP(ip);
-				s->longName += tok.GetString();
+				s->longName.value += tok.GetString();
 			}
 			break;
 		}

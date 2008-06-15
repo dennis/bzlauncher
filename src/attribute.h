@@ -37,14 +37,6 @@ public:
 	Attribute(T val) {
 		this->value = val;
 	}
-	Attribute<T> operator=(const T& val) {
-		this->value = val;
-		return *this;
-	}
-	Attribute<T> operator+=(const T& val) {
-		this->value += val;
-		return *this;
-	}
 	operator wxString() const {
 		return convertTowxString(this->value);
 	}
