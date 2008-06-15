@@ -28,6 +28,5 @@ THE SOFTWARE.
 ServerListView::ServerListView(const Query& thequery, long sort) : serverList(NULL), version(0) {
 	this->query = thequery;
 	this->currentSortMode = sort;
-	wxLogDebug(_T("ServerListView() (%lx - version = %d - query = %s"), (long int)this, this->version, query.get().c_str());
 }
 

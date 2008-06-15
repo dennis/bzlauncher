@@ -73,7 +73,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_color_t team)
 #else
 void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 #endif
-	wxLogDebug(_T("LaunchSelectedServer()"));
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
 	if(this->selectedServerHostPort.IsEmpty() || !server ) {
@@ -104,7 +103,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 #endif
 	}
 
-	wxLogDebug(_T("Setting Args"));
 	wxString	args;
 
 	switch(team) {

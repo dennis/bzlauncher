@@ -134,7 +134,6 @@ MainFrameImpl::~MainFrameImpl() {
 }
 
 void MainFrameImpl::AddView(ServerListView* view) {
-	wxLogDebug(_T("AddView(%lx)"), view);
 	this->viewList.push_back(view);
 
 	this->AddViewAsTab(view);
@@ -145,8 +144,6 @@ void MainFrameImpl::AddView(ServerListView* view) {
 
 void MainFrameImpl::RemoveView(ServerListView* view) {
 	// Ignore the delete if we only got one view
-	wxLogDebug(_T("RemoveView(%lx)"), view);
-	wxLogDebug(_T("We got %d views"), this->viewList.size());
 	if(this->viewList.size()==1) {
 		return;
 	}
@@ -155,19 +152,15 @@ void MainFrameImpl::RemoveView(ServerListView* view) {
 	if(i == this->viewList.end())
 		return;
 
-	wxLogDebug(_T("removing view from this->viewList"));	
 	this->viewList.erase(i);
 	this->ViewDisconnect(view);
 
-	wxLogDebug(_T("delete view"));
 	delete view;
 
 	this->activeView = NULL; // FIXME
-	wxLogDebug(_T("RemoveView() done"));
 }
 
 void MainFrameImpl::AddViewAsTab(ServerListView* view) {
-	wxLogDebug(_T("AddViewAsTab(%lx)"), view);
 	wxFlexGridSizer* fgSizer;
 	fgSizer = new wxFlexGridSizer( 1, 1, 0, 0 );
 	fgSizer->AddGrowableCol(0);
@@ -210,7 +203,6 @@ void MainFrameImpl::ViewDisconnect(ServerListView* view) {
 
 
 void MainFrameImpl::SetupViews() {
-	wxLogDebug(_T("SetupViews()"));
 	this->viewList = appConfig.getViews();
 
 	assert(this->viewList.size());
@@ -227,7 +219,6 @@ void MainFrameImpl::SetupViews() {
 }
 
 void MainFrameImpl::SetupColumns(ServerListView *view) {
-	wxLogDebug(_T("SetupColumns(%lx)"), view);
 	wxString names[] = {
 		_("Server"), _("Name"), _("Type"),
 		_("#"), _("Ping"), _("Fav")
@@ -261,7 +252,6 @@ void MainFrameImpl::SetStatusText(const wxString& t) {
 }
 
 void MainFrameImpl::EventRefresh(wxCommandEvent&) {
-	wxLogDebug(_T("EventRefresh()"));
 	wxGetApp().RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
 }
@@ -271,11 +261,7 @@ void MainFrameImpl::RefreshActiveView() {
 
 	wxListCtrl* list = this->activeView->serverList;
 
-	wxLogDebug(_T("RefreshActiveView for view %lx"), (long int)this->activeView );
-	wxLogDebug(_T("BEFORE: list->Size() = %d. activeView(%lx)->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView, this->activeView->version, app.listServerHandler.getVersion());
-
 	if(app.listServerHandler.getVersion() == this->activeView->version) {
-		wxLogDebug(_T("This view is up-to-date"));
 		return;
 	}
 
@@ -338,8 +324,6 @@ void MainFrameImpl::RefreshActiveView() {
 		idx++;
 	}
 
-	wxLogDebug(_T("AFTER: list->Size() = %d. activeView->version = %d. listserver version = %d"), list->GetItemCount(), this->activeView->version, app.listServerHandler.getVersion());
-	
 	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
 	this->activeView->serverList->Layout();
 }
@@ -366,7 +350,6 @@ void MainFrameImpl::ShowDetails() {
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
-	wxLogDebug(_T("EventSelectServer()"));
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
 	const wxString s = srv->name();
 	wxGetApp().SetSelectedServer(s);
@@ -378,7 +361,6 @@ void MainFrameImpl::EventRightClick(wxListEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventActivated(wxListEvent& WXUNUSED(event)) {
-	wxLogDebug(_T("EventActivated"));
 	this->ShowDetails();
 }
 
@@ -449,7 +431,6 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	BZLauncherApp& app = wxGetApp();
-	wxLogDebug(_T("EventTimer()"));
 	app.RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
 	
@@ -466,9 +447,6 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 			port = _T("5154");
 
 		wxString	serverPort = wxString::Format(_T("%s:%s"), server.c_str(), port.c_str());
-
-		wxLogDebug(_T("Scheme: %s"), arg.GetScheme().c_str());
-		wxLogDebug(_T("Server: %s"), serverPort.c_str());
 
 		if( !server.IsEmpty() && ( arg.GetScheme().CmpNoCase(_T("bzflag")) || arg.GetScheme().CmpNoCase(_T("bzlauncher")))) {
 			wxGetApp().SetSelectedServer(serverPort);
@@ -487,7 +465,6 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	// Make sure the list is up-to-date
 	if(wxGetApp().listServerHandler.getVersion() != this->activeView->version) {
-		wxLogDebug(_T("This view is not up-to-date"));
 		return;
 	}
 
@@ -545,7 +522,6 @@ void MainFrameImpl::EventSearchText(wxCommandEvent& WXUNUSED(event)) {
 void MainFrameImpl::EventViewChanged(wxAuiNotebookEvent& event) {
 	int selected = event.GetSelection();
 	if( selected >= 0 && selected < (int)this->viewList.size() ) {
-		wxLogDebug(_T("OnViewChangeEvent() - to view #%d"), selected);
 		this->SwitchView(this->viewList[event.GetSelection()]);
 		this->RefreshActiveView();
 	}
@@ -556,16 +532,13 @@ void MainFrameImpl::EventToolbarToggle(wxCommandEvent& event) {
 }
 
 void MainFrameImpl::SwitchView(ServerListView* newView) {
-	wxLogDebug(_T("SwitchView() - to view #%lx"), newView);
 	// Make sure the newView got same column-widths as the current
 	if(this->activeView) {
-		wxLogDebug(_T("SwitchView() - SetColumnWidth() from %lx"), this->activeView);
 		for(int col = 0; col < Config::COL_COUNT; col++)
 			newView->serverList->SetColumnWidth(col,this->activeView->serverList->GetColumnWidth(col));
 	}
 	
 	this->activeView = newView;
-	wxLogDebug(_T("SwitchView() - done"));
 }
 
 void MainFrameImpl::AddAsRecentServer(const wxString& server) {
@@ -582,7 +555,6 @@ void MainFrameImpl::AddAsRecentServer(const wxString& server) {
 }
 
 void MainFrameImpl::EventViewClose(wxAuiNotebookEvent& event) {
-	wxLogDebug(_T("EventViewVlose()"));
 	if(!this->CanCloseView(this->activeView)) {
 		event.Veto();
 	}
@@ -592,7 +564,6 @@ void MainFrameImpl::EventViewClose(wxAuiNotebookEvent& event) {
 }
 
 void MainFrameImpl::EventCloseView(wxCommandEvent&) {
-	wxLogDebug(_T("EventCloseView()"));
 	if(this->CanCloseView(this->activeView)) {
 		ServerListView*	deleting = this->activeView;
 		this->RemoveView(deleting);

@@ -23,7 +23,6 @@ THE SOFTWARE.
 */
 #include "ping.h"
 #include <wx/listimpl.cpp>
-#include <wx/log.h>
 
 WX_DEFINE_LIST(PingList);
 DEFINE_EVENT_TYPE(wxEVT_PING_CHANGED)

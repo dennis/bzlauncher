@@ -25,7 +25,6 @@ THE SOFTWARE.
 #define __view__
 
 #include <wx/listctrl.h>
-#include <wx/log.h>
 #include <vector>
 #include "query.h"
 

@@ -26,7 +26,6 @@ THE SOFTWARE.
 #define __attribute_h__
 
 #include <wx/string.h>
-#include <wx/log.h>
 
 template< typename T >
 class Attribute {
