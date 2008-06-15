@@ -80,8 +80,6 @@ public:
 	void setIP(const wxIPV4address&);
 	const wxIPV4address& getIP() const;
 
-	const wxString GetType() const;
-
 	bool IsFull() const;
 	bool IsEmpty() const;
 	int GetPlayerCount() const;
