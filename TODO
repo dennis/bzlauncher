@@ -1,9 +1,20 @@
 - BUG: Buggy ping. If GUI is busy, ping-measurement is off
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 
-- Add a Attribute.operator==(wxString token) used by Query ?
-- Add a ColumnClass (name of an Attribute)
-	- one exists for each column across views
+- Column Class (name of an Attribute)
+	- one exists for each column across views (eg. One for "Servername")
 		- it contains info about positioning and if visible on both the list and details
 		- and in list, if it the one the list is sorted by
-- Put most/all Attribute()'s into a hash
+		- Grouping information? Each ColumnClass belongs to a group?
+			eg: Primary (default), which is preformatted
+			eg: "BZStats" a list of name/value pairs, a lot like the server-details is now
+			.. perhaps "Groups" should be tabs in server-details?
+- Put all Attribute()'s into a map, with a ColumnClass* as key in Server
+- Each DataSource got a map with key=name, and value = ColumnKey 
+- DataSource.update() - updates the serverlist
+	- Calls DataController.update("server:port", Attribute)
+		- to update data.. If server:port dosnt exists, its added.
+	- Calls DataController.delete("server:port")
+		- to remove the server completly
+- DataController - controls/owns the datalist and versioning info
+	- Caches the data for quick load at next startup
