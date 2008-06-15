@@ -35,14 +35,12 @@ bool Query::operator==(const Server* server) const {
 
 		if( token.CmpNoCase(_T("ALL")) == 0 )
 			result &= true;
-		/*
 		else if( token.CmpNoCase(_T("CTF")) == 0 )
-			result &= server->isCTF.value;
+			result &= server->gameType.value.isCTF();
 		else if( token.CmpNoCase(_T("FFA")) == 0 )
-			result &= server->isFFA.value;
+			result &= server->gameType.value.isFFA();
 		else if( token.CmpNoCase(_T("RC")) == 0 )
-			result &= server->isRC.value;
-		*/
+			result &= server->gameType.value.isRC();
 		else if( token.CmpNoCase(_T("FAVORITE")) == 0 )
 			result &= server->favorite;
 		else if( token.CmpNoCase(_T("RECENT")) == 0 )
