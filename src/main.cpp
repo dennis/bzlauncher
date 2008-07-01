@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "server.h"
 #include "mainframe_impl.h"
 
+#include "listserver.h"
+
 IMPLEMENT_APP(BZLauncherApp)
 
 BZLauncherApp::~BZLauncherApp() {
@@ -39,8 +41,12 @@ BZLauncherApp::~BZLauncherApp() {
 bool BZLauncherApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
 	wxFileSystem::AddHandler(new wxInternetFSHandler);
+	wxSocketBase::Initialize();
 
 	appConfig.versionCheck();
+
+	this->dataControl.add(new ListServer(&dataControl, appConfig.getListServers()));
+	this->dataControl.run();
 
 	this->mainFrame = new  MainFrameImpl(NULL);
 	this->mainFrame->Show(true);
@@ -50,6 +56,11 @@ bool BZLauncherApp::OnInit() {
 	this->SetAppName(_T("BZLauncher"));
 
 	return TRUE;
+}
+
+int BZLauncherApp::OnExit() {
+	this->dataControl.stop();
+	return 0;
 }
 
 void BZLauncherApp::SetStatusText(const wxString& text) {

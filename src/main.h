@@ -24,6 +24,8 @@ THE SOFTWARE.
 #include <wx/wx.h>
 #include <wx/arrstr.h>
 
+#include "datactrl.h"
+
 #include "listserverhandler.h"
 #include "server.h"
 
@@ -34,13 +36,16 @@ class BZLauncherApp : public wxApp {
 private:
 	wxString 			selectedServerHostPort;
 
+	DataController		dataControl;
+
 public:
 	MainFrameImpl*		mainFrame;
 	ListServerHandler	listServerHandler;
 
-	virtual bool OnInit();
-
 	~BZLauncherApp();
+
+	bool OnInit();
+	int OnExit();
 
 	void SetStatusText(const wxString&);
 	void RefreshServerList(wxArrayString&, wxArrayString&);

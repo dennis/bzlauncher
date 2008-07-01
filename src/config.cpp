@@ -180,6 +180,24 @@ void Config::setFavorites(const wxArrayString& list) {
 	);
 }
 
+wxArrayString Config::getListServers() const {
+	wxArrayString	list;
+	wxString		str;
+	int 			count = 0;
+
+	CFG_OP(cfg,
+		while(cfg->Read(wxString::Format(_T("listserver/%d"), count), &str)) {
+			list.Add(str);
+			count++;
+		}
+	);
+
+	if(count == 0) 
+		list.Add(_T("http://my.bzflag.org/db?action=LIST"));
+
+	return list;
+}
+
 wxString Config::getListServerURL(int n) const {
 	int count = 0;
 	wxString str;

@@ -21,53 +21,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include <wx/log.h>
+#include "datactrl.h"
+#include "datasrc.h"
 
-#ifndef __attribute_h__
-#define __attribute_h__
+DataController::~DataController() {
+	wxLogDebug(_T("DataController::~DataController"));
+	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i )
+		delete *i;
+	this->sourceList.clear();
 
-#include <wx/string.h>
+	for(labelmap_t::iterator i = this->labelMap.begin(); i != this->labelMap.end(); ++i )
+		delete i->second;
+	this->labelMap.clear();
+}
 
-class AttributeBase {
-public:
-	virtual operator wxString() const = 0;
-	virtual wxString operator()() const = 0;
-};
+void DataController::add(DataSource* ds) {
+	this->sourceList.push_back(ds);
+}
 
-template< typename T >
-class Attribute : public AttributeBase {
-public:
-	T	value;
+void DataController::run() {
+	wxLogDebug(_T("DataController::run()"));
+	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i )
+		(*i)->Run();
+}
 
-	Attribute() {};
-	Attribute(T val) {
-		this->value = val;
+void DataController::stop() {
+	wxLogDebug(_T("DataController::stop()"));
+	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
+		(*i)->Kill();
+		(*i)->Wait();
 	}
-
-	operator wxString() const {
-		return convertTowxString(this->value);
-	}
-	wxString operator()() const {
-		return convertTowxString(this->value);
-	}
-};
-
-inline wxString convertTowxString(const bool& v) {
-	if(v)
-		return wxString(_T("Yes"));
-	else
-		return wxString(_T("No"));
 }
 
-inline wxString convertTowxString(const wxString& v) {
-	return wxString(v);
-}
-
-inline wxString convertTowxString(uint16_t v) {
-	return wxString::Format(_T("%d"), v);
-}
-
-inline wxString convertTowxString(const unsigned char& v) {
-	return wxString::Format(_T("%d"), v);
-}
-
-#endif

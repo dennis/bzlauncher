@@ -64,6 +64,7 @@ public:
 	wxArrayString getFavorites() const;
 	void setFavorites(const wxArrayString&);
 
+	wxArrayString getListServers() const;
 	wxString getListServerURL(int=0) const;
 
 	viewlist_t getViews() const;

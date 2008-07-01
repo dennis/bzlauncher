@@ -1,4 +1,6 @@
-- BUG: Buggy ping. If GUI is busy, ping-measurement is off
+Make sure to remove -O2 when compiling for debug (that might give clue about current crash?)
+DataEntity() c'tor isnt called?!
+
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 
 - Column Class (name of an Attribute)

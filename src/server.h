@@ -88,7 +88,7 @@ public:
 	Attribute<wxString> protocolVersion;		// bzfs00057
 	Attribute<wxString> longName;				// Home of DUB. Welcome. 
 
-	Attribute<GameType>		gameType;
+	Attribute<GameType>	gameType;
 	Attribute<bool>		gotSuperFlags;
 	Attribute<bool>		gotJumping;
 	Attribute<bool>		gotInertia;
