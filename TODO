@@ -7,7 +7,6 @@
 		- Grouping information? Each ColumnClass belongs to a group?
 			eg: Primary (default), which is preformatted
 			eg: "BZStats" a list of name/value pairs, a lot like the server-details is now
-			.. perhaps "Groups" should be tabs in server-details?
 - Put all Attribute()'s into a map, with a ColumnClass* as key in Server
 - Each DataSource got a map with key=name, and value = ColumnKey 
 - DataSource.update() - updates the serverlist
@@ -17,3 +16,11 @@
 		- to remove the server completly
 - DataController - controls/owns the datalist and versioning info
 	- Caches the data for quick load at next startup
+- Add a GUI class for each datasource. Eg: ListServer and ListServerGUI. The *GUI class
+	handles the GUI for the "view details" dialogbox. The idea is, that each DataSource
+	will have its own tab (So ListServer will create a "General info" tab, BZStats will 
+	have a "League" tab). *GUI classes can define zero or more tabs if needed.
+- The server-list is defined by the Label objects, with the following members:
+	name, visible, position, width
+- Consider using $server, $text etc instead of server, text for the keys of the labels
+	(can be used for searching, ie: $red > 2 (more than 2 reds)
