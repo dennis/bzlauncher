@@ -37,20 +37,6 @@ else
 fi
 AC_SUBST(ccache)
 
-dnl DISTCC
-AC_MSG_CHECKING(for distcc)
-distcc=`which distcc`
-if test "x$distcc" != "x"; then
-	GCC="$distcc $GCC"
-	CC="$distcc $CC"
-	GXX="$distcc $GXX"
-	CXX="$distcc $CXX"
-	AC_MSG_RESULT($distcc)
-else
-	AC_MSG_RESULT(not found)
-fi
-AC_SUBST(distcc)
-
 AM_OPTIONS_WXCONFIG
 
 if test x$enable_debug = xyes; then
