@@ -35,35 +35,19 @@ THE SOFTWARE.
 
 class DataEntity {
 protected:
-	//typedef std::map<const Label*, int > attributemap_t;
-	typedef std::map<int, int > attributemap_t;
-	attributemap_t*	attributes;
+	typedef std::map<const Label*, AttributeBase* > attributemap_t;
+	attributemap_t	attributes;
 public:
-	DataEntity() {
-		wxLogDebug(_T("!!!!!!!!!!!DataEntry"));
-		this->attributes = new attributemap_t;
-	}
-
 	~DataEntity() {
-		/*
 		for(attributemap_t::iterator i = this->attributes.begin(); i != this->attributes.end(); ++i )
 			if( i->second )
 				delete i->second;
-		*/
-	}
-
-	void test() {
-		(*this->attributes)[42] = 1;
 	}
 
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
-		//Attribute<T>* valdupe = NULL; //new Attribute<T>(val);
-		wxLogDebug(_T("got copy"));
-		//this->attributes[42] = 1;
-		//wxLogDebug(_T("got index"));
-		//this->attributes[l] = valdupe;
-		wxLogDebug(_T("Assigned"));
+		Attribute<T>* valdupe = new Attribute<T>(val);
+		this->attributes[l] = valdupe;
 	}
 };
 
@@ -85,7 +69,11 @@ public:
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
 		wxLogDebug(_T("Update %s attribute for label %lx = '%s'"), name.c_str(), l, static_cast<wxString>(val).c_str());
-		this->serverList[name]->test();
+
+		entitymap_t::iterator i = this->serverList.find(name);
+
+		if( i == this->serverList.end() )
+			this->serverList[name] = new DataEntity();
 		this->serverList[name]->update(l,val);
 	}
 
