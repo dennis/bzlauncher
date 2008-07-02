@@ -32,6 +32,10 @@ protected:
 public:
 	Label(const wxString& _n) : name(_n) {
 	}
+
+	const wxString& getName() const {
+		return this->name;
+	}
 };
 
 #endif

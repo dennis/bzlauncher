@@ -68,7 +68,8 @@ public:
 
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
-		wxLogDebug(_T("Update %s attribute for label %lx = '%s'"), name.c_str(), l, static_cast<wxString>(val).c_str());
+		// Remember to use locks
+		wxLogDebug(_T("Update %s attribute for label %lx [%s] = '%s'"), name.c_str(), l, l->getName().c_str(), static_cast<wxString>(val).c_str());
 
 		entitymap_t::iterator i = this->serverList.find(name);
 
