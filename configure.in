@@ -55,8 +55,9 @@ AM_OPTIONS_WXCONFIG
 
 if test x$enable_debug = xyes; then
 	AM_PATH_WXCONFIG(2.8.4, wxWin=1, wxWin=0, [], [--debug])
-	#DEBUG_FLAGS="-W -Wall -Wshadow -Wundef -g -ggdb -fno-inline -D__DEBUG__ -fmessage-length=0 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC"
-	DEBUG_FLAGS="-W -Wall -Wshadow -Wundef -g -ggdb"
+	DEBUG_FLAGS="-W -Wall -Wshadow -Wundef -g -ggdb -fno-inline -O0"
+	#dnl Reset (to avoid the -O2)
+	CXXFLAGS=""
 else
 	AM_PATH_WXCONFIG(2.8.4, wxWin=1, wxWin=0, [])
 	DEBUG_FLAGS=""
