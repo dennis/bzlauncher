@@ -57,6 +57,7 @@ ListServerHandler::~ListServerHandler() {
 
 
 void ListServerHandler::GetServerList(wxArrayString& favs,wxArrayString& recent) {
+return;	// DISABLED
 	wxBusyCursor wait;
 	BZLauncherApp& app = wxGetApp();
 
