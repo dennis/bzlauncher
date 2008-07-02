@@ -31,12 +31,12 @@ THE SOFTWARE.
 
 ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSource(_ctrl), listServers(_s) {
 	this->server           = new Label(_("Server"));
-	this->protocolVersion  = new Label(_("Protocol Version"));
+	this->protocol         = new Label(_("Protocol Version"));
 	this->text             = new Label(_("Text"));
 
 	// Ownership is transferred to ctrl, so we dont need to free them
 	this->ctrl->addLabel(_T("server"),           this->server );
-	this->ctrl->addLabel(_T("protocol_version"), this->protocolVersion );
+	this->ctrl->addLabel(_T("protocol"), 		 this->protocol );
 	this->ctrl->addLabel(_T("text"),             this->text );
 }
 
@@ -116,7 +116,7 @@ bool ListServer::ParseLine(const wxString& line) {
 			}
 			break;
 		case 1:  // version 
-			this->ctrl->updateAttribute(name, this->protocolVersion, Attribute<wxString>(token));
+			this->ctrl->updateAttribute(name, this->protocol, Attribute<wxString>(token));
 			break;
 		case 2:  // Hex info
 			/*

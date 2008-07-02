@@ -35,7 +35,7 @@ private:
 	wxArrayString	listServers;
 
 	Label*			server;
-	Label*			protocolVersion;
+	Label*			protocol;
 	Label*			text;
 
 public:
