@@ -38,18 +38,14 @@ ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSou
 	this->ctrl->addLabel(_T("server"),           this->server );
 	this->ctrl->addLabel(_T("protocol_version"), this->protocolVersion );
 	this->ctrl->addLabel(_T("text"),             this->text );
-
-	wxLogDebug(_T("[%lx] DataSource::ListServer"), this->GetId());
 }
 
 ListServer::~ListServer() {
-	wxLogDebug(_T("[%lx] DataSource::~ListServer"), this->GetId());
 }
 
 ListServer::ExitCode ListServer::Entry() {
 	this->GetServerList();
 	while(!this->TestDestroy()) {
-		wxLogDebug(_T("[%lx] Hello world"), this->GetId());
 		wxSleep(1);
 	}
 	return 0;
@@ -143,6 +139,7 @@ bool ListServer::ParseLine(const wxString& line) {
 				s->longName.value += tok.GetString();
 			}
 			*/
+			this->ctrl->updateAttribute(name, this->text, Attribute<wxString>(tok.GetString()));
 			break;
 		}
 		i++;
