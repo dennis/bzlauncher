@@ -27,7 +27,6 @@ THE SOFTWARE.
 #include "datactrl.h"
 
 #include "listserverhandler.h"
-#include "server.h"
 
 class MainFrameImpl;
 

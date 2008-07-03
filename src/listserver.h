@@ -34,10 +34,47 @@ private:
 	wxString		rawResponse;
 	wxArrayString	listServers;
 
-	Label*			server;
-	Label*			protocol;
-	Label*			text;
+	Label*			lblserver;
+	Label*			lblprotocol;
+	Label*			lbltext;
 
+	Label*			lblctf;
+	Label*			lblrc;
+	Label*			lblffa;
+
+	Label*			lblsuperflags;
+	Label*			lbljumping;
+	Label*			lblinertia;
+	Label*			lblantidote;
+	Label*			lblshakable;
+	Label*			lblricochet;
+	Label*			lblhandicap;
+
+	Label*			lblmaxshots;
+	Label*			lblshakewins;
+	Label*			lblshaketimeout;
+	Label*			lblmaxplayerscore;
+	Label*			lblmaxteamscore;
+	Label*			lblmaxtime;
+	Label*			lblmaxplayers;
+
+	Label*			lblroguecount;
+	Label*			lblroguemax;
+
+	Label*			lblredcount;
+	Label*			lblredmax;
+
+	Label*			lblgreencount;
+	Label*			lblgreenmax;
+
+	Label*			lblbluecount;
+	Label*			lblbluemax;
+
+	Label*			lblpurplecount;
+	Label*			lblpurplemax;
+
+	Label*			lblobservercount;
+	Label*			lblobservermax;
 public:
 	ListServer(DataController*, const wxArrayString&);
 	~ListServer();
@@ -46,6 +83,8 @@ public:
 	bool GetListServerResponse();
 	bool ParseLine(const wxString&);
 	void GetServerList();
+
+	void ServerHexParserBZFS0026(const wxString&,const wxString&);
 };
 
 #endif

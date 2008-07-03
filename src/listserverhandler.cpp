@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "main.h"
 #include "config.h"
 #include "listserverhandler.h"
-#include "serverparser.h"
 
 /*
  * Serverlist is a text/plain response from bzflag.org servers. Each line describes a single
@@ -121,11 +120,13 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 			break;
 		case 2:  // Hex info
 			{
+				/*
 				ServerHexParser* p = ServerHexParser::GetParser(s->protocolVersion);
 				if(p) {
 					p->parse(token,*s);
 					delete p;
 				}
+				*/
 			}
 			break;
 		case 3: 
@@ -146,7 +147,6 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 	s->recent   = (recent.Index(s->name()) != wxNOT_FOUND);
 
 	this->serverList.Append(s);
-
 	return true;
 }
 
@@ -217,6 +217,5 @@ ServerResultSet ListServerHandler::Search(const Query& query) {
 			resultSet.push_back(current);
 		}
 	}
-
 	return resultSet;
 }

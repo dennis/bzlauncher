@@ -30,9 +30,9 @@ THE SOFTWARE.
 #include <wx/arrstr.h>
 #include <vector>
 
-#include "server.h"
 #include "ping.h"
 #include "query.h"
+#include "server.h"
 
 WX_DECLARE_LIST(Server, ServerList);
 typedef std::vector<Server*> ServerResultSet;

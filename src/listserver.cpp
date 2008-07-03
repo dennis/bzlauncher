@@ -29,15 +29,93 @@ THE SOFTWARE.
 
 #include "listserver.h"
 
-ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSource(_ctrl), listServers(_s) {
-	this->server           = new Label(_("Server"));
-	this->protocol         = new Label(_("Protocol Version"));
-	this->text             = new Label(_("Text"));
+static int Hex2bin(char d) {
+	switch(d) {
+		case '0': return 0;
+		case '1': return 1;
+		case '2': return 2;
+		case '3': return 3;
+		case '4': return 4;
+		case '5': return 5;
+		case '6': return 6;
+		case '7': return 7;
+		case '8': return 8;
+		case '9': return 9;
+		case 'a': 
+		case 'A': return 10;
+		case 'b': 
+		case 'B': return 11;
+		case 'c': 
+		case 'C': return 12;
+		case 'd': 
+		case 'D': return 13;
+		case 'e': 
+		case 'E': return 14;
+		case 'f': 
+		case 'F': return 15;
+	}
+	return 0;
+}
 
+static char* UnpackHex16(char* buf, uint16_t& d) {
+	d = 0;
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	return buf;
+}
+
+static char* UnpackHex8(char* buf, uint8_t& d) {
+	d = 0;
+	d = (d << 4) | Hex2bin(*buf++);
+	d = (d << 4) | Hex2bin(*buf++);
+	return buf;
+}
+
+ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSource(_ctrl), listServers(_s) {
 	// Ownership is transferred to ctrl, so we dont need to free them
-	this->ctrl->addLabel(_T("server"),           this->server );
-	this->ctrl->addLabel(_T("protocol"), 		 this->protocol );
-	this->ctrl->addLabel(_T("text"),             this->text );
+	this->ctrl->addLabel(_T("server"),      this->lblserver   = new Label(_("Server")));
+	this->ctrl->addLabel(_T("protocol"), 	this->lblprotocol = new Label(_("Protocol Version")));
+	this->ctrl->addLabel(_T("text"),        this->lbltext	  = new Label(_("Text")));
+
+	this->ctrl->addLabel(_T("ctf"),         this->lblctf      = new Label(_("CTF")));
+	this->ctrl->addLabel(_T("rc"),          this->lblrc       = new Label(_("RC")));
+	this->ctrl->addLabel(_T("ffa"),         this->lblffa      = new Label(_("FFA")));
+
+	this->ctrl->addLabel(_T("superflags"),  this->lblsuperflags = new Label(_("Superflags")));
+	this->ctrl->addLabel(_T("jumping"),     this->lbljumping  = new Label(_("Jumping")));
+	this->ctrl->addLabel(_T("inertia"),     this->lblinertia  = new Label(_("Inertia")));
+	this->ctrl->addLabel(_T("antidote"),    this->lblantidote = new Label(_("Antidote")));
+	this->ctrl->addLabel(_T("shakable"),    this->lblshakable = new Label(_("Shakable")));
+	this->ctrl->addLabel(_T("ricochet"),    this->lblricochet = new Label(_("Ricohet")));
+	this->ctrl->addLabel(_T("handicap"),    this->lblhandicap = new Label(_("Handicap")));
+
+	this->ctrl->addLabel(_T("maxshots"),    this->lblmaxshots     = new Label(_("Shots")));
+	this->ctrl->addLabel(_T("shakewins"),   this->lblshakewins    = new Label(_("Shakewins")));
+	this->ctrl->addLabel(_T("shaketimeout"),this->lblshaketimeout = new Label(_("Shaketimeout")));
+	this->ctrl->addLabel(_T("maxplayerscore"), this->lblmaxplayerscore = new Label(_("Max player score")));
+	this->ctrl->addLabel(_T("maxteamscore"), this->lblmaxteamscore = new Label(_("Max team score")));
+	this->ctrl->addLabel(_T("maxtime"),     this->lblmaxtime      = new Label(_("Max time")));
+	this->ctrl->addLabel(_T("maxplayers"),  this->lblmaxplayers   = new Label(_("Players")));
+
+	this->ctrl->addLabel(_T("roguecount"),  this->lblroguecount   = new Label(_("Rogues")));
+	this->ctrl->addLabel(_T("roguemax"),    this->lblroguemax     = new Label(_("Max rogues")));
+
+	this->ctrl->addLabel(_T("redcount"),    this->lblredcount     = new Label(_("Reds")));
+	this->ctrl->addLabel(_T("redmax"),      this->lblredmax       = new Label(_("Max reds")));
+
+	this->ctrl->addLabel(_T("greencount"),  this->lblgreencount   = new Label(_("Greens")));
+	this->ctrl->addLabel(_T("greenmax"),    this->lblgreenmax     = new Label(_("Max greens")));
+
+	this->ctrl->addLabel(_T("bluecount"),   this->lblbluecount    = new Label(_("Blues")));
+	this->ctrl->addLabel(_T("bluemax"),     this->lblbluemax      = new Label(_("Max blues")));
+
+	this->ctrl->addLabel(_T("purplecount"), this->lblpurplecount  = new Label(_("Purples")));
+	this->ctrl->addLabel(_T("purplemax"),   this->lblpurplemax    = new Label(_("Max purples")));
+
+	this->ctrl->addLabel(_T("observercount"),  this->lblobservercount   = new Label(_("Observers")));
+	this->ctrl->addLabel(_T("observermax"),    this->lblobservermax     = new Label(_("Max observers")));
 }
 
 ListServer::~ListServer() {
@@ -104,6 +182,7 @@ bool ListServer::GetListServerResponse() {
 
 bool ListServer::ParseLine(const wxString& line) {
 	wxString name;
+	wxString proto;
 	wxStringTokenizer tok(line, _T(" "));
 
 	int i = 0;
@@ -112,22 +191,16 @@ bool ListServer::ParseLine(const wxString& line) {
 		switch(i) {
 		case 0:	{ // servername:port
 			name = token;
-			this->ctrl->updateAttribute(name, this->server, Attribute<wxString>(name));
+			this->ctrl->updateAttribute(name, this->lblserver, Attribute<wxString>(name));
 			}
 			break;
 		case 1:  // version 
-			this->ctrl->updateAttribute(name, this->protocol, Attribute<wxString>(token));
+			proto = token;
+			this->ctrl->updateAttribute(name, this->lblprotocol, Attribute<wxString>(token));
 			break;
 		case 2:  // Hex info
-			/*
-			{
-				ServerHexParser* p = ServerHexParser::GetParser(s->protocolVersion);
-				if(p) {
-					p->parse(token,*s);
-					delete p;
-				}
-			}
-			*/
+			if(proto.CmpNoCase(_T("BZFS0026")) == 0)
+				ServerHexParserBZFS0026(name,token);
 			break;
 		case 3: 
 			/*
@@ -139,11 +212,93 @@ bool ListServer::ParseLine(const wxString& line) {
 				s->longName.value += tok.GetString();
 			}
 			*/
-			this->ctrl->updateAttribute(name, this->text, Attribute<wxString>(tok.GetString()));
+			this->ctrl->updateAttribute(name, this->lbltext, Attribute<wxString>(tok.GetString()));
 			break;
 		}
 		i++;
 	}
 
 	return true;
+}
+
+void ListServer::ServerHexParserBZFS0026(const wxString& name, const wxString& hex) {
+	enum GameStyle {
+	  PlainGameStyle =       0x0000,
+	  TeamFlagGameStyle =    0x0001, // capture the flag
+	  SuperFlagGameStyle =   0x0002, // superflags allowed
+	  //FormerRogueStyle =   0x0004, // used to be rogue, but now we have rogue maxplayers 
+	  JumpingGameStyle =     0x0008, // jumping allowed
+	  InertiaGameStyle =     0x0010, // momentum for all
+	  RicochetGameStyle =    0x0020, // all shots ricochet
+	  ShakableGameStyle =    0x0040, // can drop bad flags
+	  AntidoteGameStyle =    0x0080, // anti-bad flags
+	  HandicapGameStyle =    0x0100, // handicap players based on score (eek! was TimeSyncGameStyle)
+	  RabbitChaseGameStyle = 0x0200  // rabbit chase
+	  // add here before reusing old ones above
+	};
+	char theBuf[55];
+
+	strncpy(theBuf,hex.ToAscii(),54);
+	theBuf[54] = (char)NULL;
+
+	char* p = theBuf;
+
+	uint16_t	gamestyle;
+	p = UnpackHex16(p, gamestyle);
+
+	bool isctf = (gamestyle & TeamFlagGameStyle) == TeamFlagGameStyle;
+	bool isrc  = (gamestyle & RabbitChaseGameStyle) == RabbitChaseGameStyle;
+	bool isffa = (!isctf && !isrc);
+
+#define PB(x,y) \
+	this->ctrl->updateAttribute(name, x, Attribute<bool>(y));
+
+	PB(this->lblctf, isctf);
+	PB(this->lblrc , isrc);
+	PB(this->lblffa, isffa);
+	PB(this->lblsuperflags, (gamestyle & SuperFlagGameStyle) == SuperFlagGameStyle);
+	PB(this->lbljumping,    (gamestyle & JumpingGameStyle) == JumpingGameStyle);
+	PB(this->lblinertia,    (gamestyle & InertiaGameStyle) == InertiaGameStyle);
+	PB(this->lblantidote,   (gamestyle & AntidoteGameStyle) == AntidoteGameStyle);
+	PB(this->lblshakable,   (gamestyle & ShakableGameStyle) == ShakableGameStyle);
+	PB(this->lblricochet,   (gamestyle & RicochetGameStyle) == RicochetGameStyle);
+	PB(this->lblhandicap,   (gamestyle & HandicapGameStyle) == HandicapGameStyle);
+
+#undef PB
+
+	uint8_t value8;
+	uint16_t value16;
+
+#define P16(x) \
+	p = UnpackHex16(p, value16); this->ctrl->updateAttribute(name, x, Attribute<uint16_t>(value16));
+#define P8(x) \
+	p = UnpackHex8(p, value8); this->ctrl->updateAttribute(name, x, Attribute<uint8_t>(value8));
+
+	P16(this->lblmaxshots);
+	P16(this->lblshakewins);
+	P16(this->lblshaketimeout);
+	P16(this->lblmaxplayerscore);
+	P16(this->lblmaxteamscore);
+	P16(this->lblmaxtime);
+	P8(this->lblmaxplayers);
+
+	P8(this->lblroguecount);
+	P8(this->lblroguemax);
+
+	P8(this->lblredcount);
+	P8(this->lblredmax);
+
+	P8(this->lblgreencount);
+	P8(this->lblgreenmax);
+
+	P8(this->lblbluecount);
+	P8(this->lblbluemax);
+
+	P8(this->lblpurplecount);
+	P8(this->lblpurplemax);
+
+	P8(this->lblobservercount);
+	P8(this->lblobservermax);
+#undef P16
+#undef P8
 }
