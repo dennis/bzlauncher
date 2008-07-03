@@ -77,7 +77,7 @@ public:
 	}
 
 	void addLabel(const wxString& name, Label* l) {
-		wxAssert( this->labelMap.find(name) != this->lableMap.end() );
+		wxASSERT( this->labelMap.find(name) != this->labelMap.end() );
 
 		wxLogDebug(_T("Adding label: [%lx] %s"), l, name.c_str());
 		this->labelMap[name] = l;
