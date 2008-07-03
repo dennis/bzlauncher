@@ -71,14 +71,14 @@ public:
 		// Remember to use locks
 		wxLogDebug(_T("Update %s attribute for label %lx [%s] = '%s'"), name.c_str(), l, l->getName().c_str(), static_cast<wxString>(val).c_str());
 
-		entitymap_t::iterator i = this->serverList.find(name);
-
-		if( i == this->serverList.end() )
+		if( this->serverList.find(name) == this->serverList.end() )
 			this->serverList[name] = new DataEntity();
 		this->serverList[name]->update(l,val);
 	}
 
 	void addLabel(const wxString& name, Label* l) {
+		wxAssert( this->labelMap.find(name) != this->lableMap.end() );
+
 		wxLogDebug(_T("Adding label: [%lx] %s"), l, name.c_str());
 		this->labelMap[name] = l;
 	}
