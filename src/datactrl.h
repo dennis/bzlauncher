@@ -57,13 +57,13 @@ protected:
 	typedef std::vector<DataSource*>		sourcelist_t;
 	typedef std::map<wxString,DataEntity*>	entitymap_t;
 
-	typedef std::map<wxString,Label*>		labelmap_t;
-
 	sourcelist_t	sourceList;
 	entitymap_t		serverList;
-	labelmap_t		labelMap;
 
 public:
+	typedef std::map<wxString,Label*>		labelmap_t;
+	labelmap_t		labelMap;
+
 	~DataController();
 
 	template<typename T>

@@ -75,47 +75,48 @@ static char* UnpackHex8(char* buf, uint8_t& d) {
 
 ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSource(_ctrl), listServers(_s) {
 	// Ownership is transferred to ctrl, so we dont need to free them
-	this->ctrl->addLabel(_T("server"),      this->lblserver   = new Label(_("Server")));
-	this->ctrl->addLabel(_T("protocol"), 	this->lblprotocol = new Label(_("Protocol Version")));
-	this->ctrl->addLabel(_T("text"),        this->lbltext	  = new Label(_("Text")));
-
-	this->ctrl->addLabel(_T("ctf"),         this->lblctf      = new Label(_("CTF")));
-	this->ctrl->addLabel(_T("rc"),          this->lblrc       = new Label(_("RC")));
-	this->ctrl->addLabel(_T("ffa"),         this->lblffa      = new Label(_("FFA")));
-
-	this->ctrl->addLabel(_T("superflags"),  this->lblsuperflags = new Label(_("Superflags")));
-	this->ctrl->addLabel(_T("jumping"),     this->lbljumping  = new Label(_("Jumping")));
-	this->ctrl->addLabel(_T("inertia"),     this->lblinertia  = new Label(_("Inertia")));
-	this->ctrl->addLabel(_T("antidote"),    this->lblantidote = new Label(_("Antidote")));
-	this->ctrl->addLabel(_T("shakable"),    this->lblshakable = new Label(_("Shakable")));
-	this->ctrl->addLabel(_T("ricochet"),    this->lblricochet = new Label(_("Ricohet")));
-	this->ctrl->addLabel(_T("handicap"),    this->lblhandicap = new Label(_("Handicap")));
-
-	this->ctrl->addLabel(_T("maxshots"),    this->lblmaxshots     = new Label(_("Shots")));
-	this->ctrl->addLabel(_T("shakewins"),   this->lblshakewins    = new Label(_("Shakewins")));
-	this->ctrl->addLabel(_T("shaketimeout"),this->lblshaketimeout = new Label(_("Shaketimeout")));
-	this->ctrl->addLabel(_T("maxplayerscore"), this->lblmaxplayerscore = new Label(_("Max player score")));
-	this->ctrl->addLabel(_T("maxteamscore"), this->lblmaxteamscore = new Label(_("Max team score")));
-	this->ctrl->addLabel(_T("maxtime"),     this->lblmaxtime      = new Label(_("Max time")));
-	this->ctrl->addLabel(_T("maxplayers"),  this->lblmaxplayers   = new Label(_("Players")));
-
-	this->ctrl->addLabel(_T("roguecount"),  this->lblroguecount   = new Label(_("Rogues")));
-	this->ctrl->addLabel(_T("roguemax"),    this->lblroguemax     = new Label(_("Max rogues")));
-
-	this->ctrl->addLabel(_T("redcount"),    this->lblredcount     = new Label(_("Reds")));
-	this->ctrl->addLabel(_T("redmax"),      this->lblredmax       = new Label(_("Max reds")));
-
-	this->ctrl->addLabel(_T("greencount"),  this->lblgreencount   = new Label(_("Greens")));
-	this->ctrl->addLabel(_T("greenmax"),    this->lblgreenmax     = new Label(_("Max greens")));
-
-	this->ctrl->addLabel(_T("bluecount"),   this->lblbluecount    = new Label(_("Blues")));
-	this->ctrl->addLabel(_T("bluemax"),     this->lblbluemax      = new Label(_("Max blues")));
-
-	this->ctrl->addLabel(_T("purplecount"), this->lblpurplecount  = new Label(_("Purples")));
-	this->ctrl->addLabel(_T("purplemax"),   this->lblpurplemax    = new Label(_("Max purples")));
-
-	this->ctrl->addLabel(_T("observercount"),  this->lblobservercount   = new Label(_("Observers")));
-	this->ctrl->addLabel(_T("observermax"),    this->lblobservermax     = new Label(_("Max observers")));
+	//
+	this->ctrl->addLabel(_T("server"),      this->lblserver       = new Label(_T("server"),      _("Server")));
+	this->ctrl->addLabel(_T("protocol"), 	this->lblprotocol     = new Label(_T("protocol"), 	_("Protocol Version")));
+	this->ctrl->addLabel(_T("text"),        this->lbltext	      = new Label(_T("text"),        _("Text")));
+                                                                                                 
+	this->ctrl->addLabel(_T("ctf"),         this->lblctf          = new Label(_T("ctf"),         _("CTF")));
+	this->ctrl->addLabel(_T("rc"),          this->lblrc           = new Label(_T("rc"),          _("RC")));
+	this->ctrl->addLabel(_T("ffa"),         this->lblffa          = new Label(_T("ffa"),         _("FFA")));
+                                                                                                 
+	this->ctrl->addLabel(_T("superflags"),  this->lblsuperflags   = new Label(_T("superflags"),  _("Superflags")));
+	this->ctrl->addLabel(_T("jumping"),     this->lbljumping      = new Label(_T("jumping"),     _("Jumping")));
+	this->ctrl->addLabel(_T("inertia"),     this->lblinertia      = new Label(_T("inertia"),     _("Inertia")));
+	this->ctrl->addLabel(_T("antidote"),    this->lblantidote     = new Label(_T("antidote"),    _("Antidote")));
+	this->ctrl->addLabel(_T("shakable"),    this->lblshakable     = new Label(_T("shakable"),    _("Shakable")));
+	this->ctrl->addLabel(_T("ricochet"),    this->lblricochet     = new Label(_T("ricochet"),    _("Ricohet")));
+	this->ctrl->addLabel(_T("handicap"),    this->lblhandicap     = new Label(_T("handicap"),    _("Handicap")));
+                                                                                                 
+	this->ctrl->addLabel(_T("maxshots"),    this->lblmaxshots     = new Label(_T("maxshots"),    _("Shots")));
+	this->ctrl->addLabel(_T("shakewins"),   this->lblshakewins    = new Label(_T("shakewins"),   _("Shakewins")));
+	this->ctrl->addLabel(_T("shaketimeout"),this->lblshaketimeout = new Label(_T("shaketimeout"),_("Shaketimeout")));
+	this->ctrl->addLabel(_T("maxplayerscore"), this->lblmaxplayerscore = new Label(_T("maxplayerscore"), _("Max player score")));
+	this->ctrl->addLabel(_T("maxteamscore"), this->lblmaxteamscore = new Label(_T("maxteamscore"),_("Max team score")));
+	this->ctrl->addLabel(_T("maxtime"),     this->lblmaxtime      = new Label(_T("maxtime"),     _("Max time")));
+	this->ctrl->addLabel(_T("maxplayers"),  this->lblmaxplayers   = new Label(_T("maxplayers"),  _("Players")));
+                                                                                                 
+	this->ctrl->addLabel(_T("roguecount"),  this->lblroguecount   = new Label(_T("roguecount"),  _("Rogues")));
+	this->ctrl->addLabel(_T("roguemax"),    this->lblroguemax     = new Label(_T("roguemax"),    _("Max rogues")));
+                                                                                                 
+	this->ctrl->addLabel(_T("redcount"),    this->lblredcount     = new Label(_T("redcount"),    _("Reds")));
+	this->ctrl->addLabel(_T("redmax"),      this->lblredmax       = new Label(_T("redmax"),      _("Max reds")));
+                                                                                                 
+	this->ctrl->addLabel(_T("greencount"),  this->lblgreencount   = new Label(_T("greencount"),  _("Greens")));
+	this->ctrl->addLabel(_T("greenmax"),    this->lblgreenmax     = new Label(_T("greenmax"),    _("Max greens")));
+                                                                                                 
+	this->ctrl->addLabel(_T("bluecount"),   this->lblbluecount    = new Label(_T("bluecount"),   _("Blues")));
+	this->ctrl->addLabel(_T("bluemax"),     this->lblbluemax      = new Label(_T("bluemax"),     _("Max blues")));
+                                                                                                 
+	this->ctrl->addLabel(_T("purplecount"), this->lblpurplecount  = new Label(_T("purplecount"), _("Purples")));
+	this->ctrl->addLabel(_T("purplemax"),   this->lblpurplemax    = new Label(_T("purplemax"),   _("Max purples")));
+                                                                                                 
+	this->ctrl->addLabel(_T("observercount"),  this->lblobservercount   = new Label(_T("observercount"), _("Observers")));
+	this->ctrl->addLabel(_T("observermax"),    this->lblobservermax     = new Label(_T("observermax"), _("Max observers")));
 }
 
 ListServer::~ListServer() {

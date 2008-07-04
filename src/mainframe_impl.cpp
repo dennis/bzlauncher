@@ -219,14 +219,14 @@ void MainFrameImpl::SetupViews() {
 }
 
 void MainFrameImpl::SetupColumns(ServerListView *view) {
-	wxString names[] = {
-		_("Server"), _("Name"), _("Type"),
-		_("#"), _("Ping"), _("Fav")
-	};
-
-	for(int col = 0; col < Config::COL_COUNT; col++) {
-		view->serverList->InsertColumn(col,names[col]);
-		view->serverList->SetColumnWidth(col,appConfig.getColumnWidth(Config::ColType(col)));
+	BZLauncherApp& app = wxGetApp();
+	Label* label;
+	int col = 0;
+	for(DataController::labelmap_t::iterator i = app.dataControl.labelMap.begin(); i != app.dataControl.labelMap.end(); ++i) {
+		label = i->second;
+		view->serverList->InsertColumn(col,label->getName());
+		view->serverList->SetColumnWidth(col,label->getWidth());
+		col++;
 	}
 }
 

@@ -25,16 +25,36 @@ THE SOFTWARE.
 #define __label_h__
 
 #include <wx/string.h>
+#include "config.h"
 
 class Label {
 protected:
+	wxString	tag;
 	wxString	name;
+	long		pos;
+	long		width;
 public:
-	Label(const wxString& _n) : name(_n) {
+	Label(const wxString& _t, const wxString& _n) : tag(_t), name(_n) {
+		appConfig.loadLabelSettings(_n, this);
 	}
 
 	const wxString& getName() const {
 		return this->name;
+	}
+
+	void setWidth(long w) {
+		this->width = w;
+	}
+	void setPos(long p) {
+		this->pos = p;
+	}
+
+	long getWidth() {
+		return this->width;
+	}
+
+	long getPos() {
+		return this->pos;
 	}
 };
 

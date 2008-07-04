@@ -25,6 +25,7 @@ THE SOFTWARE.
 #include <wx/log.h>
 
 #include "config.h"
+#include "label.h"
 
 Config appConfig;
 
@@ -307,4 +308,23 @@ void Config::setRecentServers(const wxArrayString& list) {
 		for(unsigned int i = 0; i < list.GetCount(); i++ ) 
 			cfg->Write(wxString::Format(_T("recent/%d"), i), list.Item(i));
 	);
+}
+
+void Config::loadLabelSettings(const wxString& name, Label* label) const {
+	wxString val;
+	long labelwidth = 100;
+	long labelpos   = 99;
+	wxLogDebug(_T("loadLabelSettings(%s)"), name.c_str());
+	CFG_OP(cfg,
+		if( cfg->Read(wxString::Format(_T("label/%s"), name.c_str()), &val) ) {
+			int pos = val.Find(',',true);
+			if( pos != wxNOT_FOUND ) {
+				val.Mid(0,pos-1).ToLong(&labelwidth);
+				val.Mid(pos+1).ToLong(&labelpos);
+			}
+		}
+	);
+
+	label->setWidth(labelwidth);
+	label->setPos(labelpos);
 }

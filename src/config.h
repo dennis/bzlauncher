@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include <wx/arrstr.h>
 #include "view.h"
 
+class Label;
+
 /// Manages configuration settings (load/save)
 class Config {
 public:
@@ -75,6 +77,8 @@ public:
 
 	wxArrayString getRecentServers() const;
 	void setRecentServers(const wxArrayString&);
+
+	void loadLabelSettings(const wxString&, Label*) const;
 };
 
 /// I prefer a global variable over static class and singleton

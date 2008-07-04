@@ -35,9 +35,8 @@ class BZLauncherApp : public wxApp {
 private:
 	wxString 			selectedServerHostPort;
 
-	DataController		dataControl;
-
 public:
+	DataController		dataControl;
 	MainFrameImpl*		mainFrame;
 	ListServerHandler	listServerHandler;
 
