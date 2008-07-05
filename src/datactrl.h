@@ -69,16 +69,16 @@ public:
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
 		// Remember to use locks
-		wxLogDebug(_T("Update %s attribute for label %lx [%s] = '%s'"), name.c_str(), l, l->getName().c_str(), static_cast<wxString>(val).c_str());
+		//wxLogDebug(_T("Update %s attribute for label %lx [%s] = '%s'"), name.c_str(), l, l->getName().c_str(), static_cast<wxString>(val).c_str());
 
 		if( this->serverList.find(name) == this->serverList.end() )
 			this->serverList[name] = new DataEntity();
 		this->serverList[name]->update(l,val);
 	}
 
-	void addLabel(const wxString& name, Label* l) {
-		wxLogDebug(_T("Adding label: [%lx] %s"), l, name.c_str());
-		this->labelMap[name] = l;
+	void addLabel(Label* l) {
+		wxLogDebug(_T("Adding label: [%lx] %s"), l, l->getTag().c_str());
+		this->labelMap[l->getTag()] = l;
 	}
 
 	void add(DataSource*);

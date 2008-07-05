@@ -33,22 +33,6 @@ class Label;
 /// Manages configuration settings (load/save)
 class Config {
 public:
-	typedef enum {
-		COL_SERVER,
-		COL_NAME,
-		COL_TYPE,
-		COL_PLAYERS,
-		COL_PING,
-		COL_FAVORITE,
-		COL_COUNT
-	} ColType;
-
-protected:
-	int getColumnDefaultWidth(ColType) const;
-	wxString getColumnName(ColType) const;
-	wxString getColumnKey(ColType) const;
-
-public:
 	Config();
 	~Config();
 
@@ -59,9 +43,6 @@ public:
 
 	wxRect getWindowDimensions() const;
 	void   setWindowDimensions(wxRect);
-
-	int getColumnWidth(ColType) const;
-	void setColumnWidth(ColType,int);
 
 	wxArrayString getFavorites() const;
 	void setFavorites(const wxArrayString&);
@@ -78,7 +59,8 @@ public:
 	wxArrayString getRecentServers() const;
 	void setRecentServers(const wxArrayString&);
 
-	void loadLabelSettings(const wxString&, Label*) const;
+	void saveLabelSettings(Label*);
+	void loadLabelSettings(Label*) const;
 };
 
 /// I prefer a global variable over static class and singleton

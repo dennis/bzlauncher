@@ -35,11 +35,18 @@ protected:
 	long		width;
 public:
 	Label(const wxString& _t, const wxString& _n) : tag(_t), name(_n) {
-		appConfig.loadLabelSettings(_n, this);
+		appConfig.loadLabelSettings(this);
+	}
+
+	~Label() {
+		appConfig.saveLabelSettings(this);
 	}
 
 	const wxString& getName() const {
 		return this->name;
+	}
+	const wxString& getTag() const {
+		return this->tag;
 	}
 
 	void setWidth(long w) {
@@ -49,11 +56,11 @@ public:
 		this->pos = p;
 	}
 
-	long getWidth() {
+	long getWidth() const {
 		return this->width;
 	}
 
-	long getPos() {
+	long getPos() const {
 		return this->pos;
 	}
 };

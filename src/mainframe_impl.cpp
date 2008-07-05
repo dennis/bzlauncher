@@ -118,8 +118,6 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 }
 
 MainFrameImpl::~MainFrameImpl() {
-	for(int col = 0; col < Config::COL_COUNT; col++)
-		appConfig.setColumnWidth(Config::ColType(col), this->activeView->serverList->GetColumnWidth(col));
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setRecentServers(this->recentServers);
 	appConfig.setWindowDimensions(GetRect());
@@ -218,14 +216,35 @@ void MainFrameImpl::SetupViews() {
 	this->tabs->Show(true);
 }
 
+static bool ColumnSorter(Label* l1, Label* l2) {
+	return l1->getPos() < l2->getPos();
+}
+
 void MainFrameImpl::SetupColumns(ServerListView *view) {
 	BZLauncherApp& app = wxGetApp();
-	Label* label;
-	int col = 0;
+
+	// We copy the map to a vector, so we can sort it easily with std::sort
+	std::vector<Label*>	columns;
 	for(DataController::labelmap_t::iterator i = app.dataControl.labelMap.begin(); i != app.dataControl.labelMap.end(); ++i) {
-		label = i->second;
-		view->serverList->InsertColumn(col,label->getName());
-		view->serverList->SetColumnWidth(col,label->getWidth());
+		if( i->second->getPos() >= 0 ) 
+			columns.push_back(i->second);
+	}
+
+	sort(columns.begin(), columns.end(), ColumnSorter);
+
+	// If nothing is selected, add "server"
+	if( columns.size() == 0 ) {
+		columns.push_back(app.dataControl.labelMap[_T("server")]);
+	}
+	else {
+		wxLogDebug(_T("We got %d columns"), columns.size());
+	}
+
+	int col = 0;
+	for(std::vector<Label*>::iterator i = columns.begin(); i != columns.end(); ++i) {
+		wxLogDebug(_T("Column: #%d %s (%d)"), col, (*i)->getName().c_str(), (*i)->getWidth());
+		view->serverList->InsertColumn(col,(*i)->getName());
+		view->serverList->SetColumnWidth(col,(*i)->getWidth());
 		col++;
 	}
 }
@@ -534,7 +553,7 @@ void MainFrameImpl::EventToolbarToggle(wxCommandEvent& event) {
 void MainFrameImpl::SwitchView(ServerListView* newView) {
 	// Make sure the newView got same column-widths as the current
 	if(this->activeView) {
-		for(int col = 0; col < Config::COL_COUNT; col++)
+		for(int col = 0; col < newView->serverList->GetColumnCount(); col++)
 			newView->serverList->SetColumnWidth(col,this->activeView->serverList->GetColumnWidth(col));
 	}
 	

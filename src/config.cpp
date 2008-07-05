@@ -111,54 +111,6 @@ void Config::setWindowDimensions(wxRect r) {
 	);
 }
 
-wxString Config::getColumnName(ColType t) const {
-	static const wxString names [] = {
-		_T("server"),
-		_T("name"),
-		_T("type"),
-		_T("players"),
-		_T("ping"),
-		_T("favorite")
-	};
-
-	return names[t];
-}
-
-wxString Config::getColumnKey(ColType type) const {
-	wxString key;
-	key += _T("window/col_");
-	key += this->getColumnName(type);
-	key += _T("_width");
-	return key;
-}
-
-int Config::getColumnDefaultWidth(ColType t) const {
-	const int widths[] = {
-		157,
-		300,
-		47,
-		30,
-		46,
-		46
-	};
-
-	return widths[t];
-}
-
-int Config::getColumnWidth(ColType type) const {
-	int w;
-	wxString key = this->getColumnKey(type);
-	CFG_OP(cfg,
-		w = cfg->Read(key, this->getColumnDefaultWidth(type));
-	);
-	return w;
-}
-
-void Config::setColumnWidth(ColType type, int w) {
-	wxString key = this->getColumnKey(type);
-	CFG_OP(cfg, cfg->Write(key,w););
-}
-
 wxArrayString Config::getFavorites() const {
 	wxString      str;
 	wxArrayString list;
@@ -310,21 +262,33 @@ void Config::setRecentServers(const wxArrayString& list) {
 	);
 }
 
-void Config::loadLabelSettings(const wxString& name, Label* label) const {
+void Config::loadLabelSettings(Label* label) const {
 	wxString val;
 	long labelwidth = 100;
-	long labelpos   = 99;
-	wxLogDebug(_T("loadLabelSettings(%s)"), name.c_str());
+	long labelpos   = -1;
+	wxLogDebug(_T("loadLabelSettings(%s)"), label->getTag().c_str());
 	CFG_OP(cfg,
-		if( cfg->Read(wxString::Format(_T("label/%s"), name.c_str()), &val) ) {
+		if( cfg->Read(wxString::Format(_T("label/%s"), label->getTag().c_str()), &val) ) {
 			int pos = val.Find(',',true);
 			if( pos != wxNOT_FOUND ) {
-				val.Mid(0,pos-1).ToLong(&labelwidth);
-				val.Mid(pos+1).ToLong(&labelpos);
+				val.Mid(0,pos-1).ToLong(&labelpos);
+				val.Mid(pos+1).ToLong(&labelwidth);
 			}
 		}
 	);
 
 	label->setWidth(labelwidth);
 	label->setPos(labelpos);
+}
+
+void Config::saveLabelSettings(Label* label) {
+	wxLogDebug(_T("saveLabelSettings(%s)"), label->getTag().c_str());
+
+	// No reason to store anything, if its the default values
+	if( label->getPos() == -1 && label->getWidth() == 100 )
+		return;
+
+	CFG_OP(cfg,
+		cfg->Write(wxString::Format(_T("label/%s"), label->getTag().c_str()), wxString::Format(_T("%d,%d"), label->getPos(), label->getWidth() ));
+	);
 }
