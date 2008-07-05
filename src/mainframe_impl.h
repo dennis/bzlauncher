@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "view.h"
 #include "query.h"
 
+class Label;
+
 /// Main Window - presenting the servers online.
 /// This is the implementation of MainFrame (which is generated)
 /// this allows us to change how MainFrame is implemented without
@@ -68,6 +70,8 @@ private:
 	void SwitchView(ServerListView*);
 
 	bool CanCloseView(ServerListView*);
+
+	std::vector<Label*> GetViewableLabels();
 
 protected:
 	wxImageList*	imageList;

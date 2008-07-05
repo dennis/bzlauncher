@@ -1,12 +1,7 @@
 Labels:
-	- save data (pos, size)
-		It currently saves the Label pos/width info, but wx column changes are never used
-		to update the Label class. So Label-class always contains the loaded values.
-	- Find all COL_COUNT and replace them
-	- default columns if cfgversion=1
+- default columns if cfgversion=1
 - reimplement favorites
 - reimplement recent
-
 
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 - Column Class (name of an Attribute)

@@ -271,7 +271,7 @@ void Config::loadLabelSettings(Label* label) const {
 		if( cfg->Read(wxString::Format(_T("label/%s"), label->getTag().c_str()), &val) ) {
 			int pos = val.Find(',',true);
 			if( pos != wxNOT_FOUND ) {
-				val.Mid(0,pos-1).ToLong(&labelpos);
+				val.Mid(0,pos).ToLong(&labelpos);
 				val.Mid(pos+1).ToLong(&labelwidth);
 			}
 		}

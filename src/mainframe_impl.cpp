@@ -118,6 +118,16 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 }
 
 MainFrameImpl::~MainFrameImpl() {
+	// Update the labels with the values from the gui (the width)
+	// This assumes that the Column order havn't been changed!
+	std::vector<Label*>	columns = this->GetViewableLabels();
+	int col = 0;
+	for(std::vector<Label*>::iterator i = columns.begin(); i != columns.end(); ++i) {
+		wxLogDebug(_T("Column: #%d %s (%d)"), col, (*i)->getName().c_str(), (*i)->getWidth());
+		(*i)->setWidth(this->activeView->serverList->GetColumnWidth(col));
+		col++;
+	}
+
 	appConfig.setFavorites(this->favoriteServers);
 	appConfig.setRecentServers(this->recentServers);
 	appConfig.setWindowDimensions(GetRect());
@@ -220,10 +230,9 @@ static bool ColumnSorter(Label* l1, Label* l2) {
 	return l1->getPos() < l2->getPos();
 }
 
-void MainFrameImpl::SetupColumns(ServerListView *view) {
+std::vector<Label*> MainFrameImpl::GetViewableLabels() {
 	BZLauncherApp& app = wxGetApp();
-
-	// We copy the map to a vector, so we can sort it easily with std::sort
+	// We copy the map to a vector, so we can sort it easily with std::sort (etc)
 	std::vector<Label*>	columns;
 	for(DataController::labelmap_t::iterator i = app.dataControl.labelMap.begin(); i != app.dataControl.labelMap.end(); ++i) {
 		if( i->second->getPos() >= 0 ) 
@@ -239,6 +248,12 @@ void MainFrameImpl::SetupColumns(ServerListView *view) {
 	else {
 		wxLogDebug(_T("We got %d columns"), columns.size());
 	}
+
+	return columns;
+}
+
+void MainFrameImpl::SetupColumns(ServerListView *view) {
+	std::vector<Label*>	columns = this->GetViewableLabels();
 
 	int col = 0;
 	for(std::vector<Label*>::iterator i = columns.begin(); i != columns.end(); ++i) {
