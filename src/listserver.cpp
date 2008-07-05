@@ -77,8 +77,10 @@ ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSou
 	// Ownership is transferred to ctrl, so we dont need to free them
 	//
 	this->ctrl->addLabel(this->lblserver       = new Label(_T("server"),      _("Server")));
-	this->ctrl->addLabel(this->lblprotocol     = new Label(_T("protocol"), 	_("Protocol Version")));
-	this->ctrl->addLabel(this->lbltext	      = new Label(_T("text"),        _("Text")));
+	this->ctrl->addLabel(this->lblprotocol     = new Label(_T("protocol"),    _("Protocol Version")));
+	this->ctrl->addLabel(this->lbltext	      = new Label(_T("text"),         _("Text")));
+
+	this->ctrl->addLabel(this->lbltype	      = new Label(_T("type"),         _("Type")));
                                                                               
 	this->ctrl->addLabel(this->lblctf          = new Label(_T("ctf"),         _("CTF")));
 	this->ctrl->addLabel(this->lblrc           = new Label(_T("rc"),          _("RC")));
@@ -98,7 +100,7 @@ ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSou
 	this->ctrl->addLabel(this->lblmaxplayerscore = new Label(_T("maxplayerscore"), _("Max player score")));
 	this->ctrl->addLabel(this->lblmaxteamscore = new Label(_T("maxteamscore"),_("Max team score")));
 	this->ctrl->addLabel(this->lblmaxtime      = new Label(_T("maxtime"),     _("Max time")));
-	this->ctrl->addLabel(this->lblmaxplayers   = new Label(_T("maxplayers"),  _("Players")));
+	this->ctrl->addLabel(this->lblmaxplayers   = new Label(_T("maxplayers"),  _("#")));
                                                                               
 	this->ctrl->addLabel(this->lblroguecount   = new Label(_T("roguecount"),  _("Rogues")));
 	this->ctrl->addLabel(this->lblroguemax     = new Label(_T("roguemax"),    _("Max rogues")));
@@ -264,6 +266,15 @@ void ListServer::ServerHexParserBZFS0026(const wxString& name, const wxString& h
 	PB(this->lblshakable,   (gamestyle & ShakableGameStyle) == ShakableGameStyle);
 	PB(this->lblricochet,   (gamestyle & RicochetGameStyle) == RicochetGameStyle);
 	PB(this->lblhandicap,   (gamestyle & HandicapGameStyle) == HandicapGameStyle);
+
+	if(isctf) 
+		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("CTF")));
+	else if(isrc)
+		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("RC")));
+	else if(isffa)
+		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("FFA")));
+	else
+		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("???")));
 
 #undef PB
 

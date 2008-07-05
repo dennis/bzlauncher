@@ -38,6 +38,8 @@ private:
 	Label*			lblprotocol;
 	Label*			lbltext;
 
+	Label*			lbltype;
+
 	Label*			lblctf;
 	Label*			lblrc;
 	Label*			lblffa;
