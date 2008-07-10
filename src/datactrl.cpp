@@ -34,6 +34,10 @@ DataController::~DataController() {
 	for(labelmap_t::iterator i = this->labelMap.begin(); i != this->labelMap.end(); ++i )
 		delete i->second;
 	this->labelMap.clear();
+
+	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i )
+		delete i->second;
+	this->serverList.clear();
 }
 
 void DataController::add(DataSource* ds) {

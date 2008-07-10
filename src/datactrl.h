@@ -37,17 +37,29 @@ class DataEntity {
 protected:
 	typedef std::map<const Label*, AttributeBase* > attributemap_t;
 	attributemap_t	attributes;
+
 public:
 	~DataEntity() {
-		for(attributemap_t::iterator i = this->attributes.begin(); i != this->attributes.end(); ++i )
+		for(attributemap_t::iterator i = this->attributes.begin(); i != this->attributes.end(); ++i ) {
 			if( i->second )
 				delete i->second;
+		}
 	}
 
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
-		Attribute<T>* valdupe = new Attribute<T>(val);
-		this->attributes[l] = valdupe;
+		if( this->attributes.find(l) != this->attributes.end() )
+			delete this->attributes[l];
+		Attribute<T>* newval = new Attribute<T>(val);
+		this->attributes[l] = newval;
+	}
+
+	AttributeBase* get(const Label* l) {
+		AttributeBase* res = NULL;
+		if( this->attributes.find(l) != this->attributes.end() )
+			res = this->attributes[l];
+
+		return res;
 	}
 };
 
@@ -60,6 +72,8 @@ protected:
 	sourcelist_t	sourceList;
 	entitymap_t		serverList;
 
+	wxMutex	lock;
+
 public:
 	typedef std::map<wxString,Label*>		labelmap_t;
 	labelmap_t		labelMap;
@@ -68,12 +82,12 @@ public:
 
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
-		// Remember to use locks
-		//wxLogDebug(_T("Update %s attribute for label %lx [%s] = '%s'"), name.c_str(), l, l->getName().c_str(), static_cast<wxString>(val).c_str());
-
+		wxLogDebug(_("updateAttribute(%s,%s)"), name.c_str(), l->getTag().c_str());
+		this->lock.Lock();
 		if( this->serverList.find(name) == this->serverList.end() )
 			this->serverList[name] = new DataEntity();
 		this->serverList[name]->update(l,val);
+		this->lock.Unlock();
 	}
 
 	void addLabel(Label* l) {
@@ -84,6 +98,21 @@ public:
 	void add(DataSource*);
 	void run();
 	void stop();
+
+	int getResultCount() {
+		this->lock.Lock();
+		int count = this->serverList.size();
+		this->lock.Unlock();
+		return count;
+	}
+
+	AttributeBase* getAttribute(const wxString& name, const Label* l) {
+		// Locks
+		if( this->serverList.find(name) == this->serverList.end() )
+			return NULL;
+		else
+			return this->serverList[name]->get(l);
+	}
 };
 
 #endif 
