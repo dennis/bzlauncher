@@ -59,7 +59,7 @@ QueryResult DataController::search(const Query& q) {
 	QueryResult res(this);
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
-		res.add(i->second);
+		res.add(i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
 	}
 	this->lock.Unlock();
 	return res;

@@ -32,6 +32,7 @@ public:
 	virtual operator wxString() const = 0;
 	virtual wxString operator()() const = 0;
 	virtual wxString aswxString() const = 0;
+	virtual AttributeBase* dupe() const = 0;
 };
 
 template< typename T >
@@ -42,6 +43,10 @@ public:
 	Attribute() {};
 	Attribute(T val) {
 		this->value = val;
+	}
+
+	AttributeBase* dupe() const {
+		return new Attribute<T>(value);
 	}
 
 	// TODO Remove these next two functions

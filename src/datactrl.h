@@ -56,10 +56,6 @@ public:
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
 		this->lock.Lock();
-		/*
-		if( this->serverList.find(name) == this->serverList.end() )
-			this->serverList[name] = new Server();
-		*/
 		this->serverList[name].update(l,val);
 		this->lock.Unlock();
 	}

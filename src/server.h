@@ -87,6 +87,20 @@ public:
 		return *this;
 	}
 
+	Server dupe() const {
+		Server	s;
+
+		wxLogDebug(_T("Server::dupe() org-data: %p"), this->data);
+
+		for(ServerData::attributemap_t::const_iterator i = this->data->attributes.begin(); i != this->data->attributes.end(); ++i )
+			s.data->attributes[i->first] = i->second->dupe();
+
+		s.data->query_ref++;
+		wxLogDebug(_T("Server::dupe() copy-data: %p"), &s.data);
+
+		return s;
+	}
+
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
 		this->data->update(l,val);
