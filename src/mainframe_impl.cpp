@@ -303,11 +303,15 @@ void MainFrameImpl::RefreshActiveView() {
 	list->DeleteAllItems();
 	for(int row = 0; row < res.size(); ++row ) {
 		int col = 0;
+		int idx = 0;
 		for(std::vector<Label*>::iterator i  = columns.begin(); i != columns.end() ; ++i ) {
+			const wxString val = res.getAttribute(row, *i);
+			wxLogDebug(_T("Updating col %d label %s, row %d, %s"),
+				col, (*i)->getName().c_str(), row, val.c_str());
 			if( col == 0 )
-				list->InsertItem(col, res.getAttribute(row, *i));
-			else
-				list->SetItem(row, col, res.getAttribute(row, *i));
+				idx = list->InsertItem(col, val);
+			else if(idx != -1)
+				list->SetItem(idx, col, val);
 			col++;
 		}
 	}
