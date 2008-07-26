@@ -40,7 +40,7 @@ class QueryResult;
 class DataController {
 protected:
 	typedef std::vector<DataSource*>	sourcelist_t;
-	typedef std::map<wxString,Server*>	entitymap_t;
+	typedef std::map<wxString,Server>	entitymap_t;
 
 	sourcelist_t	sourceList;
 	entitymap_t		serverList;
@@ -56,9 +56,11 @@ public:
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
 		this->lock.Lock();
+		/*
 		if( this->serverList.find(name) == this->serverList.end() )
 			this->serverList[name] = new Server();
-		this->serverList[name]->update(l,val);
+		*/
+		this->serverList[name].update(l,val);
 		this->lock.Unlock();
 	}
 
@@ -71,11 +73,12 @@ public:
 	void stop();
 
 	AttributeBase* getAttribute(const wxString& name, const Label* l) {
-		// Locks
+		this->lock.Lock();
 		if( this->serverList.find(name) == this->serverList.end() )
 			return NULL;
 		else
-			return this->serverList[name]->get(l);
+			return this->serverList[name].get(l);
+		this->lock.Unlock();
 	}
 
 	QueryResult search(const Query&);

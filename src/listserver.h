@@ -77,6 +77,7 @@ private:
 
 	Label*			lblobservercount;
 	Label*			lblobservermax;
+
 public:
 	ListServer(DataController*, const wxArrayString&);
 	~ListServer();

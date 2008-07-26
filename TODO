@@ -1,5 +1,4 @@
 QueryResult: 
-	- Perform real ref-counting in server
 	- Remember to use lock/unlock
 	- Implement some notification/event system, so list are updated
 	- Versionize list?

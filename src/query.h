@@ -65,7 +65,7 @@ public:
 
 class QueryResult {
 private:
-	typedef std::vector<Server*>	list_t;
+	typedef std::vector<Server>	list_t;
 	list_t	list;
 	DataController* ctrl;
 
@@ -76,13 +76,7 @@ public:
 	QueryResult(DataController* c) : ctrl(c), pointer(this->list.end()), pointer_is(-1) {
 	}
 
-	~QueryResult() {
-		for(list_t:iterator i=this->list.begin(); i!=this->end(); ++i)
-			(*i)->query_ref--;
-	}
-
-	void add(Server* s) {
-		s->query_ref++;
+	void add(Server s) {
 		this->list.push_back(s);
 	}
 
@@ -104,12 +98,10 @@ public:
 		}
 
 		if( this->pointer != this->list.end() ) {
-			Server* s = *(this->pointer);
-			if(s) {
-				AttributeBase*	ab = s->get(l);
-				if(ab)
-					return ab->aswxString();
-			}
+			Server s = *(this->pointer);
+			AttributeBase*	ab = s.get(l);
+			if(ab)
+				return ab->aswxString();
 		}
 		return _T("N/A");
 	}

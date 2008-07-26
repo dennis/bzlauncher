@@ -35,10 +35,6 @@ DataController::~DataController() {
 	for(labelmap_t::iterator i = this->labelMap.begin(); i != this->labelMap.end(); ++i )
 		delete i->second;
 	this->labelMap.clear();
-
-	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i )
-		delete i->second;
-	this->serverList.clear();
 }
 
 void DataController::add(DataSource* ds) {
@@ -63,11 +59,7 @@ QueryResult DataController::search(const Query& q) {
 	QueryResult res(this);
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
-		Server*	current = i->second;
-
-		if(q == const_cast<Server*>(current)) {
-			res.add(current);
-		}
+		res.add(i->second);
 	}
 	this->lock.Unlock();
 	return res;
