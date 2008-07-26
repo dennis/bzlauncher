@@ -142,7 +142,9 @@ void ListServer::GetServerList() {
 			count++;
 			wxString token = tok.GetNextToken();
 			this->ParseLine(token);
-			return; // FIXME Only parse one line
+
+			if(count == 5)
+				return; // FIXME Only parse 5 lines
 		}
 	}
 	else {
