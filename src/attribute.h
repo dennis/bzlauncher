@@ -29,8 +29,6 @@ THE SOFTWARE.
 
 class AttributeBase {
 public:
-	virtual operator wxString() const = 0;
-	virtual wxString operator()() const = 0;
 	virtual wxString aswxString() const = 0;
 	virtual AttributeBase* dupe() const = 0;
 };
@@ -49,13 +47,6 @@ public:
 		return new Attribute<T>(value);
 	}
 
-	// TODO Remove these next two functions
-	operator wxString() const {
-		return convertTowxString(this->value);
-	}
-	wxString operator()() const {
-		return convertTowxString(this->value);
-	}
 	wxString aswxString() const {
 		return convertTowxString(this->value);
 	}
