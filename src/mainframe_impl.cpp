@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "listserverhandler.h"
 
 #include "ping.h"
-
+#include "datactrl.h"
 
 static int SortHelper(int res, bool reverse=false) {
 	if(res==0) return res;
@@ -43,6 +43,8 @@ static int SortHelper(int res, bool reverse=false) {
 }
 
 static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
+	return 0;
+	/*
 	Server* s1 = reinterpret_cast<Server*>(item1);
 	Server* s2 = reinterpret_cast<Server*>(item2);
 
@@ -92,6 +94,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 			break;
 	}
 	return -1;
+	*/
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
@@ -245,9 +248,6 @@ std::vector<Label*> MainFrameImpl::GetViewableLabels() {
 	if( columns.size() == 0 ) {
 		columns.push_back(app.dataControl.labelMap[_T("server")]);
 	}
-	else {
-		wxLogDebug(_T("We got %d columns"), columns.size());
-	}
 
 	return columns;
 }
@@ -291,10 +291,28 @@ void MainFrameImpl::EventRefresh(wxCommandEvent&) {
 }
 
 void MainFrameImpl::RefreshActiveView() {
+	wxLogDebug(_T("RefreshActiveView()"));
 	BZLauncherApp& app = wxGetApp();
 
 	wxListCtrl* list = this->activeView->serverList;
+	std::vector<Label*>	columns = this->GetViewableLabels();
 
+	QueryResult res = app.dataControl.search(this->activeView->query);
+
+	// For now, always re-created the list
+	list->DeleteAllItems();
+	for(int row = 0; row < res.size(); ++row ) {
+		int col = 0;
+		for(std::vector<Label*>::iterator i  = columns.begin(); i != columns.end() ; ++i ) {
+			if( col == 0 )
+				list->InsertItem(col, res.getAttribute(row, *i));
+			else
+				list->SetItem(row, col, res.getAttribute(row, *i));
+			col++;
+		}
+	}
+
+	/*
 	if(app.listServerHandler.getVersion() == this->activeView->version) {
 		return;
 	}
@@ -359,6 +377,7 @@ void MainFrameImpl::RefreshActiveView() {
 	}
 
 	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
+	*/
 	this->activeView->serverList->Layout();
 }
 
@@ -384,9 +403,11 @@ void MainFrameImpl::ShowDetails() {
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
+	/*
 	Server* srv = reinterpret_cast<Server*>(event.GetData());
 	const wxString s = srv->name();
 	wxGetApp().SetSelectedServer(s);
+	*/
 }
 
 
@@ -411,6 +432,7 @@ void MainFrameImpl::EventColClick(wxListEvent& event) {
 }
 
 void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
+	/*
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
 	if(s) {
@@ -437,9 +459,11 @@ void MainFrameImpl::EventFavoriteToggle(wxCommandEvent& WXUNUSED(event)) {
 	else {
 		app.SetStatusText(_("No server selected"));
 	}
+	*/
 }
 
 void MainFrameImpl::UpdateServer(ServerListView* view, int idx, Server* s) {
+	/*
 	if(s->favorite) {
 		view->serverList->SetItemFont(idx, wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Sans") ));
 		view->serverList->SetItem(idx, 5, _("Yes"));
@@ -450,9 +474,11 @@ void MainFrameImpl::UpdateServer(ServerListView* view, int idx, Server* s) {
 	}
 
 	view->serverList->SetItem(idx, 4, s->ping);
+	*/
 }
 
 void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
+	/*
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
 	if(s) {
@@ -461,6 +487,7 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 	else {
 		app.SetStatusText(_("No server selected"));
 	}
+	*/
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {

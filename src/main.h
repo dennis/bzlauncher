@@ -51,7 +51,7 @@ public:
 	const wxString GetSelectedServer();
 	void SetSelectedServer(const wxString&);
 
-	void LaunchSelectedServer(wxWindow*, Server::team_color_t);
+	void LaunchSelectedServer(wxWindow*);
 };
 
 

@@ -31,6 +31,7 @@ class AttributeBase {
 public:
 	virtual operator wxString() const = 0;
 	virtual wxString operator()() const = 0;
+	virtual wxString aswxString() const = 0;
 };
 
 template< typename T >
@@ -43,10 +44,14 @@ public:
 		this->value = val;
 	}
 
+	// TODO Remove these next two functions
 	operator wxString() const {
 		return convertTowxString(this->value);
 	}
 	wxString operator()() const {
+		return convertTowxString(this->value);
+	}
+	wxString aswxString() const {
 		return convertTowxString(this->value);
 	}
 };

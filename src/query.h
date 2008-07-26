@@ -21,11 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __query__
-#define __query__
+#ifndef __query_h__
+#define __query_h__
 
 #include <wx/string.h>
 #include <wx/arrstr.h>
+#include <datactrl.h>
 
 class Server;
 
@@ -59,6 +60,58 @@ public:
 	bool operator==(const Server*) const;
 	bool operator!=(const Server* s) const {
 		return !(*this == s);
+	}
+};
+
+class QueryResult {
+private:
+	typedef std::vector<Server*>	list_t;
+	list_t	list;
+	DataController* ctrl;
+
+	list_t::iterator	pointer;
+	int		pointer_is;
+
+public:
+	QueryResult(DataController* c) : ctrl(c), pointer(this->list.end()), pointer_is(-1) {
+	}
+
+	~QueryResult() {
+		for(list_t:iterator i=this->list.begin(); i!=this->end(); ++i)
+			(*i)->query_ref--;
+	}
+
+	void add(Server* s) {
+		s->query_ref++;
+		this->list.push_back(s);
+	}
+
+	int size() {
+		return this->list.size();
+	}
+
+	wxString getAttribute(int row, Label* l) {
+		if( row <= 0 ) {
+			this->pointer = this->list.begin();
+			this->pointer_is = 0;
+		}
+		if( row == this->pointer_is+1 ) {
+			this->pointer++;
+			this->pointer_is++;
+		}
+		if( row >= this->list.size() ) {
+			this->pointer = this->list.end();
+		}
+
+		if( this->pointer != this->list.end() ) {
+			Server* s = *(this->pointer);
+			if(s) {
+				AttributeBase*	ab = s->get(l);
+				if(ab)
+					return ab->aswxString();
+			}
+		}
+		return _T("N/A");
 	}
 };
 

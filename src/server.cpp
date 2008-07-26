@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 #include "server.h"
 
+/*
 Server::Server() : fullyParsed(false), favorite(false), recent(false) {
 }
 
@@ -55,3 +56,4 @@ void Server::setIP(const wxIPV4address& val) {
 const wxIPV4address& Server::getIP() const {
 	return this->ip;
 }
+*/

@@ -40,10 +40,11 @@ Config::~Config() {
 // our app crashes if we let it live too long (for some reason). This
 // is a temporary hack, which should be fixed ASAP.
 #define CFG_OP(cfg,op) \
-	wxFileConfig* cfg = new wxFileConfig(_T("bzlauncher")); \
-	{ op } while(0); \
-	delete cfg; \
-	cfg = NULL;
+	{ wxFileConfig* cfg = new wxFileConfig(_T("bzlauncher")); \
+	 op \
+	 delete cfg; \
+	 cfg = NULL; \
+	} while(0);
 
 wxString Config::getBZFlagCommand(const wxString& proto) const {
 	// first try bzflag/proto (eg bzflag/bzfs0026)

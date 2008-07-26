@@ -1,7 +1,20 @@
+QueryResult: 
+	- Perform real ref-counting in server
+	- Remember to use lock/unlock
+	- Implement some notification/event system, so list are updated
+	- Versionize list?
+	- Ping
+	- ServerDetails
+	- ServerActions?
+
 Labels:
-- default columns if cfgversion=1
+- DataCtrl.search(..) returns a result-list with ptrs..
+- Default columns if cfgversion=1
 - reimplement favorites
 - reimplement recent
+- Row colors in mianframe. Let listhandler decide what color the line is
+- Add pings
+- DataCtrl add a "batch update" (mainly used when returning lists for mainframe_impl)
 
 - look at /usr/share/applications/opera.desktop for bzflag/bzlauncher protocol handler
 - Column Class (name of an Attribute)

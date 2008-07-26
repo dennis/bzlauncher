@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include "query.h"
 
 bool Query::operator==(const Server* server) const {
+/*
 	bool result = true;
 	wxString token;
 
@@ -52,6 +53,8 @@ bool Query::operator==(const Server* server) const {
 	}
 
 	return result;
+*/
+	return true;
 }
 
 void Query::set(const wxString &q) {

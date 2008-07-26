@@ -80,10 +80,11 @@ void BZLauncherApp::SetSelectedServer(const wxString& s) {
 }
 
 #ifdef _WINDOWS
-void BZLauncherApp::LaunchSelectedServer(wxWindow* w, Server::team_color_t team) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow* w) {
 #else
-void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
+void BZLauncherApp::LaunchSelectedServer(wxWindow*) {
 #endif
+/*
 	Server* server = this->listServerHandler.FindByName(this->selectedServerHostPort);
 
 	if(this->selectedServerHostPort.IsEmpty() || !server ) {
@@ -115,7 +116,6 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 	}
 
 	wxString	args;
-
 	switch(team) {
 		case Server::team_observer:
 			args += _T("-team observer ");
@@ -136,7 +136,7 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 			args += _T("-team rogue ");
 			break;
 		default:
-			/* Nothing */
+			/ * Nothing * /
 			break;
 	}
 
@@ -151,4 +151,5 @@ void BZLauncherApp::LaunchSelectedServer(wxWindow*, Server::team_color_t team) {
 	wxLogDebug(_T("cmd: %s"), cmd.c_str());
 	wxLogDebug(_T("args: %s"), args.c_str());
 	::wxExecute(wxString::Format(cmd,args.c_str()),wxEXEC_SYNC);
+	*/
 }

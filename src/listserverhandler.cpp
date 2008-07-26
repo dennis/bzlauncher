@@ -57,6 +57,7 @@ ListServerHandler::~ListServerHandler() {
 
 void ListServerHandler::GetServerList(wxArrayString& favs,wxArrayString& recent) {
 return;	// DISABLED
+/*
 	wxBusyCursor wait;
 	BZLauncherApp& app = wxGetApp();
 
@@ -83,10 +84,13 @@ return;	// DISABLED
 		wxLogError(_("Can't connect to listserver!"));
 	}
 	app.SetStatusText(wxString::Format(_("Found %d server(s)"), this->serverList.GetCount()));
+*/
 
 }
 
 bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxArrayString& recent) {
+return false;
+/*
 	Server* s = new Server;
 
 	s->fullyParsed  = false;
@@ -120,13 +124,13 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 			break;
 		case 2:  // Hex info
 			{
-				/*
+				/ *
 				ServerHexParser* p = ServerHexParser::GetParser(s->protocolVersion);
 				if(p) {
 					p->parse(token,*s);
 					delete p;
 				}
-				*/
+				* /
 			}
 			break;
 		case 3: 
@@ -148,6 +152,7 @@ bool ListServerHandler::ParseLine(const wxString& line, wxArrayString& favs,wxAr
 
 	this->serverList.Append(s);
 	return true;
+*/
 }
 
 bool ListServerHandler::GetListServerResponse() {
@@ -196,6 +201,7 @@ void ListServerHandler::ClearList() {
 }
 
 Server* ListServerHandler::FindByName(const wxString& n) {
+	/*
 	ServerList::iterator i;
 	for(i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
@@ -203,7 +209,7 @@ Server* ListServerHandler::FindByName(const wxString& n) {
 		if(n.Cmp(current->name()) == 0)
 			return current;
 	}
-
+	*/
 	return NULL;
 }
 

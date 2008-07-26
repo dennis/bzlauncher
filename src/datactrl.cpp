@@ -24,6 +24,7 @@ THE SOFTWARE.
 #include <wx/log.h>
 #include "datactrl.h"
 #include "datasrc.h"
+#include "query.h"
 
 DataController::~DataController() {
 	wxLogDebug(_T("DataController::~DataController"));
@@ -58,3 +59,16 @@ void DataController::stop() {
 	}
 }
 
+QueryResult DataController::search(const Query& q) {
+	QueryResult res(this);
+	this->lock.Lock();
+	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
+		Server*	current = i->second;
+
+		if(q == const_cast<Server*>(current)) {
+			res.add(current);
+		}
+	}
+	this->lock.Unlock();
+	return res;
+}

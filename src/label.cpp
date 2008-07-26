@@ -21,3 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include "label.h"
+#include "config.h"
+
+Label::Label(const wxString& _t, const wxString& _n) : tag(_t), name(_n) {
+	appConfig.loadLabelSettings(this);
+}
+
+Label::~Label() {
+	appConfig.saveLabelSettings(this);
+}

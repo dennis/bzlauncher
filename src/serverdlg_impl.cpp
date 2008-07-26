@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include <wx/msgdlg.h>
 
 // These variables are used with the ComboBox.. It got a ClientData ptr, which is pointed as these variables
+/*
 static const Server::team_color_t	TeamRogue = Server::team_rogue;
 static const Server::team_color_t	TeamRed = Server::team_red;
 static const Server::team_color_t	TeamGreen = Server::team_green;
@@ -35,9 +36,10 @@ static const Server::team_color_t	TeamBlue = Server::team_blue;
 static const Server::team_color_t	TeamPurple = Server::team_purple;
 static const Server::team_color_t	TeamObserver = Server::team_observer;
 static const Server::team_color_t	TeamAny = Server::team_count;
-
+*/
 ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 : ServerDlg( parent ) {
+/*
 	// ServerHostPort + Name
 	this->serverHostPort->SetLabel(selectedServer->name());
 	this->serverName->SetLabel(selectedServer->longName);
@@ -79,7 +81,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 	this->shotsVal->SetValue(selectedServer->maxShots());
 
 	// Game type
-	/*
+	/ *
 	if(selectedServer->IsCTF())
 		this->gameTypeVal->SetValue(_("CTF"));
 	else if(selectedServer->IsFFA()) 
@@ -89,7 +91,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 	else
 		this->gameTypeVal->SetValue(_("???"));
 
-	*/
+	* /
 	this->superFlagsVal->SetValue(selectedServer->gotSuperFlags()); // Super flags
 	this->antidoteVal->SetValue(selectedServer->gotAntidote()); 	// Antidote flags
 	this->ricochetVal->SetValue(selectedServer->gotRicochet());		// Ricochet
@@ -113,6 +115,7 @@ ServerDlgImpl::ServerDlgImpl(wxWindow* parent, Server* selectedServer)
 	// Select server
 	const wxString s = selectedServer->name();
 	wxGetApp().SetSelectedServer(s);
+*/
 }
 
 void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
@@ -120,6 +123,7 @@ void ServerDlgImpl::EventClose(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
+	/*
 	Server::team_color_t*	team = NULL;
 	int selected = this->teamCbx->GetSelection();
 	if(selected != wxNOT_FOUND)
@@ -127,4 +131,5 @@ void ServerDlgImpl::onLaunch(wxCommandEvent& WXUNUSED(event)) {
 	if(team == NULL) team = const_cast<Server::team_color_t*>(&TeamAny);
 	wxGetApp().mainFrame->AddAsRecentServer(this->serverHostPort->GetLabel());
 	wxGetApp().LaunchSelectedServer(this, *team);
+	*/
 }

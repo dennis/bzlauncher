@@ -25,49 +25,22 @@ THE SOFTWARE.
 #define __datactrl_h__
 
 #include <wx/string.h>
-#include <wx/log.h>
 #include <vector>
 #include <map>
 
 #include "label.h"
+#include "server.h"
 #include "attribute.h"
 #include "datasrc.h"
 
-class DataEntity {
-protected:
-	typedef std::map<const Label*, AttributeBase* > attributemap_t;
-	attributemap_t	attributes;
-
-public:
-	~DataEntity() {
-		for(attributemap_t::iterator i = this->attributes.begin(); i != this->attributes.end(); ++i ) {
-			if( i->second )
-				delete i->second;
-		}
-	}
-
-	template<typename T>
-	void update(const Label* l, const Attribute<T>& val) {
-		if( this->attributes.find(l) != this->attributes.end() )
-			delete this->attributes[l];
-		Attribute<T>* newval = new Attribute<T>(val);
-		this->attributes[l] = newval;
-	}
-
-	AttributeBase* get(const Label* l) {
-		AttributeBase* res = NULL;
-		if( this->attributes.find(l) != this->attributes.end() )
-			res = this->attributes[l];
-
-		return res;
-	}
-};
+class Query;
+class QueryResult;
 
 // This class controls/owns the datalist (serverlist) 
 class DataController {
 protected:
-	typedef std::vector<DataSource*>		sourcelist_t;
-	typedef std::map<wxString,DataEntity*>	entitymap_t;
+	typedef std::vector<DataSource*>	sourcelist_t;
+	typedef std::map<wxString,Server*>	entitymap_t;
 
 	sourcelist_t	sourceList;
 	entitymap_t		serverList;
@@ -82,29 +55,20 @@ public:
 
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
-		wxLogDebug(_("updateAttribute(%s,%s)"), name.c_str(), l->getTag().c_str());
 		this->lock.Lock();
 		if( this->serverList.find(name) == this->serverList.end() )
-			this->serverList[name] = new DataEntity();
+			this->serverList[name] = new Server();
 		this->serverList[name]->update(l,val);
 		this->lock.Unlock();
 	}
 
 	void addLabel(Label* l) {
-		wxLogDebug(_T("Adding label: [%lx] %s"), l, l->getTag().c_str());
 		this->labelMap[l->getTag()] = l;
 	}
 
 	void add(DataSource*);
 	void run();
 	void stop();
-
-	int getResultCount() {
-		this->lock.Lock();
-		int count = this->serverList.size();
-		this->lock.Unlock();
-		return count;
-	}
 
 	AttributeBase* getAttribute(const wxString& name, const Label* l) {
 		// Locks
@@ -113,6 +77,8 @@ public:
 		else
 			return this->serverList[name]->get(l);
 	}
+
+	QueryResult search(const Query&);
 };
 
 #endif 
