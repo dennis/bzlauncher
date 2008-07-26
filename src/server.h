@@ -31,19 +31,35 @@ THE SOFTWARE.
 class Label;
 
 struct ServerData {
+protected:
 	typedef std::map<const Label*, AttributeBase* > attributemap_t;
 	attributemap_t	attributes;
-
 	int query_ref; 	// How many queries are referencing this..
+	friend class Server;
+public:
 
 	ServerData() : query_ref(0) {
-		wxLogDebug(_T("ServerData() %p"), this);
 	}
 
 	~ServerData() {
-		wxLogDebug(_T("~ServerData() %p"), this);
 		for(attributemap_t::iterator i = this->attributes.begin(); i!= this->attributes.end(); ++i)
 			delete i->second;
+	}
+
+	template<typename T>
+	void update(const Label* l, const Attribute<T>& val) {
+		if( this->attributes.find(l) != this->attributes.end() )
+			delete this->attributes[l];
+		Attribute<T>* newval = new Attribute<T>(val);
+		this->attributes[l] = newval;
+	}
+
+	AttributeBase* get(const Label* l) {
+		AttributeBase* res = NULL;
+		if( this->attributes.find(l) != this->attributes.end() )
+			res = this->attributes[l];
+
+		return res;
 	}
 };
 
@@ -52,17 +68,14 @@ protected:
 	ServerData*	data;
 public:
 	Server() {
-		this->data = new ServerData;
+		this->data = new ServerData();
 		this->data->query_ref++;
-		wxLogDebug(_T("Server() ServerData[%p %d]"), this->data, this->data->query_ref);
 	}
 	Server(const Server& s) {
 		this->data = s.data;
 		s.data->query_ref++;
-		wxLogDebug(_T("Server(Server&) ServerData[%p %d]"), this->data, this->data->query_ref);
 	}
 	~Server() {
-		wxLogDebug(_T("~Server() ServerData[%p %d]"), this->data, this->data->query_ref);
 		this->data->query_ref--;
 		if(this->data->query_ref==0)
 			delete this->data;
@@ -71,24 +84,16 @@ public:
 	Server& operator=(const Server& s) {
 		this->data = s.data;
 		s.data->query_ref++;
-		wxLogDebug(_T("operator=() ServerData[%p %d]"), this->data, this->data->query_ref);
 		return *this;
 	}
 
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
-		if( this->data->attributes.find(l) != this->data->attributes.end() )
-			delete this->data->attributes[l];
-		Attribute<T>* newval = new Attribute<T>(val);
-		this->data->attributes[l] = newval;
+		this->data->update(l,val);
 	}
 
 	AttributeBase* get(const Label* l) {
-		AttributeBase* res = NULL;
-		if( this->data->attributes.find(l) != this->data->attributes.end() )
-			res = this->data->attributes[l];
-
-		return res;
+		return this->data->get(l);
 	}
 };
 
