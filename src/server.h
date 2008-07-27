@@ -61,6 +61,15 @@ public:
 
 		return res;
 	}
+
+	bool matches(const wxString& token) const {
+		for(attributemap_t::const_iterator i = this->attributes.begin(); i!= this->attributes.end(); ++i)
+			if(token.CmpNoCase(i->second->aswxString())==0) {
+				wxLogDebug(_T("Matched %s on %s"), token.c_str(), i->second->aswxString().c_str());
+				return true;
+			}
+		return false;
+	}
 };
 
 class Server {
@@ -108,6 +117,10 @@ public:
 
 	AttributeBase* get(const Label* l) {
 		return this->data->get(l);
+	}
+
+	bool matches(const wxString& token) const {
+		return this->data->matches(token);
 	}
 };
 

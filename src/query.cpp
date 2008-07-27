@@ -25,16 +25,18 @@ THE SOFTWARE.
 #include "server.h"
 #include "query.h"
 
-bool Query::operator==(const Server* server) const {
-/*
+bool Query::operator==(const Server& server) const {
 	bool result = true;
 	wxString token;
 
 	for(unsigned int i = 0; i < this->tokens.GetCount() && result; i++) {
 		token = this->tokens[i];
 
-		if( token.CmpNoCase(_T("ALL")) == 0 )
+		if( token.CmpNoCase(_T("ALL")) == 0 ) 
 			result &= true;
+		else
+			result &= server.matches(token);
+		/*
 		else if( token.CmpNoCase(_T("CTF")) == 0 )
 			result &= server->gameType.value.isCTF();
 		else if( token.CmpNoCase(_T("FFA")) == 0 )
@@ -50,11 +52,10 @@ bool Query::operator==(const Server* server) const {
 				(server->name().Find(token) != wxNOT_FOUND) ||
 				(server->longName().Find(token) != wxNOT_FOUND) ||
 				(server->protocolVersion().Find(token) != wxNOT_FOUND);
+		*/
 	}
 
 	return result;
-*/
-	return true;
 }
 
 void Query::set(const wxString &q) {

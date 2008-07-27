@@ -218,10 +218,11 @@ ServerResultSet ListServerHandler::Search(const Query& query) {
 
 	for(ServerList::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i) {
 		Server*	current = *i;
-
+		/*
 		if(query == const_cast<Server*>(current)) {
 			resultSet.push_back(current);
 		}
+		*/
 	}
 	return resultSet;
 }

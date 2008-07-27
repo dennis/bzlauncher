@@ -1,5 +1,5 @@
 QueryResult: 
-	- Remember to use lock/unlock
+	- Search: Only search visible fields?
 	- Implement some notification/event system, so list are updated
 	- Versionize list?
 	- Ping

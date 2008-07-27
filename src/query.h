@@ -57,10 +57,7 @@ public:
 
 	void set(const wxString &);
 
-	bool operator==(const Server*) const;
-	bool operator!=(const Server* s) const {
-		return !(*this == s);
-	}
+	bool operator==(const Server&) const;
 };
 
 class QueryResult {
