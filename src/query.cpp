@@ -70,6 +70,6 @@ void Query::set(const wxString &q) {
 		if(str.Len() > 2 && str[0] == '\'' && str[str.Len()-1] == '\'')
 			this->name = str.Mid(1,str.Len()-2);
 		else
-			this->tokens.Add(str);
+			this->tokens.Add(str.MakeLower());
 	}
 }

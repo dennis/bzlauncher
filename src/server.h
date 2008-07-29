@@ -63,11 +63,11 @@ public:
 	}
 
 	bool matches(const wxString& token) const {
-		for(attributemap_t::const_iterator i = this->attributes.begin(); i!= this->attributes.end(); ++i)
-			if(token.CmpNoCase(i->second->aswxString())==0) {
-				wxLogDebug(_T("Matched %s on %s"), token.c_str(), i->second->aswxString().c_str());
+		for(attributemap_t::const_iterator i = this->attributes.begin(); i!= this->attributes.end(); ++i) {
+			const wxString val = i->second->aswxString().MakeLower();
+			if(val.Find(token)!=wxNOT_FOUND) 
 				return true;
-			}
+		}
 		return false;
 	}
 };
@@ -99,13 +99,10 @@ public:
 	Server dupe() const {
 		Server	s;
 
-		wxLogDebug(_T("Server::dupe() org-data: %p"), this->data);
-
 		for(ServerData::attributemap_t::const_iterator i = this->data->attributes.begin(); i != this->data->attributes.end(); ++i )
 			s.data->attributes[i->first] = i->second->dupe();
 
 		s.data->query_ref++;
-		wxLogDebug(_T("Server::dupe() copy-data: %p"), &s.data);
 
 		return s;
 	}
