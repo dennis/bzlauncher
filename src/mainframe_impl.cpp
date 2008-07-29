@@ -31,8 +31,6 @@ THE SOFTWARE.
 #include "serverdlg_impl.h"
 #include "updatingdlg_impl.h"
 
-#include "listserverhandler.h"
-
 #include "ping.h"
 #include "datactrl.h"
 
@@ -394,6 +392,7 @@ void MainFrameImpl::EventQuit(wxCommandEvent&) {
 }
 
 void MainFrameImpl::ShowDetails() {
+/*
 	BZLauncherApp& app = wxGetApp();
 	Server* s = app.listServerHandler.FindByName(app.GetSelectedServer());
 	if(s) {
@@ -403,6 +402,7 @@ void MainFrameImpl::ShowDetails() {
 	else {
 		app.SetStatusText(_("No server selected"));
 	}
+*/
 }
 
 void MainFrameImpl::EventSelectServer(wxListEvent& event) {
@@ -494,6 +494,7 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
+/*
 	BZLauncherApp& app = wxGetApp();
 	app.RefreshServerList(this->favoriteServers, this->recentServers);
 	this->RefreshActiveView();
@@ -524,10 +525,12 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	}
 	
 	this->pingTimer.Start(10);
+*/
 }
 
 void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	// Make sure the list is up-to-date
+	/*
 	if(wxGetApp().listServerHandler.getVersion() != this->activeView->version) {
 		return;
 	}
@@ -560,6 +563,7 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 			this->UpdateServer(view, item, s);
 		}
 	}
+	*/
 }
 
 void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {

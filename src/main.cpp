@@ -27,7 +27,6 @@ THE SOFTWARE.
 #include <wx/log.h>
 
 #include "config.h"
-#include "listserverhandler.h"
 #include "server.h"
 #include "mainframe_impl.h"
 
@@ -68,7 +67,6 @@ void BZLauncherApp::SetStatusText(const wxString& text) {
 }
 
 void BZLauncherApp::RefreshServerList(wxArrayString& favs, wxArrayString& recents) {
-	this->listServerHandler.GetServerList(favs, recents);
 }
 
 const wxString BZLauncherApp::GetSelectedServer() {

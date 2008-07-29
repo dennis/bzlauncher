@@ -8,7 +8,6 @@ bzlauncher_SOURCES = \
 	datasrc.cpp \
 	label.cpp \
 	listserver.cpp \
-	listserverhandler.cpp \
 	main.cpp \
 	mainframe_impl.cpp \
 	ping.cpp \
@@ -33,7 +32,6 @@ noinst_HEADERS = \
 	gui.h \
 	label.h \
 	listserver.h \
-	listserverhandler.h \
 	main.h \
 	mainframe_impl.h \
 	ping.h \

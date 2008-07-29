@@ -39,6 +39,3 @@ Labels:
 	name, visible, position, width
 - Consider using $server, $text etc instead of server, text for the keys of the labels
 	(can be used for searching, ie: $red > 2 (more than 2 reds)
-- Delete server.{cpp,h}, listserverhandler.{cpp,h} when listserver.{cpp,h} and friends, 
-	performs the same task
-

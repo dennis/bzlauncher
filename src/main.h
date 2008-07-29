@@ -26,8 +26,6 @@ THE SOFTWARE.
 
 #include "datactrl.h"
 
-#include "listserverhandler.h"
-
 class MainFrameImpl;
 
 /// Starting point of BZLauncher 
@@ -38,7 +36,6 @@ private:
 public:
 	DataController		dataControl;
 	MainFrameImpl*		mainFrame;
-	ListServerHandler	listServerHandler;
 
 	~BZLauncherApp();
 
