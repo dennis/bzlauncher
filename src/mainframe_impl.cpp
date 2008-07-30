@@ -295,16 +295,20 @@ void MainFrameImpl::RefreshActiveView() {
 	wxListCtrl* list = this->activeView->serverList;
 	std::vector<Label*>	columns = this->GetViewableLabels();
 
-	QueryResult res = app.dataControl.search(this->activeView->query);
-	wxLogDebug(_T("Query: '%s' found %d matches"), this->activeView->query.get().c_str(), res.size());
+	if( this->activeView->result == NULL ) 
+		this->activeView->result = app.dataControl.search(this->activeView->query);
+	else
+		wxLogDebug(_T("Using QueryResult %p"), this->activeView->result);
+
+	wxLogDebug(_T("Query: '%s' found %d matches"), this->activeView->query.get().c_str(), this->activeView->result);
 
 	// For now, always re-created the list
 	list->DeleteAllItems();
-	for(int row = 0; row < res.size(); ++row ) {
+	for(int row = 0; row < this->activeView->result->size(); ++row ) {
 		int col = 0;
 		int idx = 0;
 		for(std::vector<Label*>::iterator i  = columns.begin(); i != columns.end() ; ++i ) {
-			const wxString val = res.getAttribute(row, *i);
+			const wxString val = this->activeView->result->getAttribute(row, *i);
 			if( col == 0 )
 				idx = list->InsertItem(col, val);
 			else if(idx != -1)

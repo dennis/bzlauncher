@@ -58,14 +58,40 @@ void DataController::stop() {
 	}
 }
 
-QueryResult DataController::search(const Query& q) {
+void DataController::addQueryResult(QueryResult* res) {
+	this->lock.Lock();
+	this->queryResultList.push_back(res);
+	this->lock.Unlock();
+
+	wxLogDebug(_T("DataController: Got %d Query-Result"), this->queryResultList.size());
+}
+
+void DataController::removeQueryResult(QueryResult* res) {
+	this->lock.Lock();
+
+	bool exit = false;
+
+	for(qreslist_t::iterator i = this->queryResultList.begin(); !exit && (i != this->queryResultList.end()); ++i ) {
+		if( *i == res )  {
+			this->queryResultList.erase(i);
+			exit = true;
+		}
+	}
+	this->lock.Unlock();
+
+	wxLogDebug(_T("DataController: Got %d Query-Result"), this->queryResultList.size());
+}
+
+QueryResult* DataController::search(const Query& q) {
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
-	QueryResult res(this);
+	QueryResult* res = new QueryResult(this);
+	wxLogDebug(_T("DataController - new QueryResult %p"), res);
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
 		if( q == i->second )
-			res.add(i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
+			res->add(i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
 	}
 	this->lock.Unlock();
+	this->addQueryResult(res);
 	return res;
 }

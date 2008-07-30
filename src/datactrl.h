@@ -44,9 +44,11 @@ private:
 protected:
 	typedef std::vector<DataSource*>	sourcelist_t;
 	typedef std::map<wxString,Server>	entitymap_t;
+	typedef std::vector<QueryResult*>	qreslist_t;
 
 	sourcelist_t	sourceList;
 	entitymap_t		serverList;
+	qreslist_t		queryResultList;
 
 	wxMutex	lock;
 
@@ -87,7 +89,10 @@ public:
 		this->lock.Unlock();
 	}
 
-	QueryResult search(const Query&);
+	void addQueryResult(QueryResult*);
+	void removeQueryResult(QueryResult*);
+
+	QueryResult* search(const Query&);
 };
 
 #endif 

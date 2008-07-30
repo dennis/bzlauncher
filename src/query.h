@@ -71,10 +71,16 @@ private:
 
 public:
 	QueryResult(DataController* c) : ctrl(c), pointer(this->list.end()), pointer_is(-1) {
+		this->list.clear();
+	}
+
+	~QueryResult() {
+		this->ctrl->removeQueryResult(this);
 	}
 
 	void add(Server s) {
 		this->list.push_back(s);
+		wxLogDebug(_T("QueryResult-%p: Adding element, now got: %d"), this, this->size());
 	}
 
 	int size() {

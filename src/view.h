@@ -33,19 +33,22 @@ private:
 public:
 	wxListCtrl*	serverList;
 	long		currentSortMode; // = colnum+1. If pos then asending, if neg then decending sort
-	Query		query;
-	int			version;
+	Query			query;
+	QueryResult*	result;
+	int				version;
+
+	ServerListView(const Query&, long);
 
 	~ServerListView() {
 		if( this->serverList ) 
 			delete this->serverList;
+		if( this->result )
+			delete this->result;
 	}
 
 	const wxString GetName() const {
 		return this->query.getName();
 	}
-
-	ServerListView(const Query&, long);
 };
 
 typedef std::vector<ServerListView*>	viewlist_t;

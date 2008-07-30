@@ -25,7 +25,8 @@ THE SOFTWARE.
 #include "query.h"
 #include "mainframe_impl.h"
 
-ServerListView::ServerListView(const Query& thequery, long sort) : serverList(NULL), version(0) {
+ServerListView::ServerListView(const Query& thequery, long sort) 
+	: serverList(NULL), version(0), result(NULL) {
 	this->query = thequery;
 	this->currentSortMode = sort;
 }
