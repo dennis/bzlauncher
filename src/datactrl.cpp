@@ -38,16 +38,19 @@ DataController::~DataController() {
 }
 
 void DataController::add(DataSource* ds) {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	this->sourceList.push_back(ds);
 }
 
 void DataController::run() {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	wxLogDebug(_T("DataController::run()"));
 	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i )
 		(*i)->Run();
 }
 
 void DataController::stop() {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	wxLogDebug(_T("DataController::stop()"));
 	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
 		(*i)->Kill();
@@ -56,6 +59,7 @@ void DataController::stop() {
 }
 
 QueryResult DataController::search(const Query& q) {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	QueryResult res(this);
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {

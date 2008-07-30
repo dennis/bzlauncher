@@ -25,6 +25,7 @@ THE SOFTWARE.
 #define __datactrl_h__
 
 #include <wx/string.h>
+#include <wx/utils.h>
 #include <vector>
 #include <map>
 
@@ -38,6 +39,8 @@ class QueryResult;
 
 // This class controls/owns the datalist (serverlist) 
 class DataController {
+private:
+	unsigned long	pid;
 protected:
 	typedef std::vector<DataSource*>	sourcelist_t;
 	typedef std::map<wxString,Server>	entitymap_t;
@@ -51,16 +54,22 @@ public:
 	typedef std::map<wxString,Label*>		labelmap_t;
 	labelmap_t		labelMap;
 
+	DataController() {
+		this->pid = wxGetProcessId();
+	}
+
 	~DataController();
 
 	template<typename T>
 	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
+		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 		this->lock.Lock();
 		this->serverList[name].update(l,val);
 		this->lock.Unlock();
 	}
 
 	void addLabel(Label* l) {
+		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 		this->labelMap[l->getTag()] = l;
 	}
 
@@ -69,6 +78,7 @@ public:
 	void stop();
 
 	AttributeBase* getAttribute(const wxString& name, const Label* l) {
+		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 		this->lock.Lock();
 		if( this->serverList.find(name) == this->serverList.end() )
 			return NULL;
