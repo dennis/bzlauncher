@@ -33,9 +33,9 @@ THE SOFTWARE.
 #include "server.h"
 #include "attribute.h"
 #include "datasrc.h"
+#include "queryresult.h"
 
 class Query;
-class QueryResult;
 
 // This class controls/owns the datalist (serverlist) 
 class DataController {
@@ -67,6 +67,11 @@ public:
 		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 		this->lock.Lock();
 		this->serverList[name].update(l,val);
+		for(qreslist_t::iterator i = this->queryResultList.begin(); i != this->queryResultList.end(); ++i )
+		/*
+			if( (*i)->query == this->serverList[name] )
+				wxLogDebug(_T(".."));
+		*/
 		this->lock.Unlock();
 	}
 

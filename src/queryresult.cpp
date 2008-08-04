@@ -21,43 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __query_h__
-#define __query_h__
+#include "datactrl.h"
+#include "queryresult.h"
 
-#include <wx/string.h>
-#include <wx/arrstr.h>
-#include <datactrl.h>
+QueryResult::QueryResult(DataController* c, const Query& q) : ctrl(c), pointer(this->list.end()), pointer_is(-1)/*, query(q)*/ {
+}
 
-class Server;
-
-class Query {
-private:
-	wxString		query;
-	wxArrayString	tokens;
-	wxString		name;
-
-public:
-	Query(const wxString& q = _T("")) {
-		this->set(q);
-	}
-
-	wxString get() const {
-		if( this->query.IsEmpty() )
-			return wxString(_T("All"));
-		else
-			return this->query;
-	}
-
-	wxString getName() const {
-		if( this->name.IsEmpty() )
-			return this->get();
-		else
-			return this->name;
-	}
-
-	void set(const wxString &);
-
-	bool operator==(const Server&) const;
-};
-
-#endif
+QueryResult::~QueryResult() {
+	this->ctrl->removeQueryResult(this);
+}

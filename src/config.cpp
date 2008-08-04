@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 #include "config.h"
 #include "label.h"
+#include "queryresult.h"
 
 Config appConfig;
 

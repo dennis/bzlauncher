@@ -12,6 +12,7 @@ bzlauncher_SOURCES = \
 	mainframe_impl.cpp \
 	ping.cpp \
 	query.cpp \
+	queryresult.cpp \
 	server.cpp \
 	serverdlg_impl.cpp \
 	updatingdlg_impl.cpp \
@@ -37,6 +38,7 @@ noinst_HEADERS = \
 	ping.h \
 	ping32.h \
 	query.h \
+	queryresult.h \
 	refresh32.h \
 	search32.h \
 	server.h \

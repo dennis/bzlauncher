@@ -21,43 +21,57 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __query_h__
-#define __query_h__
+#ifndef __queryresult_h__
+#define __queryresult_h__
 
 #include <wx/string.h>
 #include <wx/arrstr.h>
-#include <datactrl.h>
 
-class Server;
+class Query;
+class DataController;
 
-class Query {
+class QueryResult {
 private:
-	wxString		query;
-	wxArrayString	tokens;
-	wxString		name;
+	typedef std::map<wxString,Server>	list_t;
+	list_t	list;
+	DataController* ctrl;
+
+	list_t::iterator	pointer;
+	int		pointer_is;
 
 public:
-	Query(const wxString& q = _T("")) {
-		this->set(q);
+	QueryResult(DataController*, const Query&);
+	~QueryResult();
+
+	void add(const wxString name, Server s) {
+		this->list[name] = s;
 	}
 
-	wxString get() const {
-		if( this->query.IsEmpty() )
-			return wxString(_T("All"));
-		else
-			return this->query;
+	int size() {
+		return this->list.size();
 	}
 
-	wxString getName() const {
-		if( this->name.IsEmpty() )
-			return this->get();
-		else
-			return this->name;
+	wxString getAttribute(int row, Label* l) {
+		if( row <= 0 ) {
+			this->pointer = this->list.begin();
+			this->pointer_is = 0;
+		}
+		if( row == this->pointer_is+1 ) {
+			this->pointer++;
+			this->pointer_is++;
+		}
+		if( row >= this->list.size() ) {
+			this->pointer = this->list.end();
+		}
+
+		if( this->pointer != this->list.end() ) {
+			Server& s = this->pointer->second;
+			AttributeBase*	ab = s.get(l);
+			if(ab)
+				return ab->aswxString();
+		}
+		return _T("N/A");
 	}
-
-	void set(const wxString &);
-
-	bool operator==(const Server&) const;
 };
 
 #endif

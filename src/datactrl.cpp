@@ -84,12 +84,12 @@ void DataController::removeQueryResult(QueryResult* res) {
 
 QueryResult* DataController::search(const Query& q) {
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
-	QueryResult* res = new QueryResult(this);
+	QueryResult* res = new QueryResult(this, q);
 	wxLogDebug(_T("DataController - new QueryResult %p"), res);
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
 		if( q == i->second )
-			res->add(i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
+			res->add(i->first, i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
 	}
 	this->lock.Unlock();
 	this->addQueryResult(res);
