@@ -39,6 +39,7 @@ noinst_HEADERS = \
 	ping32.h \
 	query.h \
 	queryresult.h \
+	queue.h \
 	refresh32.h \
 	search32.h \
 	server.h \
