@@ -62,27 +62,16 @@ public:
 
 	~DataController();
 
-	template<typename T>
-	void updateAttribute(const wxString& name, const Label* l, const Attribute<T>& val) {
-		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
-		this->lock.Lock();
-		this->serverList[name].update(l,val);
-		for(qreslist_t::iterator i = this->queryResultList.begin(); i != this->queryResultList.end(); ++i )
-		/*
-			if( (*i)->query == this->serverList[name] )
-				wxLogDebug(_T(".."));
-		*/
-		this->lock.Unlock();
-	}
-
 	void addLabel(Label* l) {
 		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
+		wxLogDebug(_T("Adding label '%s' pointing at %p"), l->getTag().c_str(), l);
 		this->labelMap[l->getTag()] = l;
 	}
 
 	void add(DataSource*);
 	void run();
 	void stop();
+	void work();
 
 	AttributeBase* getAttribute(const wxString& name, const Label* l) {
 		wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));

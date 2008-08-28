@@ -44,7 +44,7 @@ bool BZLauncherApp::OnInit() {
 
 	appConfig.versionCheck();
 
-	this->dataControl.add(new ListServer(&dataControl, appConfig.getListServers()));
+	this->dataControl.add(new ListServer(appConfig.getListServers()));
 	this->dataControl.run();
 
 	this->mainFrame = new  MainFrameImpl(NULL);

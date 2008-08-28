@@ -96,7 +96,7 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 }
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
-: MainFrame( parent ), initialLoadTimer(this), filterEnabled(false), activeView(NULL)  { 
+: MainFrame( parent ), initialLoadTimer(this), dataSourceTimer(this), filterEnabled(false), activeView(NULL)  { 
 	PingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
@@ -105,6 +105,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->recentServers 	= appConfig.getRecentServers();
 
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
+	this->Connect( this->dataSourceTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 
 	this->findPanel->Show(false);
@@ -114,6 +115,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 	this->SetSize(this->DetermineFrameSize());
 	this->toolBar->Show(appConfig.getToolbarVisible());
 	this->initialLoadTimer.Start(300,true);
+	this->dataSourceTimer.Start(500,true);
 
 	this->activeView->serverList->SetFocus();
 }
@@ -501,6 +503,10 @@ void MainFrameImpl::EventPingServer(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
+	wxLogDebug(_T("MainFrameImpl::EventTimer()"));
+	BZLauncherApp& app = wxGetApp();
+	app.dataControl.work();
+	this->dataSourceTimer.Start(500);
 /*
 	BZLauncherApp& app = wxGetApp();
 	app.RefreshServerList(this->favoriteServers, this->recentServers);

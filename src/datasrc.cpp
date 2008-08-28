@@ -23,8 +23,7 @@ THE SOFTWARE.
 */
 
 #include "datasrc.h"
-#include "datactrl.h"
 
-DataSource::DataSource(DataController* c) : wxThread(wxTHREAD_JOINABLE), ctrl(c) {
+DataSource::DataSource() : wxThread(wxTHREAD_JOINABLE) {
 	this->Create(1024*1024);
 }

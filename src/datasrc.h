@@ -26,17 +26,38 @@ THE SOFTWARE.
 
 #include <wx/thread.h>
 #include <wx/log.h>
+#include <wx/string.h>
 
+#include "attribute.h"
 #include "label.h"
+#include "queue.h"
 
 class DataController;
 
+class FullAttributeInfo {
+public:
+	AttributeBase*	attr;
+	const Label*			label;
+	const wxString			server;
+
+	FullAttributeInfo(AttributeBase* a, Label* l, wxString s) 
+		: attr(a), label(l), server(s) {
+	}
+};
+
 // This class controls/owns the datalist (serverlist) 
 class DataSource : public wxThread {
-protected:
-	DataController*	ctrl;
 public:
-	DataSource(DataController*);
+	Queue< FullAttributeInfo > out_queue;		// queue that is read by data-ctrl
+
+	template<typename T>
+	void updateAttribute(const wxString& name, Label* l, const Attribute<T>& attr) {
+		out_queue.push(FullAttributeInfo(attr.dupe(), l, name));
+	}
+
+	DataSource();
+
+	virtual void initializeLabels(DataController*) = 0;
 };
 
 #endif 

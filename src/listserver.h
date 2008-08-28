@@ -27,7 +27,9 @@ THE SOFTWARE.
 #include <wx/log.h>
 #include <wx/utils.h>
 
-#include "datactrl.h"
+class DataController;
+
+#include "datasrc.h"
 
 class ListServer : public DataSource {
 private:
@@ -79,8 +81,10 @@ private:
 	Label*			lblobservermax;
 
 public:
-	ListServer(DataController*, const wxArrayString&);
+	ListServer(const wxArrayString&);
 	~ListServer();
+
+	void initializeLabels(DataController*);
 
 	ExitCode Entry();
 	bool GetListServerResponse();

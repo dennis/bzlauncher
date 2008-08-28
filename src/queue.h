@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 #include <stack>
 #include <wx/thread.h>
+#include <wx/log.h>
 
 template<typename T>
 class Queue {
@@ -39,21 +40,24 @@ public:
 	Queue() : cond(cond_mutex) {
 	}
 
-	void push(T& t) {
+	void push(T t) {
 		wxMutexLocker m(this->mutex);
 		this->stack.push(t);
 		this->cond.Signal();
 	}
 
 	T pop() {
-		this->cond.Wait();
 		wxMutexLocker m(this->mutex);
+
+		if(this->stack.size()==0)
+			this->cond.Wait();
 		T t = this->stack.top();
 		this->stack.pop();
 		return t;
 	}
 
 	// No blocking
+	/*
 	bool pop_nb(T* t) {
 		if( this->cond.Wait() != wxCOND_TIMEOUT ) {
 			wxMutexLocker m(this->mutex);
@@ -63,6 +67,12 @@ public:
 		}
 
 		return false;
+	}
+	*/
+
+	int size() {
+		wxMutexLocker m(this->mutex);
+		return this->stack.size();
 	}
 };
 

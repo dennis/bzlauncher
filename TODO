@@ -1,10 +1,4 @@
 QueryResult: 
-	- Implement some notification/event system, so list are updated
-		- DataCtrl holder styr på QueryResults og kan lave en "update" af dem
-		  løbende, som så kan læses efterfølgende af GUI
-		- QueryResult - map med server-name som key
-	- rename ListServer to ListServerDataSource? Or ListServerDSource? DataSrc?..
-	- Add DummyDataSrc
 	- Ping
 	- Sorting
 	- ServerDetails

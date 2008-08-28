@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <map>
 #include <wx/log.h>
 #include "attribute.h"
+#include "datasrc.h"
 
 class Label;
 
@@ -52,6 +53,15 @@ public:
 			delete this->attributes[l];
 		Attribute<T>* newval = new Attribute<T>(val);
 		this->attributes[l] = newval;
+	}
+
+	void update(FullAttributeInfo& info) {
+		// FAI already contains a *copy* of the attribute, so we don't
+		// need anotherone
+		if( this->attributes.find(info.label) != this->attributes.end() )
+			delete this->attributes[info.label];
+
+		this->attributes[info.label] = info.attr;
 	}
 
 	AttributeBase* get(const Label* l) {
@@ -110,6 +120,10 @@ public:
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
 		this->data->update(l,val);
+	}
+
+	void update(FullAttributeInfo& info) {
+		this->data->update(info);
 	}
 
 	AttributeBase* get(const Label* l) {

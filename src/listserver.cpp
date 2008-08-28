@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <wx/intl.h>
 #include <wx/filesys.h>
 
+#include "datactrl.h"
 #include "listserver.h"
 
 static int Hex2bin(char d) {
@@ -73,52 +74,56 @@ static char* UnpackHex8(char* buf, uint8_t& d) {
 	return buf;
 }
 
-ListServer::ListServer(DataController* _ctrl, const wxArrayString& _s) : DataSource(_ctrl), listServers(_s) {
-	// Ownership is transferred to ctrl, so we dont need to free them
-	//
-	this->ctrl->addLabel(this->lblserver       = new Label(_T("server"),      _("Server")));
-	this->ctrl->addLabel(this->lblprotocol     = new Label(_T("protocol"),    _("Protocol Version")));
-	this->ctrl->addLabel(this->lbltext	      = new Label(_T("text"),         _("Text")));
+ListServer::ListServer(const wxArrayString& _s) : listServers(_s) {
+	wxLogDebug(_T("ListServer::out_queue = %p"), &this->out_queue);
+}
 
-	this->ctrl->addLabel(this->lbltype	      = new Label(_T("type"),         _("Type")));
+void ListServer::initializeLabels(DataController* datactrl) {
+	wxLogDebug(_T("ListServer::initializeLabels(datactrl)"));
+	// Ownership is transferred to ctrl, so we dont need to free them
+	datactrl->addLabel(this->lblserver       = new Label(_T("server"),      _("Server")));
+	datactrl->addLabel(this->lblprotocol     = new Label(_T("protocol"),    _("Protocol Version")));
+	datactrl->addLabel(this->lbltext	      = new Label(_T("text"),         _("Text")));
+
+	datactrl->addLabel(this->lbltype	      = new Label(_T("type"),         _("Type")));
                                                                               
-	this->ctrl->addLabel(this->lblctf          = new Label(_T("ctf"),         _("CTF")));
-	this->ctrl->addLabel(this->lblrc           = new Label(_T("rc"),          _("RC")));
-	this->ctrl->addLabel(this->lblffa          = new Label(_T("ffa"),         _("FFA")));
+	datactrl->addLabel(this->lblctf          = new Label(_T("ctf"),         _("CTF")));
+	datactrl->addLabel(this->lblrc           = new Label(_T("rc"),          _("RC")));
+	datactrl->addLabel(this->lblffa          = new Label(_T("ffa"),         _("FFA")));
                                                                               
-	this->ctrl->addLabel(this->lblsuperflags   = new Label(_T("superflags"),  _("Superflags")));
-	this->ctrl->addLabel(this->lbljumping      = new Label(_T("jumping"),     _("Jumping")));
-	this->ctrl->addLabel(this->lblinertia      = new Label(_T("inertia"),     _("Inertia")));
-	this->ctrl->addLabel(this->lblantidote     = new Label(_T("antidote"),    _("Antidote")));
-	this->ctrl->addLabel(this->lblshakable     = new Label(_T("shakable"),    _("Shakable")));
-	this->ctrl->addLabel(this->lblricochet     = new Label(_T("ricochet"),    _("Ricohet")));
-	this->ctrl->addLabel(this->lblhandicap     = new Label(_T("handicap"),    _("Handicap")));
+	datactrl->addLabel(this->lblsuperflags   = new Label(_T("superflags"),  _("Superflags")));
+	datactrl->addLabel(this->lbljumping      = new Label(_T("jumping"),     _("Jumping")));
+	datactrl->addLabel(this->lblinertia      = new Label(_T("inertia"),     _("Inertia")));
+	datactrl->addLabel(this->lblantidote     = new Label(_T("antidote"),    _("Antidote")));
+	datactrl->addLabel(this->lblshakable     = new Label(_T("shakable"),    _("Shakable")));
+	datactrl->addLabel(this->lblricochet     = new Label(_T("ricochet"),    _("Ricohet")));
+	datactrl->addLabel(this->lblhandicap     = new Label(_T("handicap"),    _("Handicap")));
                                                                               
-	this->ctrl->addLabel(this->lblmaxshots     = new Label(_T("maxshots"),    _("Shots")));
-	this->ctrl->addLabel(this->lblshakewins    = new Label(_T("shakewins"),   _("Shakewins")));
-	this->ctrl->addLabel(this->lblshaketimeout = new Label(_T("shaketimeout"),_("Shaketimeout")));
-	this->ctrl->addLabel(this->lblmaxplayerscore = new Label(_T("maxplayerscore"), _("Max player score")));
-	this->ctrl->addLabel(this->lblmaxteamscore = new Label(_T("maxteamscore"),_("Max team score")));
-	this->ctrl->addLabel(this->lblmaxtime      = new Label(_T("maxtime"),     _("Max time")));
-	this->ctrl->addLabel(this->lblmaxplayers   = new Label(_T("maxplayers"),  _("#")));
+	datactrl->addLabel(this->lblmaxshots     = new Label(_T("maxshots"),    _("Shots")));
+	datactrl->addLabel(this->lblshakewins    = new Label(_T("shakewins"),   _("Shakewins")));
+	datactrl->addLabel(this->lblshaketimeout = new Label(_T("shaketimeout"),_("Shaketimeout")));
+	datactrl->addLabel(this->lblmaxplayerscore = new Label(_T("maxplayerscore"), _("Max player score")));
+	datactrl->addLabel(this->lblmaxteamscore = new Label(_T("maxteamscore"),_("Max team score")));
+	datactrl->addLabel(this->lblmaxtime      = new Label(_T("maxtime"),     _("Max time")));
+	datactrl->addLabel(this->lblmaxplayers   = new Label(_T("maxplayers"),  _("#")));
                                                                               
-	this->ctrl->addLabel(this->lblroguecount   = new Label(_T("roguecount"),  _("Rogues")));
-	this->ctrl->addLabel(this->lblroguemax     = new Label(_T("roguemax"),    _("Max rogues")));
+	datactrl->addLabel(this->lblroguecount   = new Label(_T("roguecount"),  _("Rogues")));
+	datactrl->addLabel(this->lblroguemax     = new Label(_T("roguemax"),    _("Max rogues")));
                                                                               
-	this->ctrl->addLabel(this->lblredcount     = new Label(_T("redcount"),    _("Reds")));
-	this->ctrl->addLabel(this->lblredmax       = new Label(_T("redmax"),      _("Max reds")));
+	datactrl->addLabel(this->lblredcount     = new Label(_T("redcount"),    _("Reds")));
+	datactrl->addLabel(this->lblredmax       = new Label(_T("redmax"),      _("Max reds")));
                                                                               
-	this->ctrl->addLabel(this->lblgreencount   = new Label(_T("greencount"),  _("Greens")));
-	this->ctrl->addLabel(this->lblgreenmax     = new Label(_T("greenmax"),    _("Max greens")));
+	datactrl->addLabel(this->lblgreencount   = new Label(_T("greencount"),  _("Greens")));
+	datactrl->addLabel(this->lblgreenmax     = new Label(_T("greenmax"),    _("Max greens")));
                                                                               
-	this->ctrl->addLabel(this->lblbluecount    = new Label(_T("bluecount"),   _("Blues")));
-	this->ctrl->addLabel(this->lblbluemax      = new Label(_T("bluemax"),     _("Max blues")));
+	datactrl->addLabel(this->lblbluecount    = new Label(_T("bluecount"),   _("Blues")));
+	datactrl->addLabel(this->lblbluemax      = new Label(_T("bluemax"),     _("Max blues")));
                                                                               
-	this->ctrl->addLabel(this->lblpurplecount  = new Label(_T("purplecount"), _("Purples")));
-	this->ctrl->addLabel(this->lblpurplemax    = new Label(_T("purplemax"),   _("Max purples")));
+	datactrl->addLabel(this->lblpurplecount  = new Label(_T("purplecount"), _("Purples")));
+	datactrl->addLabel(this->lblpurplemax    = new Label(_T("purplemax"),   _("Max purples")));
                                                                               
-	this->ctrl->addLabel(this->lblobservercount   = new Label(_T("observercount"), _("Observers")));
-	this->ctrl->addLabel(this->lblobservermax     = new Label(_T("observermax"), _("Max observers")));
+	datactrl->addLabel(this->lblobservercount   = new Label(_T("observercount"), _("Observers")));
+	datactrl->addLabel(this->lblobservermax     = new Label(_T("observermax"), _("Max observers")));
 }
 
 ListServer::~ListServer() {
@@ -142,9 +147,6 @@ void ListServer::GetServerList() {
 			count++;
 			wxString token = tok.GetNextToken();
 			this->ParseLine(token);
-
-//			if(count == 5)
-//				return; // FIXME Only parse 5 lines
 		}
 	}
 	else {
@@ -197,12 +199,12 @@ bool ListServer::ParseLine(const wxString& line) {
 		switch(i) {
 		case 0:	{ // servername:port
 			name = token;
-			this->ctrl->updateAttribute(name, this->lblserver, Attribute<wxString>(name));
+			this->updateAttribute(name, this->lblserver, Attribute<wxString>(name));
 			}
 			break;
 		case 1:  // version 
 			proto = token;
-			this->ctrl->updateAttribute(name, this->lblprotocol, Attribute<wxString>(token));
+			this->updateAttribute(name, this->lblprotocol, Attribute<wxString>(token));
 			break;
 		case 2:  // Hex info
 			if(proto.CmpNoCase(_T("BZFS0026")) == 0)
@@ -218,7 +220,7 @@ bool ListServer::ParseLine(const wxString& line) {
 				s->longName.value += tok.GetString();
 			}
 			*/
-			this->ctrl->updateAttribute(name, this->lbltext, Attribute<wxString>(tok.GetString()));
+			this->updateAttribute(name, this->lbltext, Attribute<wxString>(tok.GetString()));
 			break;
 		}
 		i++;
@@ -257,7 +259,7 @@ void ListServer::ServerHexParserBZFS0026(const wxString& name, const wxString& h
 	bool isffa = (!isctf && !isrc);
 
 #define PB(x,y) \
-	this->ctrl->updateAttribute(name, x, Attribute<bool>(y));
+	this->updateAttribute(name, x, Attribute<bool>(y));
 
 	PB(this->lblctf, isctf);
 	PB(this->lblrc , isrc);
@@ -271,13 +273,13 @@ void ListServer::ServerHexParserBZFS0026(const wxString& name, const wxString& h
 	PB(this->lblhandicap,   (gamestyle & HandicapGameStyle) == HandicapGameStyle);
 
 	if(isctf) 
-		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("CTF")));
+		this->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("CTF")));
 	else if(isrc)
-		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("RC")));
+		this->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("RC")));
 	else if(isffa)
-		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("FFA")));
+		this->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("FFA")));
 	else
-		this->ctrl->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("???")));
+		this->updateAttribute(name, this->lbltype, Attribute<wxString>(_T("???")));
 
 #undef PB
 
@@ -285,9 +287,9 @@ void ListServer::ServerHexParserBZFS0026(const wxString& name, const wxString& h
 	uint16_t value16;
 
 #define P16(x) \
-	p = UnpackHex16(p, value16); this->ctrl->updateAttribute(name, x, Attribute<uint16_t>(value16));
+	p = UnpackHex16(p, value16); this->updateAttribute(name, x, Attribute<uint16_t>(value16));
 #define P8(x) \
-	p = UnpackHex8(p, value8); this->ctrl->updateAttribute(name, x, Attribute<uint8_t>(value8));
+	p = UnpackHex8(p, value8); this->updateAttribute(name, x, Attribute<uint8_t>(value8));
 
 	P16(this->lblmaxshots);
 	P16(this->lblshakewins);

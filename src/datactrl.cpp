@@ -39,6 +39,8 @@ DataController::~DataController() {
 
 void DataController::add(DataSource* ds) {
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
+	wxLogDebug(_T("DataController::add(%p)"), ds);
+	ds->initializeLabels(this);
 	this->sourceList.push_back(ds);
 }
 
@@ -94,4 +96,20 @@ QueryResult* DataController::search(const Query& q) {
 	this->lock.Unlock();
 	this->addQueryResult(res);
 	return res;
+}
+
+void DataController::work() {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
+	wxLogDebug(_T("DataController::work(). Serverlist got %d entries"), this->serverList.size());
+	this->lock.Lock();
+	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
+		int size = (*i)->out_queue.size();
+		wxLogDebug(_T("DataSource %p got %d in queue"), (*i), size);
+		while(size) {
+			FullAttributeInfo info = (*i)->out_queue.pop();	// Throws it away!
+			this->serverList[info.server].update(info);
+			size--;
+		}
+	}
+	this->lock.Unlock();
 }

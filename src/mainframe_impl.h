@@ -50,6 +50,7 @@ private:
 	void UpdateServer(ServerListView*, int idx, Server*);
 
 	wxTimer			initialLoadTimer;
+	wxTimer			dataSourceTimer;
 	PingTrackerTimer	pingTimer;
 
 	bool			filterEnabled;
