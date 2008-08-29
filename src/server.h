@@ -24,8 +24,11 @@ THE SOFTWARE.
 #ifndef __server_h__
 #define __server_h__
 
-#include <map>
 #include <wx/log.h>
+#include <wx/string.h>
+
+#include <map>
+
 #include "attribute.h"
 #include "datasrc.h"
 
@@ -86,6 +89,8 @@ class Server {
 protected:
 	ServerData*	data;
 public:
+	static Label*	equality_label;
+
 	Server() {
 		this->data = new ServerData();
 		this->data->query_ref++;
@@ -117,6 +122,14 @@ public:
 		return s;
 	}
 
+	bool operator==(const Server& s) {
+		wxASSERT(Server::equality_label);
+		AttributeBase* a = this->get(Server::equality_label);
+		AttributeBase* b = s.get(Server::equality_label);
+
+		return( a && b && a->aswxString().Cmp(b->aswxString()) == 0 );
+	}
+
 	template<typename T>
 	void update(const Label* l, const Attribute<T>& val) {
 		this->data->update(l,val);
@@ -126,7 +139,7 @@ public:
 		this->data->update(info);
 	}
 
-	AttributeBase* get(const Label* l) {
+	AttributeBase* get(const Label* l) const {
 		return this->data->get(l);
 	}
 

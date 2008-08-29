@@ -27,6 +27,8 @@ THE SOFTWARE.
 #include <wx/listctrl.h>
 #include <vector>
 #include "query.h"
+#include "queryresult.h"
+
 
 class ServerListView {
 private:

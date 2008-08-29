@@ -24,48 +24,59 @@ THE SOFTWARE.
 #ifndef __queryresult_h__
 #define __queryresult_h__
 
-#include <wx/string.h>
-#include <wx/arrstr.h>
+#include <vector>
+#include <algorithm>
 
-class Query;
+#include <wx/string.h>
+
+#include "server.h"
+#include "query.h"
+
 class DataController;
+class Label;
 
 class QueryResult {
 private:
-	typedef std::map<wxString,Server>	list_t;
-	list_t	list;
+	typedef std::vector<Server>	serverlist_t;
+	serverlist_t	serverlist;
+
 	DataController* ctrl;
 
-	list_t::iterator	pointer;
+	serverlist_t::iterator	pointer;
 	int		pointer_is;
 
 public:
+	Query	query;
+
 	QueryResult(DataController*, const Query&);
 	~QueryResult();
 
-	void add(const wxString name, Server s) {
-		this->list[name] = s;
+	void add(Server s) {
+		serverlist_t::iterator i = find(this->serverlist.begin(), this->serverlist.end(), s);
+		if( i != this->serverlist.end() )
+			this->serverlist.erase(i);
+		this->serverlist.push_back(s);
 	}
 
 	int size() {
-		return this->list.size();
+		return this->serverlist.size();
 	}
 
 	wxString getAttribute(int row, Label* l) {
 		if( row <= 0 ) {
-			this->pointer = this->list.begin();
+			this->pointer = this->serverlist.begin();
 			this->pointer_is = 0;
 		}
 		if( row == this->pointer_is+1 ) {
 			this->pointer++;
 			this->pointer_is++;
 		}
-		if( row >= this->list.size() ) {
-			this->pointer = this->list.end();
+		if( row >= this->serverlist.size() ) {
+			this->pointer = this->serverlist.end();
 		}
 
-		if( this->pointer != this->list.end() ) {
-			Server& s = this->pointer->second;
+		if( this->pointer != this->serverlist.end() ) {
+			Server& s = *(this->pointer);
 			AttributeBase*	ab = s.get(l);
 			if(ab)
 				return ab->aswxString();

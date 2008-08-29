@@ -26,7 +26,6 @@ THE SOFTWARE.
 
 #include <wx/string.h>
 #include <wx/arrstr.h>
-#include <datactrl.h>
 
 class Server;
 

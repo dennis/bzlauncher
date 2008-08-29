@@ -124,6 +124,8 @@ void ListServer::initializeLabels(DataController* datactrl) {
                                                                               
 	datactrl->addLabel(this->lblobservercount   = new Label(_T("observercount"), _("Observers")));
 	datactrl->addLabel(this->lblobservermax     = new Label(_T("observermax"), _("Max observers")));
+
+	Server::equality_label = this->lblserver;
 }
 
 ListServer::~ListServer() {

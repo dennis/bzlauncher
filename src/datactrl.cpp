@@ -91,7 +91,7 @@ QueryResult* DataController::search(const Query& q) {
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
 		if( q == i->second )
-			res->add(i->first, i->second.dupe());	// Make sure we're giving a copy (that by-passes ref-counting)
+			res->add(i->second.dupe());
 	}
 	this->lock.Unlock();
 	this->addQueryResult(res);
@@ -99,16 +99,36 @@ QueryResult* DataController::search(const Query& q) {
 }
 
 void DataController::work() {
+	typedef std::map<wxString,bool>	dirtylist_t;
+	dirtylist_t dirty;
+
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	wxLogDebug(_T("DataController::work(). Serverlist got %d entries"), this->serverList.size());
+
 	this->lock.Lock();
 	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
 		int size = (*i)->out_queue.size();
 		wxLogDebug(_T("DataSource %p got %d in queue"), (*i), size);
+		if(size > 4096) {
+			size = 4096;
+			wxLogDebug(_T(" ..clamped to %d"), size);
+		}
 		while(size) {
+			// Update our serverlist
 			FullAttributeInfo info = (*i)->out_queue.pop();	// Throws it away!
 			this->serverList[info.server].update(info);
 			size--;
+
+			// Mark it as dirty
+			dirty[info.server] = 1;
+		}
+	}
+
+	// Update the result-lists
+	for(dirtylist_t::iterator d = dirty.begin(); d != dirty.end(); ++d) {
+		for(qreslist_t::iterator q = this->queryResultList.begin(); q != this->queryResultList.end(); ++q ) {
+			if( (*q)->query == this->serverList[d->first] )
+				(*q)->add(this->serverList[d->first]);
 		}
 	}
 	this->lock.Unlock();
