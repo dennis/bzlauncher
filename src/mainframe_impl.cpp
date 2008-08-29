@@ -297,13 +297,8 @@ void MainFrameImpl::RefreshActiveView() {
 	wxListCtrl* list = this->activeView->serverList;
 	std::vector<Label*>	columns = this->GetViewableLabels();
 
-	if( this->activeView->result == NULL ) 
+	if( this->activeView->result == NULL )
 		this->activeView->result = app.dataControl.search(this->activeView->query);
-	else {
-		wxLogDebug(_T("Using QueryResult %p"), this->activeView->result);
-		delete this->activeView->result;
-		this->activeView->result = app.dataControl.search(this->activeView->query);
-	}
 
 	wxLogDebug(_T("Query: '%s' found %d matches"), this->activeView->query.get().c_str(), this->activeView->result->size());
 
