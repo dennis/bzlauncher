@@ -73,6 +73,8 @@ private:
 	bool CanCloseView(ServerListView*);
 
 	std::vector<Label*> GetViewableLabels();
+		
+	void UpdateListRow(const wxString&);
 
 protected:
 	wxImageList*	imageList;

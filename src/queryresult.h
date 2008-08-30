@@ -24,7 +24,8 @@ THE SOFTWARE.
 #ifndef __queryresult_h__
 #define __queryresult_h__
 
-#include <vector>
+#include <map>
+#include <deque>
 #include <algorithm>
 
 #include <wx/string.h>
@@ -37,51 +38,42 @@ class Label;
 
 class QueryResult {
 private:
-	typedef std::vector<Server>	serverlist_t;
-	serverlist_t	serverlist;
-
 	DataController* ctrl;
 
-	serverlist_t::iterator	pointer;
-	int		pointer_is;
-
 public:
+	class QueryItem {
+	public:
+		Server	server;
+		int		idx;
+
+		QueryItem() : idx(-1) {
+		}
+
+	};
+
+	// Contains a full list of all known servers
+	typedef std::map<wxString,QueryItem>	serverlist_t;
+	serverlist_t	serverlist;
+
+	// Contains a list of server-names, we need to add to the list
+	typedef std::deque<wxString> servernamequeue_t;
+	servernamequeue_t	updatedServers;
+
 	Query	query;
 
 	QueryResult(DataController*, const Query&);
 	~QueryResult();
 
-	void add(Server s) {
-		serverlist_t::iterator i = find(this->serverlist.begin(), this->serverlist.end(), s);
-		if( i != this->serverlist.end() )
-			this->serverlist.erase(i);
-		this->serverlist.push_back(s);
+	void add(const wxString& name, Server s) {
+		servernamequeue_t::iterator j = find(this->updatedServers.begin(), this->updatedServers.end(), name);
+		if(j == this->updatedServers.end() )	// only add it once
+			this->updatedServers.push_back(name);
+
+		this->serverlist[name].server = s;
 	}
 
-	int size() {
+	ssize_t size() {
 		return this->serverlist.size();
-	}
-
-	wxString getAttribute(int row, Label* l) {
-		if( row <= 0 ) {
-			this->pointer = this->serverlist.begin();
-			this->pointer_is = 0;
-		}
-		if( row == this->pointer_is+1 ) {
-			this->pointer++;
-			this->pointer_is++;
-		}
-		if( row >= this->serverlist.size() ) {
-			this->pointer = this->serverlist.end();
-		}
-
-		if( this->pointer != this->serverlist.end() ) {
-			Server& s = *(this->pointer);
-			AttributeBase*	ab = s.get(l);
-			if(ab)
-				return ab->aswxString();
-		}
-		return _T("N/A");
 	}
 };
 

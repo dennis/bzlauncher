@@ -294,96 +294,42 @@ void MainFrameImpl::RefreshActiveView() {
 	wxLogDebug(_T("RefreshActiveView()"));
 	BZLauncherApp& app = wxGetApp();
 
-	wxListCtrl* list = this->activeView->serverList;
-	std::vector<Label*>	columns = this->GetViewableLabels();
-
 	if( this->activeView->result == NULL )
 		this->activeView->result = app.dataControl.search(this->activeView->query);
 
 	wxLogDebug(_T("Query: '%s' found %d matches"), this->activeView->query.get().c_str(), this->activeView->result->size());
 
-	// For now, always re-created the list
-	list->DeleteAllItems();
-	for(int row = 0; row < this->activeView->result->size(); ++row ) {
-		int col = 0;
-		int idx = 0;
-		for(std::vector<Label*>::iterator i  = columns.begin(); i != columns.end() ; ++i ) {
-			const wxString val = this->activeView->result->getAttribute(row, *i);
-			if( col == 0 )
-				idx = list->InsertItem(col, val);
-			else if(idx != -1)
-				list->SetItem(idx, col, val);
-			col++;
-		}
+	while(!this->activeView->result->updatedServers.empty()) {
+		wxString name = this->activeView->result->updatedServers.front();
+		this->activeView->result->updatedServers.pop_front();
+		this->UpdateListRow(name);
 	}
 
-	/*
-	if(app.listServerHandler.getVersion() == this->activeView->version) {
-		return;
-	}
-
-	for(viewlist_t::iterator i = this->viewList.begin(); i != this->viewList.end(); ++i ) {
-		if( (*i)->version < app.listServerHandler.getVersion())
-			(*i)->serverList->DeleteAllItems();
-	}
-
-	// Content
-	ServerResultSet::iterator i;
-	ServerResultSet	resultSet = app.listServerHandler.Search(this->activeView->query);
-	this->activeView->version = app.listServerHandler.getVersion();
-
-	int idx = 0;
-	for(i = resultSet.begin(); i != resultSet.end(); ++i) {
-		Server*	current = *i;
-
-		// Check if its a favorite and recent
-		current->favorite = (this->favoriteServers.Index(current->name()) != wxNOT_FOUND);
-		current->recent   = (this->recentServers.Index(current->name()) != wxNOT_FOUND);
-
-		// Server
-		list->InsertItem(idx, current->name());
-		list->SetItemPtrData(idx,reinterpret_cast<wxUIntPtr>(current));
-
-		// Name
-		list->SetItem(idx, 1, current->longName);
-
-		if(current->fullyParsed) {
-			// Type
-			list->SetItem(idx, 2, current->gameType());
-
-			// Player Count
-			list->SetItem(idx, 3, wxString::Format(_T("%d"), current->GetPlayerCount()));
-		}
-		else {
-			// Type
-			list->SetItem(idx, 2, _T("?"));
-
-			// Player Count
-			list->SetItem(idx, 3, _T("?"));
-		}
-		
-		// Ping
-		list->SetItem(idx, 4, _("..."));
-
-		// Favorite
-		this->UpdateServer(this->activeView, idx,current);
-
-		// Use colors to show if servers are supported by bzlauncher(Red), full (Blue), empty (grey)
-		if(!current->fullyParsed)
-			list->SetItemTextColour(idx, *wxRED);
-		else if(current->IsFull())
-			list->SetItemTextColour(idx, *wxBLUE);
-		else if(current->IsEmpty())
-			list->SetItemTextColour(idx, *wxLIGHT_GREY);
-		else
-			list->SetItemTextColour(idx, *wxBLACK);
-
-		idx++;
-	}
-
-	this->activeView->serverList->SortItems(ServerSortCallback, this->activeView->currentSortMode);
-	*/
 	this->activeView->serverList->Layout();
+}
+
+void MainFrameImpl::UpdateListRow(const wxString& name) {
+	std::vector<Label*>	columns = this->GetViewableLabels();
+	wxListCtrl* list = this->activeView->serverList;
+
+	int col = 0;
+	int idx = this->activeView->result->serverlist[name].idx;
+
+	for(std::vector<Label*>::iterator i  = columns.begin(); i != columns.end() ; ++i ) {
+		wxString val = _T("N/A");
+		AttributeBase* b = this->activeView->result->serverlist[name].server.get(*i);
+		if(b) 
+			val = b->aswxString();
+
+		if( col == 0 && idx == -1 ) {
+			idx = list->InsertItem(list->GetItemCount(), val);
+			this->activeView->result->serverlist[name].idx = idx;
+		}
+		else if(idx != -1) {
+			list->SetItem(idx, col, val);
+		}
+		col++;
+	}
 }
 
 void MainFrameImpl::EventShowAbout(wxCommandEvent&) {
@@ -502,6 +448,7 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 	BZLauncherApp& app = wxGetApp();
 	app.dataControl.work();
 	this->dataSourceTimer.Start(500);
+	this->RefreshActiveView();
 /*
 	BZLauncherApp& app = wxGetApp();
 	app.RefreshServerList(this->favoriteServers, this->recentServers);

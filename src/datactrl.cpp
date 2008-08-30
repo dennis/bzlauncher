@@ -91,7 +91,7 @@ QueryResult* DataController::search(const Query& q) {
 	this->lock.Lock();
 	for(entitymap_t::iterator i = this->serverList.begin(); i != this->serverList.end(); ++i ) {
 		if( q == i->second )
-			res->add(i->second.dupe());
+			res->add(i->first, i->second.dupe());
 	}
 	this->lock.Unlock();
 	this->addQueryResult(res);
@@ -131,7 +131,7 @@ void DataController::work() {
 	for(dirtylist_t::iterator d = dirty.begin(); d != dirty.end(); ++d) {
 		for(qreslist_t::iterator q = this->queryResultList.begin(); q != this->queryResultList.end(); ++q ) {
 			if( (*q)->query == this->serverList[d->first] )
-				(*q)->add(this->serverList[d->first]);
+				(*q)->add(d->first, this->serverList[d->first]);
 		}
 	}
 	this->lock.Unlock();

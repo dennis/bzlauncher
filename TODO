@@ -1,11 +1,13 @@
 QueryResult: 
-	- How to determine which servers to update?
 	- Ping
 	- Sorting
 	- ServerDetails
-	- ServerActions?
+	- ServerActions? (launch.. etc)
 
-Labels:
+- Colorization
+- mechanism that removes servers
+- reload serverlist
+- fully parsed servers?
 - servers are never deleted from list
 - Default columns if cfgversion=1
 - reimplement favorites

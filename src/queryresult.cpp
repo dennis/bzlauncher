@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "queryresult.h"
 #include "query.h"
 
-QueryResult::QueryResult(DataController* c, const Query& q) : ctrl(c), pointer(this->serverlist.end()), pointer_is(-1), query(q) {
+QueryResult::QueryResult(DataController* c, const Query& q) : ctrl(c), query(q) {
 }
 
 QueryResult::~QueryResult() {
