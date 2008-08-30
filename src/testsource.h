@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 #include <wx/log.h>
 #include <wx/utils.h>
+#include <wx/thread.h>
 #include <vector>
 
 class DataController;
@@ -38,6 +39,8 @@ private:
 
 	typedef std::vector<wxString>	serverlist_t;
 	serverlist_t	serverlist;
+
+	wxMutex	lock;
 public:
 	TestSource();
 

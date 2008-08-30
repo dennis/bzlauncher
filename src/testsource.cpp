@@ -40,8 +40,11 @@ void TestSource::initializeLabels(DataController* datactrl) {
 TestSource::ExitCode TestSource::Entry() {
 	uint16_t count = 0;
 	while(!this->TestDestroy()) {
-		for(serverlist_t::iterator i = this->serverlist.begin(); i != this->serverlist.end(); ++i) {
-			this->updateAttribute(*i, this->lblsequence, Attribute<uint16_t>(count));
+		{
+			wxMutexLocker m(this->lock);
+			for(serverlist_t::iterator i = this->serverlist.begin(); i != this->serverlist.end(); ++i) {
+				this->updateAttribute(*i, this->lblsequence, Attribute<uint16_t>(count));
+			}
 		}
 		wxSleep(5);
 		count++;
@@ -51,5 +54,6 @@ TestSource::ExitCode TestSource::Entry() {
 
 void TestSource::eventNewServer(const wxString& server) {
 	wxLogDebug(_T("TestSource::eventNewServer(%s)"), server.c_str());
+	wxMutexLocker m(this->lock);
 	this->serverlist.push_back(server);
 }
