@@ -15,6 +15,7 @@ bzlauncher_SOURCES = \
 	queryresult.cpp \
 	server.cpp \
 	serverdlg_impl.cpp \
+	testsource.cpp \
 	updatingdlg_impl.cpp \
 	view.cpp 
 
@@ -45,6 +46,7 @@ noinst_HEADERS = \
 	server.h \
 	serverdlg_impl.h \
 	stop22.h \
+	testsource.h \
 	types.h \
 	updatingdlg_impl.h \
 	view.h 

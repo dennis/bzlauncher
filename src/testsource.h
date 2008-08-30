@@ -21,46 +21,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __datasrc_h__
-#define __datasrc_h__
+#ifndef __testsource_h__
+#define __testsource_h__
 
-#include <wx/thread.h>
 #include <wx/log.h>
-#include <wx/string.h>
-
-#include "attribute.h"
-#include "label.h"
-#include "queue.h"
+#include <wx/utils.h>
+#include <vector>
 
 class DataController;
 
-class FullAttributeInfo {
-public:
-	AttributeBase*	attr;
-	const Label*			label;
-	const wxString			server;
+#include "datasrc.h"
 
-	FullAttributeInfo(AttributeBase* a, Label* l, wxString s) 
-		: attr(a), label(l), server(s) {
-	}
+class TestSource : public DataSource {
+private:
+	Label*			lblsequence;
+
+	typedef std::vector<wxString>	serverlist_t;
+	serverlist_t	serverlist;
+public:
+	TestSource();
+
+	void initializeLabels(DataController*);
+
+	ExitCode Entry();
+
+	void eventNewServer(const wxString&);
 };
 
-// This class controls/owns the datalist (serverlist) 
-class DataSource : public wxThread {
-public:
-	Queue< FullAttributeInfo > out_queue;		// queue that is read by data-ctrl
-
-	template<typename T>
-	void updateAttribute(const wxString& name, Label* l, const Attribute<T>& attr) {
-		out_queue.push(FullAttributeInfo(attr.dupe(), l, name));
-	}
-
-	DataSource();
-
-	virtual void initializeLabels(DataController*) = 0;
-
-	virtual void eventNewServer(const wxString&) { }
-	virtual void eventDeleteServer(const wxString&) {}
-};
-
-#endif 
+#endif

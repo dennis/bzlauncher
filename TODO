@@ -6,6 +6,7 @@ QueryResult:
 	- ServerActions?
 
 Labels:
+- servers are never deleted from list
 - Default columns if cfgversion=1
 - reimplement favorites
 - reimplement recent

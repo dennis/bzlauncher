@@ -87,6 +87,8 @@ public:
 	void removeQueryResult(QueryResult*);
 
 	QueryResult* search(const Query&);
+
+	void eventNewServer(const wxString&);
 };
 
 #endif 

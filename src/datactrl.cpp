@@ -116,6 +116,9 @@ void DataController::work() {
 		while(size) {
 			// Update our serverlist
 			FullAttributeInfo info = (*i)->out_queue.pop();	// Throws it away!
+			if(this->serverList.find(info.server) == this->serverList.end()) {
+				this->eventNewServer(info.server);
+			}
 			this->serverList[info.server].update(info);
 			size--;
 
@@ -132,4 +135,10 @@ void DataController::work() {
 		}
 	}
 	this->lock.Unlock();
+}
+
+void DataController::eventNewServer(const wxString& server) {
+	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
+		(*i)->eventNewServer(server);	
+	}
 }

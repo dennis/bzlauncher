@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "mainframe_impl.h"
 
 #include "listserver.h"
+#include "testsource.h"
 
 IMPLEMENT_APP(BZLauncherApp)
 
@@ -45,6 +46,7 @@ bool BZLauncherApp::OnInit() {
 	appConfig.versionCheck();
 
 	this->dataControl.add(new ListServer(appConfig.getListServers()));
+	this->dataControl.add(new TestSource());
 	this->dataControl.run();
 
 	this->mainFrame = new  MainFrameImpl(NULL);

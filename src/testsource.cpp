@@ -21,46 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __datasrc_h__
-#define __datasrc_h__
-
-#include <wx/thread.h>
 #include <wx/log.h>
-#include <wx/string.h>
+#include <wx/intl.h>
 
-#include "attribute.h"
-#include "label.h"
-#include "queue.h"
+#include "testsource.h"
+#include "datactrl.h"
 
-class DataController;
+TestSource::TestSource() {
+	wxLogDebug(_T("TestSource::out_queue = %p"), &this->out_queue);
+}
 
-class FullAttributeInfo {
-public:
-	AttributeBase*	attr;
-	const Label*			label;
-	const wxString			server;
+void TestSource::initializeLabels(DataController* datactrl) {
+	wxLogDebug(_T("TestSource::initializeLabels(datactrl)"));
+	// Ownership is transferred to ctrl, so we dont need to free them
+	datactrl->addLabel(this->lblsequence   = new Label(_T("dbgcount"),      _("DBG Count")));
+}
 
-	FullAttributeInfo(AttributeBase* a, Label* l, wxString s) 
-		: attr(a), label(l), server(s) {
+TestSource::ExitCode TestSource::Entry() {
+	uint16_t count = 0;
+	while(!this->TestDestroy()) {
+		for(serverlist_t::iterator i = this->serverlist.begin(); i != this->serverlist.end(); ++i) {
+			this->updateAttribute(*i, this->lblsequence, Attribute<uint16_t>(count));
+		}
+		wxSleep(5);
+		count++;
 	}
-};
+	return 0;
+}
 
-// This class controls/owns the datalist (serverlist) 
-class DataSource : public wxThread {
-public:
-	Queue< FullAttributeInfo > out_queue;		// queue that is read by data-ctrl
-
-	template<typename T>
-	void updateAttribute(const wxString& name, Label* l, const Attribute<T>& attr) {
-		out_queue.push(FullAttributeInfo(attr.dupe(), l, name));
-	}
-
-	DataSource();
-
-	virtual void initializeLabels(DataController*) = 0;
-
-	virtual void eventNewServer(const wxString&) { }
-	virtual void eventDeleteServer(const wxString&) {}
-};
-
-#endif 
+void TestSource::eventNewServer(const wxString& server) {
+	wxLogDebug(_T("TestSource::eventNewServer(%s)"), server.c_str());
+	this->serverlist.push_back(server);
+}
