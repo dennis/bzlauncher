@@ -24,20 +24,20 @@ THE SOFTWARE.
 #include <wx/log.h>
 #include <wx/intl.h>
 
-#include "testsource.h"
+#include "pinger.h"
 #include "datactrl.h"
 
-TestSource::TestSource() {
-	wxLogDebug(_T("TestSource::out_queue = %p"), &this->out_queue);
+Pinger::Pinger() {
+	wxLogDebug(_T("Pinger::out_queue = %p"), &this->out_queue);
 }
 
-void TestSource::initializeLabels(DataController* datactrl) {
-	wxLogDebug(_T("TestSource::initializeLabels(datactrl)"));
+void Pinger::initializeLabels(DataController* datactrl) {
+	wxLogDebug(_T("Pinger::initializeLabels(datactrl)"));
 	// Ownership is transferred to ctrl, so we dont need to free them
 	datactrl->addLabel(this->lblsequence   = new Label(_T("dbgcount"),      _("DBG Count")));
 }
 
-TestSource::ExitCode TestSource::Entry() {
+Pinger::ExitCode Pinger::Entry() {
 	uint16_t count = 0;
 	while(!this->TestDestroy()) {
 		{
@@ -52,8 +52,8 @@ TestSource::ExitCode TestSource::Entry() {
 	return 0;
 }
 
-void TestSource::eventNewServer(const wxString& server) {
-	wxLogDebug(_T("TestSource::eventNewServer(%s)"), server.c_str());
+void Pinger::eventNewServer(const wxString& server) {
+	wxLogDebug(_T("Pinger::eventNewServer(%s)"), server.c_str());
 	wxMutexLocker m(this->lock);
 	this->serverlist.push_back(server);
 }

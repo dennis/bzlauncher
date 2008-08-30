@@ -21,8 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef __testsource_h__
-#define __testsource_h__
+#ifndef __pinger_h__
+#define __pinger_h__
 
 #include <wx/log.h>
 #include <wx/utils.h>
@@ -33,7 +33,7 @@ class DataController;
 
 #include "datasrc.h"
 
-class TestSource : public DataSource {
+class Pinger : public DataSource {
 private:
 	Label*			lblsequence;
 
@@ -42,7 +42,7 @@ private:
 
 	wxMutex	lock;
 public:
-	TestSource();
+	Pinger();
 
 	void initializeLabels(DataController*);
 
