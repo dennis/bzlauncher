@@ -59,6 +59,8 @@ public:
 
 	virtual void initializeLabels(DataController*) = 0;
 
+	// These are called from the main thread and NOT from the 
+	// datasources own thread
 	virtual void eventNewServer(const wxString&) { }
 	virtual void eventDeleteServer(const wxString&) {}
 };

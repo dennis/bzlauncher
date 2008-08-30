@@ -138,6 +138,7 @@ void DataController::work() {
 }
 
 void DataController::eventNewServer(const wxString& server) {
+	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
 		(*i)->eventNewServer(server);	
 	}
