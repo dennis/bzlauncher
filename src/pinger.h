@@ -27,17 +27,18 @@ THE SOFTWARE.
 #include <wx/log.h>
 #include <wx/utils.h>
 #include <wx/thread.h>
-#include <vector>
+#include <map>
 
 class DataController;
 
 #include "datasrc.h"
+#include "ping.h"
 
 class Pinger : public DataSource {
 private:
-	Label*			lblsequence;
+	Label*			lblping;
 
-	typedef std::vector<wxString>	serverlist_t;
+	typedef std::map<wxString,Ping>	serverlist_t;
 	serverlist_t	serverlist;
 
 	wxMutex	lock;
@@ -48,7 +49,7 @@ public:
 
 	ExitCode Entry();
 
-	void eventNewServer(const wxString&);
+	void eventNewServer(const wxString&, const Server&);
 };
 
 #endif

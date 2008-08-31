@@ -101,6 +101,7 @@ QueryResult* DataController::search(const Query& q) {
 void DataController::work() {
 	typedef std::map<wxString,bool>	dirtylist_t;
 	dirtylist_t dirty;
+	dirtylist_t newservers;
 
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
 	wxLogDebug(_T("DataController::work(). Serverlist got %d entries"), this->serverList.size());
@@ -117,7 +118,7 @@ void DataController::work() {
 			// Update our serverlist
 			FullAttributeInfo info = (*i)->out_queue.pop();	// Throws it away!
 			if(this->serverList.find(info.server) == this->serverList.end()) {
-				this->eventNewServer(info.server);
+				newservers[info.server] = 1;
 			}
 			this->serverList[info.server].update(info);
 			size--;
@@ -134,12 +135,19 @@ void DataController::work() {
 				(*q)->add(d->first, this->serverList[d->first]);
 		}
 	}
+
+	// Announce new servers
+	for(dirtylist_t::iterator d = dirty.begin(); d != dirty.end(); ++d) {
+		this->eventNewServer(d->first);
+	}
+
 	this->lock.Unlock();
 }
 
-void DataController::eventNewServer(const wxString& server) {
+void DataController::eventNewServer(const wxString& name) {
 	wxASSERT_MSG(this->pid == wxGetProcessId(), _T("not invoked from main thread"));
+	Server& server = this->serverList[name];
 	for(sourcelist_t::iterator i = this->sourceList.begin(); i != this->sourceList.end(); ++i ) {
-		(*i)->eventNewServer(server);	
+		(*i)->eventNewServer(name, server);	
 	}
 }

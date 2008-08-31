@@ -23,3 +23,4 @@ THE SOFTWARE.
 */
 #include "server.h"
 Label*	Server::equality_label = NULL;
+Label*	Server::ip_label = NULL;

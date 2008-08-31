@@ -82,6 +82,7 @@ void ListServer::initializeLabels(DataController* datactrl) {
 	wxLogDebug(_T("ListServer::initializeLabels(datactrl)"));
 	// Ownership is transferred to ctrl, so we dont need to free them
 	datactrl->addLabel(this->lblserver       = new Label(_T("server"),      _("Server")));
+	datactrl->addLabel(this->lblip           = new Label(_T("ip"),      _("IP")));
 	datactrl->addLabel(this->lblprotocol     = new Label(_T("protocol"),    _("Protocol Version")));
 	datactrl->addLabel(this->lbltext	      = new Label(_T("text"),         _("Text")));
 
@@ -126,6 +127,7 @@ void ListServer::initializeLabels(DataController* datactrl) {
 	datactrl->addLabel(this->lblobservermax     = new Label(_T("observermax"), _("Max observers")));
 
 	Server::equality_label = this->lblserver;
+	Server::ip_label       = this->lblip;
 }
 
 ListServer::~ListServer() {
@@ -194,6 +196,7 @@ bool ListServer::ParseLine(const wxString& line) {
 	wxString name;
 	wxString proto;
 	wxStringTokenizer tok(line, _T(" "));
+	long      port  = 5154;
 
 	int i = 0;
 	while(tok.HasMoreTokens()) {
@@ -201,6 +204,11 @@ bool ListServer::ParseLine(const wxString& line) {
 		switch(i) {
 		case 0:	{ // servername:port
 			name = token;
+			int pos;
+			if((pos = name.Find(':',true)) != wxNOT_FOUND) {
+				if(!name.Mid(pos+1).ToLong(&port))
+					port = 5154;
+			}
 			this->updateAttribute(name, this->lblserver, Attribute<wxString>(name));
 			}
 			break;
@@ -212,17 +220,14 @@ bool ListServer::ParseLine(const wxString& line) {
 			if(proto.CmpNoCase(_T("BZFS0026")) == 0)
 				ServerHexParserBZFS0026(name,token);
 			break;
-		case 3: 
-			/*
-			{
+		case 3: {
 				wxIPV4address ip;
 				ip.Hostname(token);
-				ip.Service(port);
-				s->setIP(ip);
-				s->longName.value += tok.GetString();
+				ip.Service(port); 
+
+				this->updateAttribute(name, this->lblip, Attribute<wxIPV4address>(ip));
+				this->updateAttribute(name, this->lbltext, Attribute<wxString>(tok.GetString()));
 			}
-			*/
-			this->updateAttribute(name, this->lbltext, Attribute<wxString>(tok.GetString()));
 			break;
 		}
 		i++;

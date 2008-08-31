@@ -1,4 +1,6 @@
 - DataSource: Ping
+	- Merge PingTracker with Pinger
+	- Update the server-result
 - Sorting of QueryResult
 - ServerDetails ("details")
 	- Each DataSource got a DataSourceGUI class, to display the info?
@@ -14,3 +16,8 @@
 - Consider using $server, $text etc instead of server, text for the keys of the labels
 	(can be used for searching, ie: $red > 2 (more than 2 reds)
 	(eg: $ping < 100, will only show server that is playable :))
+- Listserver: Detect if the webserver returns a mysql/php error, and use another listserver if so
+--- eg:
+<br />
+<b>Warning</b>:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Too many connections in <b>/usr/web/bzflag.org/document.php</b> on line <b>21</b><br />
+Could not connect: Too many connections

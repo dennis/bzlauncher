@@ -33,27 +33,34 @@ Pinger::Pinger() {
 
 void Pinger::initializeLabels(DataController* datactrl) {
 	wxLogDebug(_T("Pinger::initializeLabels(datactrl)"));
+
 	// Ownership is transferred to ctrl, so we dont need to free them
-	datactrl->addLabel(this->lblsequence   = new Label(_T("dbgcount"),      _("DBG Count")));
+	datactrl->addLabel(this->lblping   = new Label(_T("ping"),      _("Ping")));
 }
 
 Pinger::ExitCode Pinger::Entry() {
-	uint16_t count = 0;
 	while(!this->TestDestroy()) {
 		{
 			wxMutexLocker m(this->lock);
+			PingTracker::Work();
+			/*
 			for(serverlist_t::iterator i = this->serverlist.begin(); i != this->serverlist.end(); ++i) {
-				this->updateAttribute(*i, this->lblsequence, Attribute<uint16_t>(count));
+				this->updateAttribute(*i, this->lblping, Attribute<uint16_t>(count));
 			}
+			*/
 		}
-		wxSleep(5);
-		count++;
+		wxSleep(1);
 	}
 	return 0;
 }
 
-void Pinger::eventNewServer(const wxString& server) {
-	wxLogDebug(_T("Pinger::eventNewServer(%s)"), server.c_str());
+void Pinger::eventNewServer(const wxString& name, const Server& server) {
+	wxLogDebug(_T("Pinger::eventNewServer(%s)"), name.c_str());
 	wxMutexLocker m(this->lock);
-	this->serverlist.push_back(server);
+
+	AttributeBase* ip = server.get(Server::ip_label);
+	if(ip) {
+		Attribute< wxIPV4address >* attrip = static_cast< Attribute< wxIPV4address >* >(ip);
+		this->serverlist[name] = Ping(attrip->value);
+	}
 }

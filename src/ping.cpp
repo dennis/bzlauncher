@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 #include "ping.h"
 #include <wx/listimpl.cpp>
+#include <wx/log.h>
 
 WX_DEFINE_LIST(PingList);
 DEFINE_EVENT_TYPE(wxEVT_PING_CHANGED)
@@ -36,33 +37,44 @@ Ping::Ping(const wxIPV4address& ip) : impl(PingTracker::Ping(ip)) {
 }
 
 Ping::Ping(const Ping& s) : impl(s.impl) { 
-	this->impl->refcount++;
-	assert(this->impl->refcount);
+	if(this->impl) {
+		this->impl->refcount++;
+		assert(this->impl->refcount);
+	}
 }
 
 Ping::~Ping() { 
-	assert(this->impl->refcount);
-	this->impl->refcount--;
-	if( this->impl && this->impl->refcount == 0) {
-		PingTracker::Unping(this);
-		delete impl; 
+	if( this->impl ) {
+		assert(this->impl->refcount);
+		this->impl->refcount--;
+		if( this->impl && this->impl->refcount == 0) {
+			PingTracker::Unping(this);
+			delete impl; 
+		}
 	}
 }
 
 Ping& Ping::operator=(const Ping& s) {
 	this->impl = s.impl;
-	this->impl->refcount++;
-	assert(this->impl->refcount);
-	
+	if(this->impl) {
+		this->impl->refcount++;
+		assert(this->impl->refcount);
+	}
 	return *this;
 }
 
 bool Ping::isOK() const {
-	return this->impl->isSuccess();
+	if(this->impl)
+		return this->impl->isSuccess();
+	else
+		return true;
 }
 
 long Ping::getDuration() const {
-	return this->impl->getDuration();
+	if(this->impl)
+		return this->impl->getDuration();
+	else
+		return 0;
 }
 
 void Ping::ping() {
@@ -77,16 +89,18 @@ wxWindow* PingTracker::receiver = NULL;
 PingImpl* PingTracker::Ping(const wxIPV4address &ip) {
 	PingImpl*	ping = NULL;
 	wxString ipReal = ip.IPAddress();
+	wxLogDebug(_T("PingTracker::Ping() - %s"), ipReal.c_str());
 
 	// Try to find existing ping object for requested ip
 	for(PingList::iterator i = PingTracker::list.begin(); i != PingTracker::list.end(); ++i) {
 		ping = *i;
 		if(ipReal.compare(ping->ip.IPAddress()) == 0) {
+			wxLogDebug(_T(" - Already pinging it, reusing.."));
 			return ping;
-
 		}
 	}
 
+	wxLogDebug(_T("Creating new PingImpl"));
 	// None found, add new
 	ping = new PingImpl(ip);
 	PingTracker::list.push_back(ping);
@@ -164,7 +178,10 @@ void PingTrackerTimer::Notify() {
 }
 
 void PingTracker::SendEvent(const wxIPV4address& ip) {
+	/*
 	wxCommandEvent event(wxEVT_PING_CHANGED);
 	event.SetString(wxString::Format(_T("%s:%ld"), ip.IPAddress().c_str(), ip.Service()));
 	PingTracker::receiver->GetEventHandler()->ProcessEvent(event);
+	*/
+	wxLogDebug(_T("I got a result for: %s:%ld"), ip.IPAddress().c_str(), ip.Service());
 }

@@ -84,7 +84,7 @@ protected:
 	void EventColClick(wxListEvent&);
 	void EventFavoriteToggle(wxCommandEvent&);
 	void EventLaunch(wxCommandEvent&);
-	void EventPingChanged(wxCommandEvent&);
+	//void EventPingChanged(wxCommandEvent&);
 	void EventPingServer(wxCommandEvent&);
 	void EventQuit(wxCommandEvent&);
 	void EventRefresh(wxCommandEvent&);

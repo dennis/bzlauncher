@@ -106,7 +106,7 @@ MainFrameImpl::MainFrameImpl( wxWindow* parent )
 
 	this->Connect( this->initialLoadTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
 	this->Connect( this->dataSourceTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler(MainFrameImpl::EventTimer));
-	this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
+	//this->Connect(  wxID_ANY, wxEVT_PING_CHANGED, wxCommandEventHandler(MainFrameImpl::EventPingChanged));
 
 	this->findPanel->Show(false);
 
@@ -483,9 +483,9 @@ void MainFrameImpl::EventTimer(wxTimerEvent& WXUNUSED(event)) {
 */
 }
 
+	/*
 void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 	// Make sure the list is up-to-date
-	/*
 	if(wxGetApp().listServerHandler.getVersion() != this->activeView->version) {
 		return;
 	}
@@ -518,8 +518,8 @@ void MainFrameImpl::EventPingChanged(wxCommandEvent& event) {
 			this->UpdateServer(view, item, s);
 		}
 	}
-	*/
 }
+*/
 
 void MainFrameImpl::EventSearch(wxCommandEvent& WXUNUSED(event)) {
 	this->filterEnabled = !this->filterEnabled;

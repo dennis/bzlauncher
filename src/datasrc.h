@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "queue.h"
 
 class DataController;
+class Server;
 
 class FullAttributeInfo {
 public:
@@ -61,8 +62,8 @@ public:
 
 	// These are called from the main thread and NOT from the 
 	// datasources own thread
-	virtual void eventNewServer(const wxString&) { }
-	virtual void eventDeleteServer(const wxString&) {}
+	virtual void eventNewServer(const wxString&, const Server&);
+	virtual void eventDeleteServer(const wxString&);
 };
 
 #endif 

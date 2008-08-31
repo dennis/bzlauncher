@@ -26,6 +26,7 @@ THE SOFTWARE.
 #define __attribute_h__
 
 #include <wx/string.h>
+#include <wx/socket.h>
 
 class AttributeBase {
 public:
@@ -69,6 +70,11 @@ inline wxString convertTowxString(uint16_t v) {
 
 inline wxString convertTowxString(const unsigned char& v) {
 	return wxString::Format(_T("%d"), v);
+}
+
+inline wxString convertTowxString(const wxIPV4address& v) {
+	//return wxString::Format(_T("%s:%d"), v.Hostname().c_str(), v.Service());
+	return _T("");
 }
 
 #endif

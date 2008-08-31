@@ -90,6 +90,7 @@ protected:
 	ServerData*	data;
 public:
 	static Label*	equality_label;
+	static Label*	ip_label;
 
 	Server() {
 		this->data = new ServerData();

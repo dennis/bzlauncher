@@ -37,6 +37,7 @@ private:
 	wxArrayString	listServers;
 
 	Label*			lblserver;
+	Label*			lblip;
 	Label*			lblprotocol;
 	Label*			lbltext;
 

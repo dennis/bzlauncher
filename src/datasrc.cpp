@@ -23,7 +23,12 @@ THE SOFTWARE.
 */
 
 #include "datasrc.h"
+#include "server.h"
 
 DataSource::DataSource() : wxThread(wxTHREAD_JOINABLE) {
 	this->Create(1024*1024);
+}
+void DataSource::eventNewServer(const wxString&, const Server&) {
+}
+void DataSource::eventDeleteServer(const wxString&) {
 }
