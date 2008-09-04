@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include <wx/utils.h>
 #include <wx/thread.h>
 #include <map>
+#include <vector>
 
 class DataController;
 
@@ -38,8 +39,9 @@ class Pinger : public DataSource {
 private:
 	Label*			lblping;
 
-	typedef std::map<wxString,Ping>	serverlist_t;
-	serverlist_t	serverlist;
+	typedef std::vector<wxString>	serverlist_t;
+	typedef std::map<wxString, std::pair< Ping, serverlist_t > > addresslist_t;
+	addresslist_t					addresslist;
 
 	wxMutex	lock;
 public:
@@ -50,6 +52,9 @@ public:
 	ExitCode Entry();
 
 	void eventNewServer(const wxString&, const Server&);
+	void eventNewPingResult(const wxIPV4address&,long);
+	void newPingResultNoLockHelper(const wxIPV4address&, long);
+	
 };
 
 #endif

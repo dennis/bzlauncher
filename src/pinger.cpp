@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 Pinger::Pinger() {
 	wxLogDebug(_T("Pinger::out_queue = %p"), &this->out_queue);
+	PingTracker::pinger = this;
 }
 
 void Pinger::initializeLabels(DataController* datactrl) {
@@ -43,13 +44,8 @@ Pinger::ExitCode Pinger::Entry() {
 		{
 			wxMutexLocker m(this->lock);
 			PingTracker::Work();
-			/*
-			for(serverlist_t::iterator i = this->serverlist.begin(); i != this->serverlist.end(); ++i) {
-				this->updateAttribute(*i, this->lblping, Attribute<uint16_t>(count));
-			}
-			*/
 		}
-		wxSleep(1);
+		wxMilliSleep(2);
 	}
 	return 0;
 }
@@ -58,9 +54,42 @@ void Pinger::eventNewServer(const wxString& name, const Server& server) {
 	wxLogDebug(_T("Pinger::eventNewServer(%s)"), name.c_str());
 	wxMutexLocker m(this->lock);
 
-	AttributeBase* ip = server.get(Server::ip_label);
-	if(ip) {
-		Attribute< wxIPV4address >* attrip = static_cast< Attribute< wxIPV4address >* >(ip);
-		this->serverlist[name] = Ping(attrip->value);
+	AttributeBase* serverip   = server.get(Server::ip_label);
+	AttributeBase* servername = server.get(Server::equality_label);
+	if(serverip && servername) {
+		Attribute<wxIPV4address>* attrip = static_cast< Attribute< wxIPV4address >* >(serverip);
+		wxString theip = attrip->value.IPAddress();
+		if(this->addresslist.find(theip) == this->addresslist.end())  {
+			// New ip to ping
+			this->addresslist[theip].first = Ping(attrip->value);
+		}
+		else if(this->addresslist[theip].first.isOK()) {
+			// We already got the result ready.
+			this->newPingResultNoLockHelper(attrip->value, this->addresslist[theip].first.getDuration());
+		}
+
+		this->addresslist[theip].second.push_back(servername->aswxString());
+		wxLogDebug(_T(" added: %s -> %s. IP got %d entries. Total IPs %d"), theip.c_str(), servername->aswxString().c_str(), this->addresslist[theip].second.size(), this->addresslist.size());
 	}
 }
+
+void Pinger::eventNewPingResult(const wxIPV4address& ip,long duration) {
+	//FIXME wxMutexLocker m(this->lock);
+	newPingResultNoLockHelper(ip,duration);
+}
+
+void Pinger::newPingResultNoLockHelper(const wxIPV4address& ip, long duration) {
+	wxString theip = ip.IPAddress();
+	wxLogDebug(_T("PING for %s is %ld"), theip.c_str(), duration);
+
+	if(this->addresslist.find(theip) != this->addresslist.end()) {
+		wxLogDebug(_T(" Found %d servers"), this->addresslist[theip].second.size());
+		for(serverlist_t::iterator i = this->addresslist[theip].second.begin(); i != this->addresslist[theip].second.end(); ++i) {
+			this->updateAttribute(*i, this->lblping, Attribute<uint16_t>(duration));
+		}
+	}
+	else {
+		wxLogDebug(_T("Response for a ping we don't care about?"));
+	}
+}
+

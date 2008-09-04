@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include "ping.h"
+#include "pinger.h"
+
 #include <wx/listimpl.cpp>
 #include <wx/log.h>
 
@@ -84,7 +86,7 @@ void Ping::ping() {
 
 PingList PingTracker::list;
 const int PingTracker::maxpings = 5;
-wxWindow* PingTracker::receiver = NULL;
+Pinger* PingTracker::pinger = NULL;
 
 PingImpl* PingTracker::Ping(const wxIPV4address &ip) {
 	PingImpl*	ping = NULL;
@@ -150,6 +152,7 @@ void PingImpl::measurePingStart() {
 }
 
 void PingImpl::measurePingContinue() {
+	wxASSERT(PingTracker::pinger);
 	if( this->sock.WaitOnConnect(0,0) ) {
 		// Connected
 		if(this->sock.IsConnected()) {
@@ -161,7 +164,7 @@ void PingImpl::measurePingContinue() {
 			this->status = PING_FAILED;
 			this->duration = 9999;
 		}
-		PingTracker::SendEvent(this->ip);
+		PingTracker::pinger->eventNewPingResult(this->ip, this->duration);
 	}
 }
 
@@ -175,13 +178,4 @@ void PingImpl::ping() {
 
 void PingTrackerTimer::Notify() {
 	PingTracker::Work();
-}
-
-void PingTracker::SendEvent(const wxIPV4address& ip) {
-	/*
-	wxCommandEvent event(wxEVT_PING_CHANGED);
-	event.SetString(wxString::Format(_T("%s:%ld"), ip.IPAddress().c_str(), ip.Service()));
-	PingTracker::receiver->GetEventHandler()->ProcessEvent(event);
-	*/
-	wxLogDebug(_T("I got a result for: %s:%ld"), ip.IPAddress().c_str(), ip.Service());
 }

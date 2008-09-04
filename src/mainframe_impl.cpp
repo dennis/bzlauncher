@@ -97,7 +97,6 @@ static int wxCALLBACK ServerSortCallback(long item1, long item2, long col) {
 
 MainFrameImpl::MainFrameImpl( wxWindow* parent )
 : MainFrame( parent ), initialLoadTimer(this), dataSourceTimer(this), filterEnabled(false), activeView(NULL)  { 
-	PingTracker::receiver = this;
 	this->toolBar->SetToolBitmapSize(wxSize(32,32));
 	this->toolBar->Realize();
 
@@ -126,7 +125,6 @@ MainFrameImpl::~MainFrameImpl() {
 	std::vector<Label*>	columns = this->GetViewableLabels();
 	int col = 0;
 	for(std::vector<Label*>::iterator i = columns.begin(); i != columns.end(); ++i) {
-		wxLogDebug(_T("Column: #%d %s (%d)"), col, (*i)->getName().c_str(), (*i)->getWidth());
 		(*i)->setWidth(this->activeView->serverList->GetColumnWidth(col));
 		col++;
 	}
@@ -257,7 +255,6 @@ void MainFrameImpl::SetupColumns(ServerListView *view) {
 
 	int col = 0;
 	for(std::vector<Label*>::iterator i = columns.begin(); i != columns.end(); ++i) {
-		wxLogDebug(_T("Column: #%d %s (%d)"), col, (*i)->getName().c_str(), (*i)->getWidth());
 		view->serverList->InsertColumn(col,(*i)->getName());
 		view->serverList->SetColumnWidth(col,(*i)->getWidth());
 		col++;

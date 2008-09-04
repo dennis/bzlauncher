@@ -95,6 +95,7 @@ public:
 WX_DECLARE_LIST(PingImpl, PingList);
 
 /// Static class that manage the pings. It controls the birth and deaths of PingImpls
+class Pinger;
 class PingTracker {
 private:
 	PingTracker() {};
@@ -103,9 +104,7 @@ protected:
 	static const int        maxpings;
 	static int CountQueued();
 public:
-	/// Where should SendEvent() send its events to?
-	static wxWindow*		receiver;
-
+	static Pinger*	pinger;
 	/// Ping a IP. This will return a PingImpl that 
 	/// represents the ping to that particular ip.
 	static PingImpl* Ping(const wxIPV4address &ip);
@@ -115,9 +114,6 @@ public:
 
 	/// Process pings (send out more, wait for answer..)
 	static void Work();
-
-	/// Send event to a receiver once a ping is changed
-	static void SendEvent(const wxIPV4address&);
 };
 
 

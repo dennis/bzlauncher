@@ -1,6 +1,8 @@
-- DataSource: Ping
-	- Merge PingTracker with Pinger
-	- Update the server-result
+- Memory leak
+Ping:
+	- Locking dosnt work (disabled, otherwise it blocks)
+	- Add asserts (perhaps a generic system for all datasources?)
+	- Make Pinger more clever - uses too many resources..
 - Sorting of QueryResult
 - ServerDetails ("details")
 	- Each DataSource got a DataSourceGUI class, to display the info?
